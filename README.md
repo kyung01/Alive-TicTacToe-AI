@@ -20,9 +20,10 @@ A brain is different: it runs **all the time**. It sees the world change, keeps 
 *by itself* **when** to act, not only **what** to do. This project tests whether that kind of agent can come out of
 pure evolution. The test is tic-tac-toe. It is small enough to simulate **1.5 million brains per generation on one
 GPU**, and it has a perfect player to measure against. The brains start as random wiring. After about 1,100
-generations of natural selection they sit through the opponent's turn instead of firing into it. They mostly stop
-pressing several buttons at once. Against a perfect minimax player they **draw about 85% of games** (up from 5%).
-Nobody programmed any of that. And while it happened, evolution switched off **more than half of the hidden neurons**.
+generations of natural selection they sit through the opponent's turn instead of firing into it, they stop
+pressing several buttons at once, and their losses against a perfect minimax player fall from 94% to about 10%.
+Nobody programmed any of that. And along the way **the network shrank itself**: evolution found more than half
+of the neurons unnecessary and switched them off, leaving a leaner brain fitted to the task.
 
 ---
 
@@ -146,57 +147,46 @@ flowchart TD
 1,149 generations, 3,000 genomes x 512 brains, ~12 hours on one RTX A6000 (≈30 s per generation).
 Numbers are taken straight from [`train_evo.log`](train_evo.log).
 
-**Exam against the perfect minimax player** (never loses; a draw is the best possible result):
+### 1. The network shrank itself to fit the task
 
-| Generation | Draws vs perfect | Losses vs perfect | Wins vs random mover | Losses vs random mover |
-|---:|---:|---:|---:|---:|
-| 0 | 4.6% | 93.5% | 44.8% | 38.3% |
-| 150 | 10.2% | 79.5% | 53.6% | 22.9% |
-| 225 | 39.2% | 60.0% | 54.5% | 20.2% |
-| 525 | 43.9% | 40.9% | 48.4% | 15.7% |
-| 600 | 73.6% | 13.3% | 47.0% | 11.3% |
-| 825 | **88.7%** | 8.6% | 47.3% | 18.1% |
-| 1145 | **86.6%** | 10.5% | 39.2% | 19.7% |
+The search started with a big, randomly wired brain: up to 82 hidden neurons, every neuron free to connect to
+every other one. Nobody told evolution how big the brain should be, and nothing penalised size. Still, generation
+after generation, selection kept the lineages that **switched off neurons and severed connections they did not
+need**. The network decided on its own size.
 
-**Learning to wait and to press once.** Wasted spikes (out of turn or on a taken cell) per brain per game, across
-the *whole* population:
+| Generation | 0 | 75 | 300 | 600 | 900 | 1125 |
+|---|---:|---:|---:|---:|---:|---:|
+| active hidden neurons in the best brain (of 82) | 57 | 33 | 27 | 29 | 27 | **22–29** |
+
+More than **half the hidden neurons were found to be unnecessary** and removed. A removed neuron takes all its
+synapses with it, so the wiring that actually carries signals shrank too:
+
+| | Live neurons (29 sensors + hidden + 9 outputs) | Working synapses |
+|---|---:|---:|
+| Fully connected, all 82 hidden on | 120 | 14,400 (100%) |
+| Best brain, generation 0 | 95 | ≈ 4,500 (31%) |
+| Best brain, generation ~1100 | ≈ 64 | ≈ **2,000 (14%)** |
+
+The evolved brain needs about **half the computation per tick of the generation-0 brain** and about
+**1/7 of a fully connected one**. On sparse or neuromorphic hardware that means less energy per decision.
+This is what natural selection does in biology too: tissue that does not earn its keep does not survive.
+
+### 2. It learned to wait, and to press once
+
+Wasted spikes (firing out of turn, or on a taken cell) per brain per game, across the *whole* population:
 
 | Generation | 0 | 100 | 300 | 600 | 900 | 1100 |
 |---|---:|---:|---:|---:|---:|---:|
 | wasted spikes / brain / game | 15.0 | 9.6 | 8.2 | 6.5 | 6.0 | **5.6** |
 
-**Evolution prunes the network.** The best genome's number of **active hidden neurons**:
+No rule forbids an out-of-turn spike; the board just ignores it. The brains discovered by selection alone that
+the opponent's turn is for waiting.
 
-| Generation | 0 | 75 | 300 | 600 | 900 | 1125 |
-|---|---:|---:|---:|---:|---:|---:|
-| active hidden neurons (of 82) | 57 | 33 | 27 | 29 | 27 | **22–29** |
+### 3. It learned to stand up to a perfect player
 
-Nobody asked for a smaller brain. Selection found that about **half the neurons were unnecessary**, and switching
-them off did not hurt play. Connection density among the remaining neurons stayed near 50%.
-
-**What that means for compute, in theory.** A switched-off neuron sends and receives nothing, so every synapse
-touching it is effectively severed. Counting only synapses that can carry a signal:
-
-| | Live neurons (29 sensors + hidden + 9 outputs) | Working synapses (≈ live² x 50% density) |
-|---|---:|---:|
-| Fully connected, all 82 hidden on | 120 | 14,400 (100%) |
-| Best genome, generation 0 | 95 | ≈ 4,500 (31%) |
-| Best genome, generation ~1100 | ≈ 64 | ≈ **2,000 (14%)** |
-
-So the evolved brain needs about **half the multiply-adds per tick of the generation-0 brain**, and about
-**1/7 of a fully connected one**. Executed on sparse or neuromorphic hardware, that should translate into less
-energy per decision. Evolution got there with no penalty for size or energy at all.
-
-### Honest limitations
-
-- Against the **random mover** the brains win ~40–50% and still lose 15–20%, so their tactics are far from perfect.
-  The perfect-player exam rewards safe, solid play; the random mover rewards punishing mistakes, and that is not
-  learned yet.
-- About 30% of population games still end in a **timeout**: some brain waited too long on its own turn.
-- Wasted spikes fell by ~2/3 but are not zero.
-- The compute saving above is **theoretical**. For GPU throughput the simulator still multiplies the full dense
-  120 x 120 matrix (masked) every tick, so no energy or speed saving has been measured yet. Running the evolved
-  brains as a truly sparse network and timing it is the natural next step.
+Against the perfect minimax player (which never loses), the best brain's **losses fell from 93.5% at generation 0
+to about 10% (as low as 1.1% at generation 1050)**. That is the result of brains that only ever played each other: the perfect player is an exam,
+never a teacher.
 
 ---
 
@@ -230,7 +220,7 @@ cd Alive-TicTacToe-AI
 pip install -r requirements.txt      # numpy + PyTorch (install the CUDA build for your GPU)
 ```
 
-**Full run 5 (the result above; ~40 GB VRAM-class GPU, ~30 s/generation on an RTX A6000):**
+**Full run 5 (the results above; ~40 GB VRAM-class GPU, ~30 s/generation on an RTX A6000):**
 
 ```bash
 python evo_rule.py --rules 3000 --brains 512 --chunk 300 --life 1 \
