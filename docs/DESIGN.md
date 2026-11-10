@@ -1,5 +1,10 @@
 # AI Brain: design notes
 
+> **How to read this file.** This is the project's chronological lab notebook. The current design is the
+> evolution-only brain in `evo_rule.py` (see *Run 5* below), which produced the results in the main README. The
+> sections near the end (*Earlier experiment: one brain...*, *What failed*, *Results so far*) record the
+> learning-rule experiments that came before evolution-only and are kept for the history.
+
 A fully connected recurrent "brain" that plays tic-tac-toe, lives continuously,
 learns from outcomes during its life, and is replaced by evolution when it dies.
 
@@ -71,7 +76,7 @@ and unknowable for harder tasks. Traces now do not fade within a game: every mov
 of a game receives the full outcome, and the averaging over 65k games does the
 blaming.
 
-**Reward-modulated Hebbian rule (2026-11-09, late; `--rule hebb`).** The user's
+**Reward-modulated Hebbian rule (2026-11-09, late; `--rule hebb`).** The author's
 objection to the backward wave: in a brain, a synapse is rewarded for having
 been active, not for a computed share of blame. So the alternative rule drops
 the wave entirely. Every tick each connection adds (sender activity a tick
@@ -106,7 +111,7 @@ enough to dig it out, and the second seat (the harder, noisier seat) drifted.
 Third variant, the literal form: no baseline at all, win +1 / loss -0.5 /
 illegal -1 times each connection's co-activation. Fastest collapse of the three:
 in 12 games the first seat went 92% -> 83% and the second 64% -> 47%, with
-illegal moves at 10-15% on both seats. Re-run for 250 games at the user's request: wins
+illegal moves at 10-15% on both seats. Re-run for 250 games at the author's request: wins
 fell to 20% on the second seat and ~55% on the first, with illegal moves at
 55-65% and 35-40%. A plateau from game 80 to 160, then a second slide; it never
 turned around. All three Hebbian variants degrade a brain that the backward wave
@@ -136,7 +141,7 @@ centred sum and what they share is "fire harder", not "the right move".
 
 ## Evolution only (2026-11-09, afternoon; `evo_rule.py`)
 
-The user's conclusion after the Hebbian runs: every learning rule we wrote was
+The author's conclusion after the Hebbian runs: every learning rule we wrote was
 a human theory of credit, and the rule is the most designed part left. So the
 rule itself becomes genes, along with everything else about the brain. Nothing
 inside a life is written by hand; the only optimiser is selection.
@@ -161,7 +166,7 @@ plays 60 games (alternating seats) against the random mover, and changes only
 through its plasticity genes. Fitness = mean external score over the last 20
 games. Best quarter survives; the rest are mutated copies of survivors.
 Generation 0 (5.5 min): the best lineage scored -0.53 by freezing in 94% of
-games, since a freeze (-0.5) beats an illegal move (-1). The user had the world
+games, since a freeze (-0.5) beats an illegal move (-1). The author had the world
 pay for legal moves again (+0.3 per legal move, `--reward-legal`), so a lineage
 that fires legally outscores one that never moves; the brain's own value of a
 legal move is a gene too (r_legal).
@@ -177,7 +182,7 @@ Generations 1-17 (~1.7 min each): best lineage from -0.20 to +0.28 (wins 6% -> 2
 illegal 84% -> 54%), population mean from -0.39 to +0.12. The best rule genes
 converged on full outcome modulation with a strong same-round baseline.
 
-**The merged node (2026-11-09, 14:30).** The user's observation: the stored
+**The merged node (2026-11-09, 14:30).** The author's observation: the stored
 number (persistent, decaying, written to) is what a node should be; the
 recomputed-every-tick activation is the special case where nothing is kept.
 And a node must not amplify itself (normal networks have no such thing): it
@@ -340,7 +345,7 @@ Kept as physics: weight clamp +-5, hidden-node cap 82, tanh nodes with per-node
 leak in [0,1] and Gaussian noise, the second-order Hebbian form of the rule with
 every coefficient a gene, and the per-tick normalisation of the trace.
 
-The goal, stated by the user: not a tic-tac-toe player, but a small brain that
+The goal, stated by the author: not a tic-tac-toe player, but a small brain that
 understands the game. Resumed from the generation 252 population with the two
 genes dropped; brains that relied on the timer double-fire and die out first.
 
@@ -356,7 +361,7 @@ mutation (the world), and `--noise-seed` exists solely for a deliberate replay.
 Within a run every node gets a fresh Gaussian kick every tick; this closes the
 one gap where each resume used to reopen the stream at the same place.
 
-**New world scores (generation 266 on, set by the user).** Ten generations of
+**New world scores (generation 266 on, set by the author).** Ten generations of
 peers-only play (255-265) sat in a do-nothing equilibrium: no board results, the
 best genome freezing in ~95% of exam games, the threshold gene at 0.99. The
 world's prices changed to make that untenable: win on the board +100000, legal
@@ -366,10 +371,10 @@ wrong move, so sitting still is the worst thing a brain can do, and a single
 board win outweighs everything else a lineage could earn. The brain itself is
 unchanged.
 
-**Reward only, never punish (generation 269 on, set by the user).** Two
+**Reward only, never punish (generation 269 on, set by the author).** Two
 generations under the punitive prices flipped the population from "never try" to
 "always try, badly": freezes vanished, illegal moves went 94% -> 61%, and the
-first board wins appeared. The user's conclusion: if punishment teaches
+first board wins appeared. The author's conclusion: if punishment teaches
 avoidance, use none. New prices: a legal move +1, a win on the board +100, and
 every other event (loss, draw, illegal move, freeze, opponent died) exactly 0.
 A mistake costs only the future it forecloses: the legal moves and the win the
@@ -388,7 +393,7 @@ twice nets zero and a brain has to make its second move somewhere else.
 Run 1 (generations 0-291, archived in `runs/v1_gens0-291/` with its log) carried
 every design change of the day on one population: random opponent, perfect
 player, co-evolution, the vision sensors and continuous game, spiking outputs,
-no sibling baseline, four price lists. The user called the concept settled and
+no sibling baseline, four price lists. The author called the concept settled and
 asked for a clean start. Run 2 begins at generation 0 with the design as it
 stands:
 
@@ -402,13 +407,13 @@ stands:
   (loss, draw, freeze, opponent died) 0.
 - Every gene a gene; nothing learned by hand. Noise seeded from entropy.
 
-The starting population is broadly randomized, per the user ("randomized node
+The starting population is broadly randomized, per the author ("randomized node
 values for each"): every node's leak uniform in [0,1], noise std log-normal
 around 0.3 with spread 0.6, bias std 0.15; trace decay lam 0.5 +- 0.3, threshold
 0.6 +- 0.2, live hidden nodes 60 +- 15; weights N(0, 0.1). Previously lam and
 n_hid started identical across the whole population.
 
-**Survival selection (run 2, generation 8 on, from the user).** Seven generations
+**Survival selection (run 2, generation 8 on, from the author).** Seven generations
 in, run 2 had converged on the waiting strategy exactly as run 1 had: the free
 freeze made stillness and the double tap score the same. Rather than another
 price list, selection itself changed to a tournament: a brain's fitness is the
@@ -425,7 +430,7 @@ ladder. Each step up is forced by the step below, with nothing hand-priced.
 Ties, which are common, are broken at random.
 
 **Mutation x2.5 (run 2, generation 21 on).** With survival selection the top
-half always goes through, so the population drifts slowly; the user asked for
+half always goes through, so the population drifts slowly; the author asked for
 stronger mutation overall. `--mutation` multiplies every mutation step (scalar
 genes, per-node vectors, weight matrices). Set to 2.5. And instead of 30% of
 children mutating 5x harder, 10% are "freaks": every gene mutated 20x harder
@@ -440,7 +445,7 @@ Under survival selection a random mover never blunders, so surviving a game
 means winning or drawing it: the first opponent that cannot be beaten by
 waiting. The perfect player remains an exam.
 
-**An attempt beats no attempt (run 2, generation 31 on, from the user).** Six
+**An attempt beats no attempt (run 2, generation 31 on, from the author).** Six
 generations against the random mover under pure survival scoring: best 0.7%,
 population mean 0.0%. Almost every brain scored exactly nothing every game, so
 the top half was being chosen by the random tie-break; selection had gone
@@ -450,7 +455,7 @@ not trying (0). We are rewarding an illegal move, which is new; the point is
 that a brain that acts is closer to a brain that acts correctly than one that
 sits still.
 
-**Patience pays (run 2, generation 33 on, from the user).** Waiting has to be
+**Patience pays (run 2, generation 33 on, from the author).** Waiting has to be
 learned too, so survival scoring also credits 0.001 for every tick a brain is
 alive while it is the opponent's turn (`--reward-wait`). Against the random
 mover's 1..30 tick delay that is roughly 0.015 per opponent move: small next
@@ -469,14 +474,14 @@ waiting throughout.
 
 Run 2 (generations 0-45, archived in `runs/v2_gens0-45/`) carried the switch
 from prices to the tournament, the move from peers to the random mover, and
-the attempt / waiting / legal-move credits. The user asked for a clean start
+the attempt / waiting / legal-move credits. The author asked for a clean start
 with the rules as they now stand:
 
 - Opponent: the random legal mover, answering after a random 1..30 ticks.
 - Selection: tournament, reward only. Score per game = 100 for a win on the
   board + 1 per legal move + 0.1 for an illegal move + 0.001 per tick alive on
   the opponent's turn. A draw, a loss, a freeze or the opponent dying first
-  earn nothing by themselves (the user: none of those should be rewarded).
+  earn nothing by themselves (the author: none of those should be rewarded).
   Fitness = mean over the last third of a 40-game life. Top half of the 256
   lineages carries over unchanged; children of the top half fill the rest,
   mutation x2.5, one child in ten a freak at x20 on top.
@@ -497,10 +502,10 @@ fitness averages over four times as many lives. At 65,536 brains the card used
 13.6 of 49 GB; the fused trace update left far more headroom than the old code.
 Generations take proportionally longer.
 
-**No plasticity (run 3, generation 55 on, from the user).** The last hand-shaped
+**No plasticity (run 3, generation 55 on, from the author).** The last hand-shaped
 thing inside the brain was the within-life plasticity: every coefficient was a
 gene, but the *form* of the rule (a second-order Hebbian trace, applied at game
-end, scaled by the brain's own valuation genes) was mine. The user had assumed
+end, scaled by the brain's own valuation genes) was mine. The author had assumed
 it was already gone and wants it gone. Removed: the trace tensor, the weight
 update, and the genes A B C D E, log_eta, mod, lam, wd and the six valuations.
 A brain is now exactly its genome from its first tick to its last; the only
@@ -528,7 +533,7 @@ the brains play a peer, half the random mover, so the pressure to move legally
 and win stays while tactics against a real opponent are selected for. The
 perfect-player exam continues every fifth generation.
 
-**Peers only (run 3, from the user, a few generations later).** The random
+**Peers only (run 3, from the author, a few generations later).** The random
 mover came out of the mix: with freezing neither rewarded nor punished and a
 legal move worth a point, waiting out an opponent's blunder earns nothing, so
 the old collapse cannot recur. `--opponent peer`; the random mover and the
@@ -553,7 +558,7 @@ brain fires on tick one and dies, so each game is decided by who drew X, the
 ranking is seat luck, and the X skill drifts away within a dozen generations.
 Interim: back to the random mover, now with half the brains seated as O every
 game, until the exam shows the brains playing O; then peers. (Autonomous call,
-to stop the erosion; the user had asked for peers only and can override.)
+to stop the erosion; the author had asked for peers only and can override.)
 
 ### Run 4: from generation 0, peers only (2026-11-10, late evening)
 
@@ -581,7 +586,7 @@ population scored ~0.07 and there was no gradient. Legal moves now land first
 and the illegal fire ends the game afterwards (a board result on the same tick
 outranks it). X keeps its point; O still dies. Run 4 proper starts from here.
 
-**Pair selection (run 4 proper, from the user).** Selection is now head-to-head
+**Pair selection (run 4 proper, from the author).** Selection is now head-to-head
 inside each game (`--select pair`). Both brains get the reward-only score (win
 100, legal move 1, illegal 0.1, 0.001 per waiting tick); the higher score in
 the pair survives (1), the other does not (0), a tie splits (0.5). If X never
@@ -607,11 +612,11 @@ plasticity update and left with it, so the weight genes had no bound and the
 game then ended on tick one and every pair was decided by the seat draw, so
 the "best" genome was a different random one each generation with 55-59% pair
 wins, the sampling-noise band around 50%. Fixes: `WCLIP = 5` applied to the
-weight genes in mutation. Lives stay at one game, per the user: 512 brains per
+weight genes in mutation. Lives stay at one game, per the author: 512 brains per
 genome is already 512 pairs per lineage, enough to rank them; the plateau was
 the saturated weights, not the sample size. Restarted from scratch.
 
-**Illegal fires are ignored (run 4, from the user, after the loophole).** The
+**Illegal fires are ignored (run 4, from the author, after the loophole).** The
 pair rule let a brain bank its lead by ending the game with an illegal move:
 open, then fire on the same cell, game over, X wins every pair from the X seat
 and the population converged on exactly that. New world rule: an illegal fire
@@ -619,7 +624,7 @@ and the population converged on exactly that. New world rule: an illegal fire
 ignores it and the game keeps ticking while the brain's own clock runs. A turn
 ends only with a legal move. If the 30-tick clock runs out the brain times out
 and the opponent takes the pair. Board results decide otherwise; a draw falls
-back to the score. The first-move rule stays, per the user: if X times out
+back to the score. The first-move rule stays, per the author: if X times out
 without ever opening, O is re-seated as X with a cleared memory and must move
 within one turn (a move wins the pair, none and both are thrown out); any later
 timeout is simply a loss for the brain whose clock ran out. The attempt credit
@@ -627,12 +632,12 @@ is 0. The game log now prints illegal fires
 per brain per game. The live battle shows illegal fires briefly and plays on;
 a timeout is a win for the other side.
 
-**A cost per illegal fire (run 4, from the user).** With illegal fires ignored,
+**A cost per illegal fire (run 4, from the author).** With illegal fires ignored,
 brains were making about 14 of them per game. Each one costs 0.001 in the
 score (`--reward-attempt -0.001`, applied per fire). It was raised to 1 for
 generations 65-110; over those generations timeouts rose from 10% to 14% and
 board results fell while fires barely moved, which read as brains hesitating
-rather than aiming, so the user put it back. Under pair
+rather than aiming, so the author put it back. Under pair
 selection the board and the clock still decide a pair outright, so this cost
 only separates brains whose game ends in a draw or otherwise on equal terms;
 it is a nudge toward quieter outputs, not a punishment that ends anything.
@@ -651,7 +656,7 @@ survivors and evaluation cards are repurposed or hidden. The live battle's
 move log is a fixed scrollable box that folds repeated ignored fires into one
 counted chip, and the battle card reserves its height so nothing reflows.
 
-**Seat fairness (run 4, generation 140 on, from the user).** Two things gave the
+**Seat fairness (run 4, generation 140 on, from the author).** Two things gave the
 X seat an edge in a level game. (1) In a drawn game X fills the ninth cell and
 collects a fifth legal move for a cell that changes nothing. Now, when one cell
 is left and filling it cannot win for the player to move, the game ends as a
@@ -663,7 +668,7 @@ fires alone (0.001 each), or is a true tie.
 ### Run 5: from generation 0 (2026-11-10, night)
 
 Run 4 (archived in `runs/v4_gens0-179/`) carried the pair rule from its first
-draft to its settled form. The user asked for a clean start under the settled
+draft to its settled form. The author asked for a clean start under the settled
 rules, with a randomized population.
 
 Who survives a game (two brains, X and O, random seats, one survives):
@@ -684,7 +689,7 @@ unchanged: 29 vision sensors, <= 82 hidden, 9 spiking outputs, memory by leak,
 no plasticity. Exams vs the random mover and the perfect player every fifth
 generation, both seats, for the log only.
 
-**A population five times larger, in GPU passes (run 5 restart, from the user).**
+**A population five times larger, in GPU passes (run 5 restart, from the author).**
 A generation no longer has to fit the card in one go: the lineages are dealt
 into chunks (`--chunk 320` genomes x 512 brains, about 30% more than the card
 held before), each chunk is born, plays its games and is scored in turn, and
@@ -693,11 +698,11 @@ chunks every generation, so over time a brain meets peers from the whole
 population, not a fixed neighbourhood. Run 5 restarted with 1280 lineages x 512
 brains = 655,360 brains per generation in four passes; top 10% = 128 lineages
 carry over. The exams and the best-brain save run on the chunk that holds the
-best genome. Raised again at the user's request to 3000 lineages x 512 brains
+best genome. Raised again at the author's request to 3000 lineages x 512 brains
 = 1,536,000 brains per generation in ten passes of 300; top 10% = 300 lineages.
 
 **Neurons and connections switch on and off individually (run 5 restart, from
-the user).** The hidden-node count gene (`n_hid`, which switched on the first n
+the author).** The hidden-node count gene (`n_hid`, which switched on the first n
 hidden neurons) is gone. Instead every hidden neuron carries its own on/off
 gene (`alive`), inherited with the neuron in crossover and flipped by mutation
 with a 1% chance per neuron (times the mutation scale, freaks included, capped
@@ -709,7 +714,7 @@ exists, and a brain's wiring is `W0 * conn`. A synapse can now be pruned or
 grown outright instead of a weight having to drift to zero, and a sparse brain
 is possible. Run 5 restarted from scratch with 3000 lineages.
 
-## Current training: one brain, many games, averaged backprop (`single.py`)
+## Earlier experiment: one brain, many games, averaged backprop (`single.py`)
 
 Evolution turned out to be the crutch for a learning rule that did not work. The
 run that finally learned is a single brain whose weights are shared by 262,144

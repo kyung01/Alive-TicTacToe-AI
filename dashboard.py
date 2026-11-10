@@ -212,7 +212,7 @@ class Handler(BaseHTTPRequestHandler):
             except Exception as e:  # keep the dashboard alive if the brain file is mid-write
                 self.send(503, "application/json", json.dumps({"error": str(e)}))
         elif u.path.startswith("/icon/") and u.path.endswith(".png") and "/" not in u.path[6:]:
-            # state icons generated in ChatGPT from assets/icon-<name>.png; 404 until the PNG exists
+            # optional state icons: assets/icon-<name>.png; 404 (the page shows an emoji) when the PNG does not exist
             path = os.path.join("assets", "icon-" + u.path[6:])
             if not os.path.isfile(path):
                 self.send(404, "text/plain", "no icon yet")
@@ -265,8 +265,8 @@ class Handler(BaseHTTPRequestHandler):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--port", type=int, default=8765)
-    ap.add_argument("--log", default="train_single.log")
+    ap.add_argument("--port", type=int, default=8766)
+    ap.add_argument("--log", default="train_evo.log")
     a = ap.parse_args()
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     Handler.log_default = a.log

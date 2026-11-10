@@ -21,9 +21,10 @@ A brain is different: it runs **all the time**. It sees the world change, keeps 
 pure evolution. The test is tic-tac-toe. It is small enough to simulate **1.5 million brains per generation on one
 GPU**, and it has a perfect player to measure against. The brains start as random wiring. After about 1,100
 generations of natural selection they sit through the opponent's turn instead of firing into it, they stop
-pressing several buttons at once, and their losses against a perfect minimax player fall from 94% to about 10%.
-Nobody programmed any of that. And along the way **the network shrank itself**: evolution found more than half
-of the neurons unnecessary and switched them off, leaving a leaner brain fitted to the task.
+pressing several buttons at once, and they go from losing almost every game against a perfect minimax player to
+standing up to it. Nobody programmed any of that. And along the way **the network shrank itself**: evolution found more than half
+of the neurons unnecessary and switched them off, leaving a brain that uses **a tenth of the connections** of a
+fully connected one.
 
 ---
 
@@ -41,6 +42,7 @@ board, it is your turn, pick one of 9 cells."* The program handles the rest for 
 
 | | Traditional bot | Alive brain (this project) |
 |---|---|---|
+| How does it get the board? | Handed a data structure on its turn | Through an artificial **eye** that streams the board into it every tick |
 | When does it run? | Only when called | **Every tick**, during its turn *and* the opponent's |
 | Who says it is my turn? | The program | **Nobody.** It has to see the board change |
 | How is a move made? | `argmax` over 9 outputs | An output neuron **spikes** when it crosses a threshold |
@@ -65,7 +67,7 @@ So before it can play well, the brain has to discover by itself that:
 
 ```mermaid
 flowchart LR
-    subgraph Eyes["29 sensors (vision)"]
+    subgraph Eyes["the eye: 29 sensors"]
       E1["9 x 'cell is empty'"]
       E2["9 x 'cell is X'"]
       E3["9 x 'cell is O'"]
@@ -94,8 +96,36 @@ x  =  tanh( d0 * x   +   (W0 * conn) · x   +   b   +   noise )
   Nothing else stores the past.
 - An output **spikes the tick it crosses its threshold from below**, and must fall back under before it can spike
   again. No refractory timer, no move window, no argmax. The spike *is* the move.
-- Noise comes from OS entropy every tick, so no two lives are the same.
+- Every neuron gets a fresh random kick every tick (seeded from OS entropy), so no two lives are the same.
 - The weights **never change during a life**. A brain is exactly its genome from first tick to last.
+
+### The eye: it *sees* the board, nobody tells it what is happening
+
+A normal bot receives the board as a data structure, only on its turn. This brain gets something closer to
+vision: we built a simple artificial **eye**. Each of the 9 cells is watched by three "photoreceptor" sensor
+neurons, one that lights up when the cell is empty, one for X and one for O, like three kinds of cone cell each
+tuned to a single colour. That makes 27 receptors, plus two that tell the brain which side it plays.
+
+```
+     the board                      what the eye sends into the brain, every tick
+
+     X │   │                    "empty"        "X"           "O"
+    ───┼───┼───                  · ● ●        ● · ·         · · ·
+       │ O │                     ● · ●        · · ·         · ● ·
+    ───┼───┼───                  ● ● ●        · · ·         · · ·
+       │   │                                                       + "I am X" ●   "I am O" ·
+```
+
+- **The eye never closes.** It streams the board into the brain every single tick, on the brain's own turn and
+  during the opponent's, the way your eyes keep seeing while you wait.
+- **It shows only what is there**: the marks. There is no "your turn" light, no "the opponent just moved" signal,
+  and no list of legal moves. When the opponent moves, a receptor flips, and that change in the picture is the
+  only clue. Noticing it, and working out what it means, is the brain's job.
+- **It sees X and O, not "mine" and "theirs".** To know which marks are its own, the brain has to combine what it
+  sees with the seat receptor.
+
+Everything the brain knows about the game comes in through this eye, and it acts only through its 9 output
+neurons, one per cell. Everything in between is evolved.
 
 ### Everything is a gene
 
@@ -136,9 +166,9 @@ flowchart TD
   tie-break in a draw, and the clock keeps running. So no rule says "don't do that". Wasted spikes just don't
   help you survive.
 - **No reward for a win, a legal move or waiting.** The game decides who survives. That's all.
-- The road here was long: five full runs, plus reward schemes that let brains cheat (out-waiting, banking a lead by
-  ending the game with an illegal move, seat bias). Each loophole and its fix is written up in
-  [docs/DESIGN.md](docs/DESIGN.md).
+- These rules were refined over five full runs. Each time evolution found a shortcut in the world's rules
+  (out-waiting the opponent, banking a lead by ending the game early, a seat advantage), the rule was closed
+  and evolution had to find the real skill instead. Every step is written up in [docs/DESIGN.md](docs/DESIGN.md).
 
 ---
 
@@ -149,27 +179,33 @@ Numbers are taken straight from [`train_evo.log`](train_evo.log).
 
 ### 1. The network shrank itself to fit the task
 
-The search started with a big, randomly wired brain: up to 82 hidden neurons, every neuron free to connect to
-every other one. Nobody told evolution how big the brain should be, and nothing penalised size. Still, generation
-after generation, selection kept the lineages that **switched off neurons and severed connections they did not
-need**. The network decided on its own size.
+The search started with big, randomly wired brains: about 57 of the 82 possible hidden neurons switched on, and
+every neuron free to connect to every other one. Nobody told evolution how big the brain should be, and nothing
+penalised size. Still, selection kept the lineages that **switched off neurons they did not need**, and every
+synapse to and from those neurons went with them. The network decided its own size.
 
-| Generation | 0 | 75 | 300 | 600 | 900 | 1125 |
-|---|---:|---:|---:|---:|---:|---:|
-| active hidden neurons in the best brain (of 82) | 57 | 33 | 27 | 29 | 27 | **22–29** |
+| Generation | 0 | 25 | 50 | 100 | 300 | 600 | 900 | 1149 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| active hidden neurons in the best brain (of 82) | 57 | 39 | 34 | 25 | 27 | 29 | 27 | **26** |
 
-More than **half the hidden neurons were found to be unnecessary** and removed. A removed neuron takes all its
-synapses with it, so the wiring that actually carries signals shrank too:
+**This is selection, not chance.** Mutation switches a neuron off exactly as often as it switches one on, so
+random drift alone would settle at about half of them, 41 neurons. The brains went far below that and stayed
+there. Across the *whole* population of 3,000 genomes the average is now **29 hidden neurons**. Smaller brains
+won.
 
-| | Live neurons (29 sensors + hidden + 9 outputs) | Working synapses |
+Counting only the synapses that can actually carry a signal (from a live neuron to a live hidden or output neuron;
+the sensors are overwritten by the board every tick):
+
+| | Live neurons | Working synapses |
 |---|---:|---:|
-| Fully connected, all 82 hidden on | 120 | 14,400 (100%) |
-| Best brain, generation 0 | 95 | ≈ 4,500 (31%) |
-| Best brain, generation ~1100 | ≈ 64 | ≈ **2,000 (14%)** |
+| Fully connected, all 82 hidden on | 120 | 10,920 (100%) |
+| Best brain, generation 0 | 95 | ≈ 3,100 (29%) |
+| **Best brain, generation 1149** (`best_evo_01149.npz`, exact count) | **64** | **1,135 (10%)** |
 
-The evolved brain needs about **half the computation per tick of the generation-0 brain** and about
-**1/7 of a fully connected one**. On sparse or neuromorphic hardware that means less energy per decision.
-This is what natural selection does in biology too: tissue that does not earn its keep does not survive.
+The evolved brain does its job with about **a third of the computation per tick of the generation-0 brain**,
+and **a tenth of a fully connected one**. On sparse or neuromorphic hardware, where a missing synapse costs
+nothing, that means less energy per decision. Evolution found the lean design by itself, exactly as natural
+selection does in biology.
 
 ### 2. It learned to wait, and to press once
 
@@ -184,14 +220,13 @@ the opponent's turn is for waiting.
 
 ### 3. It learned to stand up to a perfect player
 
-Against the perfect minimax player (which never loses), the best brain's **losses fell from 93.5% at generation 0
-to about 10% (as low as 1.1% at generation 1050)**. That is the result of brains that only ever played each other: the perfect player is an exam,
-never a teacher.
+At generation 0 the best brain lost almost every game against the perfect minimax player (which never loses).
+Through evolution alone it learned to stand up to it, even though it had only ever played other brains: the
+perfect player is an exam, never a teacher.
 
 ---
 
 ## Watch it: the live dashboard
-
 
 `dashboard.py` serves a web page that reads the training log live (refreshing every few seconds) and shows:
 
@@ -203,7 +238,7 @@ never a teacher.
   remembers, and which output it wants to fire.
 
 ```bash
-python dashboard.py --log train_evo.log --port 8766
+python dashboard.py
 # open http://localhost:8766
 ```
 
@@ -220,7 +255,7 @@ cd Alive-TicTacToe-AI
 pip install -r requirements.txt      # numpy + PyTorch (install the CUDA build for your GPU)
 ```
 
-**Full run 5 (the results above; ~40 GB VRAM-class GPU, ~30 s/generation on an RTX A6000):**
+**Full run 5 (the results above; run on one 48 GB RTX A6000, ~30 s per generation):**
 
 ```bash
 python evo_rule.py --rules 3000 --brains 512 --chunk 300 --life 1 \
@@ -233,17 +268,18 @@ python evo_rule.py --rules 3000 --brains 512 --chunk 300 --life 1 \
 ```bash
 python evo_rule.py --rules 512 --brains 128 --chunk 128 --life 1 \
   --opponent peer --select pair --elite 0.1 --mutation 2.5 \
-  --opp-delay 30 --reward-attempt -0.001 2>&1 | tee train_evo.log
+  --opp-delay 30 --reward-attempt -0.001 2>&1 | tee my_run.log
 ```
 
-Then, in a second terminal:
+Then, in a second terminal (the log picker at the top of the page switches between `my_run.log` and the
+included `train_evo.log`):
 
 ```bash
-python dashboard.py --log train_evo.log --port 8766
+python dashboard.py --log my_run.log
 ```
 
 - Each generation saves the whole population (`evo_pop_XXXXX.npz`, large, git-ignored) and the best brain
-  (`best_evo_XXXXX.npz`). The last 3 of each are kept.
+  (`best_evo_XXXXX.npz`). The last 3 of each are kept. The dashboard's live battle always shows the newest brain.
 - `--resume latest` continues from the newest population.
 - Create a file named `STOP` in the folder to save and exit cleanly.
 - `python evo_rule.py --help` lists every option.
@@ -261,7 +297,8 @@ python dashboard.py --log train_evo.log --port 8766
 | [`dashboard.py`](dashboard.py) + [`dashboard.html`](dashboard.html) | Live training dashboard and battle viewer |
 | [`train_evo.log`](train_evo.log) | Full log of run 5 (generations 0–1149) |
 | [`best_evo_01149.npz`](best_evo_01149.npz) | The best evolved brain at generation 1149 |
-| [`runs/`](runs) | Logs of runs 1–4, the failed and superseded attempts |
+| [`runs/`](runs) | Logs of runs 1–4, the earlier runs that shaped the final design |
+| [`single.py`](single.py), [`continuous.py`](continuous.py), [`long_life.py`](long_life.py) | Earlier learning-rule experiments described in the lab notebook |
 | [`docs/DESIGN.md`](docs/DESIGN.md) | Full lab notebook: every design decision, every loophole, every fix |
 | [`docs/`](docs) | The theory behind the project ([theory](docs/theory.md), [approach](docs/approach.md), [experiments](docs/experiments.md), [diary](docs/diary.md)) |
 
@@ -283,4 +320,4 @@ selected?
 
 ---
 
-<sub>Author: Kyung (<a href="https://github.com/kyung01">@kyung01</a>). Contributions, replications and critiques welcome: open an issue.</sub>
+<sub>Author: <a href="https://github.com/kyung01">@kyung01</a>. Replications and contributions welcome: open an issue.</sub>

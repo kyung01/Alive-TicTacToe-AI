@@ -224,7 +224,7 @@ survival selection and the best genome's survival rate has sat between 68% and
 75% the whole time. The children were too much like their parents to find the
 next rung quickly.
 
-Two changes to the breeding program, both the user's.
+Two changes to the breeding program, both the author's.
 
 - **Every mutation step is 2.5x larger** than before: the scalar genes, the
   per-node genes (bias, leak, noise), and the weights.
@@ -350,12 +350,12 @@ archived.
 ## 2026-11-10, run 4 — start over, peers only, winner of each pair survives
 
 Run 3 is thrown away. Five hundred generations of what looked like progress
-was one-sided play, and the user's verdict was the right one: start fresh, and
+was one-sided play, and the author's verdict was the right one: start fresh, and
 this time the brains only ever meet each other.
 
-Selection is the user's rule, and it is the most tournament-like we have had.
+Selection is the author's rule, and it is the most tournament-like we have had.
 Each game is a pair. Both brains get the reward-only score; whichever scored
-higher survives and the other does not. One special case, also the user's: if
+higher survives and the other does not. One special case, also the author's: if
 X never opened, the O brain is moved into the X seat with a cleared memory and
 given one turn to make any move at all. If it can, it is the winner. If it
 cannot, both are thrown out. So two waiters meeting each other both die, and
@@ -440,7 +440,7 @@ beat an opponent is to outplay it.
 
 ## 2026-11-10, run 4 — an illegal move is no longer an exit
 
-The user's fix for the loophole, and it is the right shape: take the exit away.
+The author's fix for the loophole, and it is the right shape: take the exit away.
 An illegal fire now does nothing. The board ignores it, nobody is paid for it,
 and the game keeps ticking while the brain's own 30-tick clock runs down. A
 turn ends only when a legal move lands. If the clock runs out, the brain times

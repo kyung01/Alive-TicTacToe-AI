@@ -644,7 +644,8 @@ function celebrate(botId) {
 // an emoji stands in for any icon that does not exist yet
 const ICONS = { thinking: '💭', waiting: '⏳', trophy: '🏆', draw: '🤝', illegal: '⛔', 'out-of-turn': '⏱', frozen: '❄️',
                 'no-winner': '😐', lost: '😵', turn: '▶' };
-const missingIcons = new Set(['turn']);
+// no icon PNGs ship with the repo, so the emoji are used directly; take a name out of this set after adding its PNG
+const missingIcons = new Set(Object.keys(ICONS));
 function icon(name) {
   const em = document.createElement('span'); em.textContent = ICONS[name] || '•';
   if (missingIcons.has(name)) return em;

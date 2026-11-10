@@ -1,4 +1,4 @@
-# AI Brain — project docs
+# Alive Tic-Tac-Toe AI — theory and lab notes
 
 An experiment testing one idea: **modern AI is limited because humans designed its
 structure. What happens if we stop designing and let structure emerge?**
@@ -16,6 +16,6 @@ measure against.
 | [experiments.md](experiments.md) | Every run so far, what happened, what we learned, what is next |
 | [diary.md](diary.md) | Day-by-day notes: what I noticed and what I was thinking |
 
-Lab notebook with every design decision: [DESIGN.md](DESIGN.md). Diagrams: [design_diagrams.html](design_diagrams.html).
+Lab notebook with every design decision: [DESIGN.md](DESIGN.md). Diagrams of the earlier learning-rule designs that led here: [design_diagrams.html](design_diagrams.html).
 
 Files, results and how to reproduce: see the [main README](../README.md).
