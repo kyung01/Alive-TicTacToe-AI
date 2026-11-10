@@ -57,6 +57,9 @@
   #board button.ready { box-shadow: inset 0 0 0 2px var(--gold); }
   #board button.taken.ready { box-shadow: inset 0 0 0 2px var(--red); }
   #board button.fired { box-shadow: inset 0 0 0 3px #fff; }
+  #board button.invalid { box-shadow: inset 0 0 0 3px var(--red); }
+  #board button.invalid .want { background: var(--red); }
+  #status .try { color: var(--red); }
   #board button.win { box-shadow: inset 0 0 0 3px var(--gold); background: rgba(255,201,77,0.16); }
   #board button.playable { cursor: pointer; }
   #board button.playable:hover { background: rgba(56,227,184,0.15); }
@@ -104,8 +107,8 @@
 <div id="title" class="hud">
   <h1>The champion brain</h1>
   <p>The best brain evolved in <a href="https://github.com/kyung01/Alive-TicTacToe-AI">Alive Tic-Tac-Toe AI</a>.
-     Every neuron and synapse was chosen by natural selection. Current runs along a synapse while it carries a
-     signal. Drag to rotate, scroll to zoom, hover a neuron.</p>
+     Every neuron and synapse was chosen by natural selection. While a synapse carries a signal, light
+     runs along it from sender to receiver. Drag to rotate, scroll to zoom, hover a neuron.</p>
   <div class="stats" id="stats"></div>
 </div>
 
@@ -150,6 +153,9 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
+import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -238,36 +244,22 @@ const tmpM = new THREE.Matrix4(), tmpQ = new THREE.Quaternion(), tmpS = new THRE
 deadIdx.forEach((j, k) => ghosts.setMatrixAt(k, tmpM.compose(P[j], tmpQ, tmpS.set(0.06, 0.06, 0.06))));
 scene.add(ghosts);
 
-// synapses: a faint wire each; while a signal runs through it, lit sections travel along the wire from the
-// sender to the receiver like current. dist = distance from the sender along the wire (world units).
-const lineGeo = new THREE.BufferGeometry();
-const linePos = new Float32Array(E * 6), lineDist = new Float32Array(E * 2), linePhase = new Float32Array(E * 2);
-const lineBase = new Float32Array(E * 6), lineSig = new Float32Array(E * 6), lineSpeed = new Float32Array(E * 2);
-lineEdges.forEach(([i, j], k) => {
-  linePos.set([P[i].x, P[i].y, P[i].z, P[j].x, P[j].y, P[j].z], k * 6);
-  lineDist[k * 2 + 1] = P[i].distanceTo(P[j]);
-  linePhase[k * 2] = linePhase[k * 2 + 1] = Math.random();
-});
-lineGeo.setAttribute('position', new THREE.BufferAttribute(linePos, 3));
-lineGeo.setAttribute('dist', new THREE.BufferAttribute(lineDist, 1));
-lineGeo.setAttribute('phase', new THREE.BufferAttribute(linePhase, 1));
-lineGeo.setAttribute('base', new THREE.BufferAttribute(lineBase, 3));
-lineGeo.setAttribute('sig', new THREE.BufferAttribute(lineSig, 3));
-lineGeo.setAttribute('speed', new THREE.BufferAttribute(lineSpeed, 1));
-const wireMat = new THREE.ShaderMaterial({
-  uniforms: { time: { value: 0 } },
-  vertexShader: `attribute float dist; attribute float phase; attribute vec3 base; attribute vec3 sig; attribute float speed;
-    varying float vDist; varying float vPhase; varying vec3 vBase; varying vec3 vSig; varying float vSpeed;
-    void main() { vDist = dist; vPhase = phase; vBase = base; vSig = sig; vSpeed = speed;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
-  fragmentShader: `uniform float time; varying float vDist; varying float vPhase; varying vec3 vBase; varying vec3 vSig; varying float vSpeed;
-    void main() {
-      float t = fract((vDist - time * vSpeed) / 2.4 + vPhase);              // one lit section every 2.4 units
-      float lit = smoothstep(0.0, 0.05, t) * (1.0 - smoothstep(0.22, 0.32, t));
-      gl_FragColor = vec4(vBase + vSig * (0.12 + lit), 1.0); }`,
-  blending: THREE.AdditiveBlending, transparent: true, depthWrite: false,
-});
-scene.add(new THREE.LineSegments(lineGeo, wireMat));
+// synapses: crisp wires. Each is drawn twice: a faint full wire, and on top the same wire cut into short
+// sections that slide from sender to receiver while it carries a signal, lit as bright as that signal
+// (sender activity x weight). So the part of the wire where the signal is lights up, like current inside it.
+const linePos = new Float32Array(E * 6), wireBaseCol = new Float32Array(E * 6), wireLitCol = new Float32Array(E * 6);
+lineEdges.forEach(([i, j], k) => { linePos.set([P[i].x, P[i].y, P[i].z, P[j].x, P[j].y, P[j].z], k * 6); });
+function wireLayer(width, dashed) {
+  const g = new LineSegmentsGeometry(); g.setPositions(linePos); g.setColors(new Float32Array(E * 6));
+  const m = new LineMaterial({ vertexColors: true, linewidth: width, transparent: true, depthWrite: false,
+    blending: THREE.AdditiveBlending, dashed, dashSize: 0.55, gapSize: 2.6 });
+  m.resolution.set(innerWidth, innerHeight);
+  const l = new LineSegments2(g, m);
+  if (dashed) l.computeLineDistances();
+  scene.add(l);
+  return { col: g.attributes.instanceColorStart.data, mat: m };
+}
+const wireBase = wireLayer(1.0, false), wireLit = wireLayer(1.8, true);
 
 // labels
 function label(text, x, y, z, cls = '') {
@@ -327,7 +319,8 @@ const name = (s) => s === 1 ? 'X' : 'O';
 const kind = () => mode === 'human' ? 'human' : opp;
 
 function newGame() {
-  const g = { board: Array(9).fill(0), turn: 1, clock: 0, tick: 0, result: null, last: -1, line: null, fired: -1,
+  const g = { board: Array(9).fill(0), turn: 1, clock: 0, tick: 0, result: null, last: -1, line: null,
+              firedAt: Array(9).fill(-9), triedAt: Array(9).fill(-9), lastTry: null,
               minds: { 1: new Mind(), 2: new Mind() }, wait: null, endAt: 0 };
   if (mode === 'human') { g.human = humanSide; g.brains = [3 - humanSide]; g.view = 3 - humanSide; }
   else if (opp === 'random') { const b = rand() < 0.5 ? 1 : 2; g.brains = [b]; g.view = b; g.randomSide = 3 - b; }
@@ -345,14 +338,19 @@ function place(side, cell) {
 }
 function step() {
   if (!G || G.result) return;
-  G.tick++; G.fired = -1;
+  G.tick++;
   for (const s of G.brains) G.minds[s].tick(G.board, s);
   let moved = false;
   for (const s of G.brains) {
     const cell = G.minds[s].spike();
     if (cell < 0) continue;
-    if (s === G.view) { G.fired = cell; if (!SIM) flash[OUT + cell] = 1; }
-    if (s !== G.turn || G.board[cell] !== 0) continue;          // out of turn or a taken cell: the board ignores it
+    const invalid = s !== G.turn || G.board[cell] !== 0;           // out of turn or a taken cell: the board ignores it
+    if (s === G.view && !SIM) {
+      flash[OUT + cell] = 1;
+      if (invalid) { G.triedAt[cell] = clock; G.lastTry = { cell, why: s !== G.turn ? 'not its turn' : 'cell already taken', at: clock }; }
+      else G.firedAt[cell] = clock;
+    }
+    if (invalid) continue;
     place(s, cell); moved = true;
     break;
   }
@@ -403,10 +401,11 @@ function renderBoard() {
     const v = G.board[c];
     const want = Math.max(0, Math.min(1, x[OUT + c] / THR));       // 1 = at the firing threshold
     b.querySelector('.m').textContent = v ? name(v) : '';
-    b.querySelector('.want').style.opacity = (G.result ? 0 : want * want * 0.32).toFixed(3);
+    const tried = clock - G.triedAt[c] < 0.9, fired = clock - G.firedAt[c] < 0.5;
+    b.querySelector('.want').style.opacity = (tried ? 0.45 * (1 - (clock - G.triedAt[c]) / 0.9) + 0.1 : G.result ? 0 : want * want * 0.32).toFixed(3);
     b.querySelector('.meter i').style.width = (G.result ? 0 : want * 100).toFixed(1) + '%';
     b.className = (v === 1 ? 'x' : v === 2 ? 'o' : '') + (v ? ' taken' : '') + (c === G.last ? ' last' : '') +
-      (!G.result && x[OUT + c] > THR ? ' ready' : '') + (!G.result && c === G.fired ? ' fired' : '') +
+      (!G.result && x[OUT + c] > THR ? ' ready' : '') + (fired ? ' fired' : '') + (tried ? ' invalid' : '') +
       (G.line && G.line.includes(c) ? ' win' : '') +
       (G.human && !G.result && G.turn === G.human && !v ? ' playable' : '');
   });
@@ -418,6 +417,8 @@ function renderBoard() {
   else if (G.randomSide) s = G.turn === G.randomSide ? `<span class="big">Random player's turn</span><br>The brain (${name(G.view)}) waits.`
     : `<span class="big">The brain's turn (${name(G.view)})</span><br>${MAXT - G.clock} ticks left on its clock.`;
   else s = `<span class="big">${name(G.turn)} to move</span><br>${MAXT - G.clock} ticks left · bars show ${name(G.view)}'s brain`;
+  const t = G.lastTry;
+  if (!G.result && t && clock - t.at < 1.1) s += `<br><span class="try">Tried the ${cellName(t.cell)} cell: ignored, ${t.why}</span>`;
   $('status').innerHTML = s;
 }
 function renderScore() {
@@ -467,7 +468,6 @@ function neuronLook(j, out) {
   return scale;
 }
 
-const setPair = (arr, k, c, m) => { arr[k * 6] = arr[k * 6 + 3] = c.r * m; arr[k * 6 + 1] = arr[k * 6 + 4] = c.g * m; arr[k * 6 + 2] = arr[k * 6 + 5] = c.b * m; };
 function draw() {
   liveIdx.forEach((j, k) => {
     const s = neuronLook(j, tmpC);
@@ -476,22 +476,28 @@ function draw() {
   });
   neurons.instanceMatrix.needsUpdate = true; neurons.instanceColor.needsUpdate = true;
 
-  // each wire: a faint base, plus current whose strength is the signal it carries now (sender activity x weight)
   for (let k = 0; k < E; k++) {
     const [i, j, w] = lineEdges[k];
-    let a, col;
-    if (G) { const sig = disp[i] * w; a = Math.min(1, Math.max(0, (Math.abs(sig) - 0.05) / 0.6)); col = sig >= 0 ? C.pos : C.neg; }
-    else { a = 0.35 * Math.min(1, Math.abs(w) / 1.5); col = w >= 0 ? C.pos : C.neg; }
-    let base = 0.022;
-    if (hover >= 0) {
-      if (i === hover || j === hover) { base = 0.12; a = Math.max(a, 0.5 * Math.min(1, Math.abs(w))); }
-      else { base *= 0.3; a *= 0.12; }
+    let a, base, col;
+    if (G) {
+      const sig = disp[i] * w;
+      a = Math.min(1, Math.max(0, (Math.abs(sig) - 0.25) / 0.8));     // only signals that matter light up
+      col = sig >= 0 ? C.pos : C.neg;
+      base = 0.014 + 0.05 * a;
+    } else {
+      a = 0; col = w >= 0 ? C.pos : C.neg;
+      base = 0.05 + 0.2 * Math.min(1, Math.abs(w) / 1.5);
     }
-    setPair(lineBase, k, col, base);
-    setPair(lineSig, k, col, a * 0.95);
-    lineSpeed[k * 2] = lineSpeed[k * 2 + 1] = 1.5 + 3.5 * a;
+    if (hover >= 0) {
+      if (i === hover || j === hover) { base = Math.max(base, 0.3); a = Math.max(a, 0.6 * Math.min(1, Math.abs(w))); }
+      else { base *= 0.2; a *= 0.1; }
+    }
+    const o = k * 6, lit = 0.8 * a * a;
+    wireBaseCol[o] = wireBaseCol[o + 3] = col.r * base; wireBaseCol[o + 1] = wireBaseCol[o + 4] = col.g * base; wireBaseCol[o + 2] = wireBaseCol[o + 5] = col.b * base;
+    wireLitCol[o] = wireLitCol[o + 3] = col.r * lit; wireLitCol[o + 1] = wireLitCol[o + 4] = col.g * lit; wireLitCol[o + 2] = wireLitCol[o + 5] = col.b * lit;
   }
-  for (const n of ['base', 'sig', 'speed']) lineGeo.attributes[n].needsUpdate = true;
+  wireBase.col.array.set(wireBaseCol); wireBase.col.needsUpdate = true;
+  wireLit.col.array.set(wireLitCol); wireLit.col.needsUpdate = true;
 }
 
 // ---------------------------------------------------------------- interaction
@@ -537,6 +543,7 @@ $('spin').addEventListener('change', (e) => { controls.autoRotate = e.target.che
 addEventListener('resize', () => {
   camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight); labels.setSize(innerWidth, innerHeight);
+  wireBase.mat.resolution.set(innerWidth, innerHeight); wireLit.mat.resolution.set(innerWidth, innerHeight);
 });
 
 // ---------------------------------------------------------------- loop
@@ -549,13 +556,13 @@ function frame(dt) {
     } else {
       acc += dt; let n = 0;
       while (acc > 1 / tps && n < 6) { step(); acc -= 1 / tps; n++; }
-      if (n) renderBoard();
     }
+    renderBoard();
     const x = G.minds[G.view].x, k = Math.min(1, dt * 14);
     for (let j = 0; j < N; j++) disp[j] += (x[j] - disp[j]) * k;
   }
   for (let j = 0; j < N; j++) flash[j] = Math.max(0, flash[j] - dt * 2.5);
-  wireMat.uniforms.time.value = clock;
+  wireLit.mat.dashOffset = -clock * 3.2;              // the lit sections travel from sender to receiver
   draw();
   controls.update(dt);
   renderer.render(scene, camera);
