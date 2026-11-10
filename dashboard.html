@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brain Evolution</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f4f4f2; --surface: #fcfcfb; --border: #e2e1dc;
+    --text: #0b0b0b; --text-2: #52514e; --text-3: #8a8983; --grid: #ebeae6;
+    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4;
+    --s6: #008300; --s7: #6250d6; --s8: #e34948;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #111110; --surface: #1a1a19; --border: #2c2c2a;
+      --text: #f0efec; --text-2: #c3c2b7; --text-3: #8a8983; --grid: #262624;
+      --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181;
+      --s6: #008300; --s7: #9085e9; --s8: #e66767;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 14px/1.45 system-ui, -apple-system, Segoe UI, sans-serif; }
+  .wrap { max-width: 1440px; margin: 0 auto; padding: 20px 16px 40px; }
+  header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 18px; margin-bottom: 14px; }
+  h1 { font-size: 18px; margin: 0; font-weight: 600; }
+  .sub { color: var(--text-2); font-size: 12.5px; }
+  select { font: inherit; background: var(--surface); color: var(--text);
+           border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; }
+  .status { margin-left: auto; font-size: 12.5px; color: var(--text-2); }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+         background: var(--s3); margin-right: 6px; vertical-align: middle; }
+  .dot.done { background: var(--text-3); }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 14px; }
+  .tile { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+  .tile .k { font-size: 11.5px; color: var(--text-2); text-transform: uppercase; letter-spacing: .04em; }
+  .tile .v { font-size: 26px; font-weight: 600; line-height: 1.15; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .tile .d { font-size: 12px; color: var(--text-3); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 12px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 14px 10px; }
+  .card h2 { font-size: 13px; margin: 0 0 2px; font-weight: 600; }
+  .card p { margin: 0 0 8px; font-size: 12px; color: var(--text-2); }
+  .card canvas { width: 100% !important; height: 220px !important; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+  th, td { text-align: right; padding: 5px 6px; border-bottom: 1px solid var(--border); }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--text-2); font-weight: 500; }
+  .empty { color: var(--text-3); padding: 30px 0; text-align: center; }
+  /* battle */
+  .battle { display: grid; grid-template-columns: 428px 120px auto 120px 428px; gap: 14px; align-items: center; justify-items: center; }
+  .brains { display: grid; grid-template-columns: 210px 210px; gap: 8px; }     /* activation | memory, side by side */
+  .card canvas.brainviz { width: 210px !important; height: 294px !important; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; }
+  @media (max-width: 980px) { .brains { display: none; } }
+  @media (max-width: 980px) { .battle { grid-template-columns: 1fr auto 1fr; } .brainviz { display: none; } }
+  .bot { display: grid; justify-items: center; gap: 4px; width: 120px; }
+  .bot .step { font-size: 11px; color: var(--text-2); background: var(--bg); border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px; font-variant-numeric: tabular-nums; }
+  .bot img, .bot .ph { width: 72px; height: 72px; border-radius: 14px; object-fit: contain; }
+  .bot .ph { background: var(--border); display: grid; place-items: center; color: var(--text-2); font-size: 28px; }
+  .bot .who { font-size: 12px; color: var(--text-2); }
+  .bot.active img, .bot.active .ph { outline: 3px solid var(--s3); outline-offset: 2px; }
+  .bot.dead img, .bot.dead .ph { filter: grayscale(1) brightness(.7); opacity: .55; transition: filter .4s, opacity .4s; }
+  .bot.dead .think { color: var(--s8); }
+  .bot { position: relative; }
+  .bot.winner img, .bot.winner .ph { outline: 3px solid var(--s4); outline-offset: 2px; }
+  .bot.winner .think { color: var(--s4); font-weight: 600; }
+  .confetti { position: absolute; left: 50%; top: 40px; width: 7px; height: 11px; border-radius: 2px; pointer-events: none;
+              animation: confetti 1.4s ease-out forwards; }
+  @keyframes confetti {
+    0%   { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .confetti { animation-duration: .01s; } }
+  .bot .who { white-space: nowrap; height: 16px; }
+  .battle { align-items: start; }
+  .bot .think { font-size: 11px; color: var(--text-3); height: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px; }
+  .board { display: grid; grid-template-columns: repeat(3, 56px); grid-template-rows: repeat(3, 56px); gap: 4px; }
+  .cell { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; display: grid; place-items: center;
+          font: 600 28px/1 system-ui, sans-serif; transition: background .2s; }
+  .cell.x { color: var(--s1); } .cell.o { color: var(--s2); }
+  .cell.last { background: var(--grid); }
+  .cell { position: relative; }
+  .cell.bad { outline: 2px solid var(--s8); }
+  .cell.bad.turn { outline-style: dashed; }
+  .cell.ghost { opacity: .45; }
+  .cell.bad::after { content: '✕'; position: absolute; right: 3px; top: 1px; font-size: 13px; color: var(--s8); }
+  .bot.spared .think { color: var(--text-2); }
+  /* decision history: newest slides in on top, older ones move down and fade; at most four are kept */
+  .stack { display: grid; gap: 0; margin-top: 6px; width: 86px; min-height: 236px; align-content: start; }   /* room for four decisions: no reflow */
+  .decision { display: flex; align-items: center; gap: 6px; max-height: 52px; margin-bottom: 6px; opacity: 1; overflow: hidden;
+              transition: max-height .45s ease, margin .45s ease, opacity .45s ease; }
+  .decision.enter, .decision.leave { max-height: 0; margin-bottom: 0; opacity: 0; }
+  .decision .g { display: grid; grid-template-columns: repeat(3, 14px); gap: 2px; }
+  .decision .t { font-size: 10px; color: var(--text-3); white-space: nowrap; }
+  .stack .decision:nth-child(2) { opacity: .7; } .stack .decision:nth-child(3) { opacity: .45; } .stack .decision:nth-child(4) { opacity: .25; }
+  .decision .g span { width: 14px; height: 14px; border-radius: 3px; background: rgba(120,124,135,.12); position: relative; transition: background .2s; }
+  .decision .g span.pick { outline: 2px solid var(--text-1); outline-offset: -1px; }
+  .decision .g span.bad { outline-color: var(--s8); }
+  .decision .g span.bad::after { content: '✕'; position: absolute; inset: 0; display: grid; place-items: center; font: 700 11px/1 system-ui; color: var(--s8); }
+  /* icon badge on a bot's shoulder: what it is doing / how it ended */
+  .bot .badge { position: absolute; top: 14px; right: 4px; font-size: 28px; line-height: 1; pointer-events: none;
+                filter: drop-shadow(0 1px 2px rgba(0,0,0,.35)); animation: pop .35s cubic-bezier(.2,1.4,.4,1) both; }
+  .bot .badge.pulse { animation: pulse 1s ease-in-out infinite; }
+  @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+  @keyframes pulse { 0%, 100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.18); opacity: 1; } }
+  .bot.dead img, .bot.dead .ph { filter: grayscale(1) brightness(.7); opacity: .55; }
+  .bot.dead { animation: shake .4s ease-in-out; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+  .cell.last::before { content: ''; position: absolute; inset: -3px; border-radius: 10px; border: 2px solid var(--s3);
+                       animation: ring .9s ease-out both; }
+  @keyframes ring { from { transform: scale(.7); opacity: 1; } to { transform: scale(1.15); opacity: 0; } }
+  .cell.bad { animation: shake .4s ease-in-out; }
+  .cell.bad::after { content: '⛔'; font-size: 16px; right: 2px; top: 0; color: inherit; }
+  .cell.bad.turn::after { content: '⏱'; }
+  .banner { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 10px; height: 44px; white-space: nowrap; overflow: hidden;
+            padding: 6px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg);
+            font-size: 15px; font-weight: 600; color: var(--text-1); }
+  .banner .ic { font-size: 26px; line-height: 1; display: inline-grid; place-items: center; }
+  .banner .ic img, .bot .badge img { width: 32px; height: 32px; object-fit: contain; display: block; }
+  .bot .badge img { width: 36px; height: 36px; }
+  .legend img { width: 14px; height: 14px; vertical-align: -2px; }
+  .banner.bad { border-color: var(--s8); color: var(--s8); }
+  .banner.win { border-color: var(--s4); color: var(--s4); }
+  .banner.draw { border-color: var(--s3); color: var(--s3); }
+  .banner.turn { font-weight: 500; color: var(--text-2); }
+  .legend { font-size: 11.5px; color: var(--text-3); text-align: center; grid-column: 1 / -1; }
+  /* exam games against the perfect player: a colder room */
+  .card.vs-perfect { border-color: #7fa0c0; background: linear-gradient(180deg, rgba(127,196,238,.10), transparent 40%), var(--surface); }
+  .card.vs-perfect h2::before { content: 'EXAM'; font-size: 10px; letter-spacing: .08em; color: #4f87b5; border: 1px solid #7fa0c0; border-radius: 4px; padding: 1px 5px; margin-right: 8px; vertical-align: 2px; }
+  .bot.perfect img, .bot.perfect .ph { outline: 2px solid #7fa0c0; outline-offset: 2px; border-radius: 6px; filter: saturate(.3); }
+  .bot.perfect .step { color: #4f87b5; border-color: #7fa0c0; }
+  .bot.perfect .who { color: #4f87b5; }
+  .card.vs-perfect .banner.turn { border-color: #7fa0c0; }
+  /* X always sits on the left, O on the right; the bots swap places as they swap marks */
+  .battle .banner { order: 6; } .battle .verdict { order: 7; } .battle .timeline { order: 8; } .battle .legend { order: 9; }
+  @media (prefers-reduced-motion: reduce) { .bot .badge, .bot.dead, .cell.bad, .cell.last::before { animation: none; } }
+  .timeline { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; align-content: flex-start;
+              height: 58px; overflow-y: auto; padding: 2px 6px; border: 1px solid var(--border); border-radius: 8px; width: min(100%, 900px); }
+  .ev .n { margin-left: 6px; font-weight: 700; }
+  .ev { font-size: 11.5px; border: 1px solid var(--border); border-radius: 999px; padding: 2px 9px; color: var(--text-2);
+        font-variant-numeric: tabular-nums; }
+  .ev.x { border-color: var(--s1); } .ev.o { border-color: var(--s2); }
+  .ev.bad { border-color: var(--s8); color: var(--s8); }
+  .ev.win { border-color: var(--s4); color: var(--s4); font-weight: 600; }
+  .verdict { grid-column: 1 / -1; text-align: center; font-size: 13px; color: var(--text-2); height: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  button.snd { font: inherit; font-size: 12.5px; background: var(--surface); color: var(--text-2);
+               border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+  button.snd.off { color: var(--s8); }
+  @keyframes bump { 0% { transform: scale(1); } 35% { transform: scale(1.06); } 100% { transform: scale(1); } }
+  @keyframes glow { 0% { box-shadow: 0 0 0 0 var(--glow); } 100% { box-shadow: 0 0 0 14px transparent; } }
+  @keyframes flash { 0% { background: var(--flash); } 100% { background: var(--surface); } }
+  .tile.bump { animation: bump .45s ease-out; }
+  .tile.record { --glow: var(--s4); animation: bump .6s ease-out, glow .9s ease-out; }
+  .tile.alive { --glow: var(--s3); animation: bump .6s ease-out, glow .9s ease-out; }
+  .card.flash { --flash: color-mix(in srgb, var(--s1) 18%, var(--surface)); animation: flash 1.2s ease-out; }
+  tr.newrow td { animation: flash 1.5s ease-out; --flash: color-mix(in srgb, var(--s4) 25%, var(--surface)); }
+  #confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9; }
+  .brain-wrap { position: relative; height: 150px; margin: 0 0 14px; border-radius: 12px; overflow: hidden;
+                background: var(--surface); border: 1px solid var(--border); }
+  #brain { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .brain-cap { position: absolute; left: 14px; bottom: 10px; font-size: 12px; color: var(--text-2); pointer-events: none; }
+  .brain-cap b { color: var(--text); font-weight: 600; }
+  .brain-msg { position: absolute; right: 14px; bottom: 10px; font-size: 12px; color: var(--text-3); pointer-events: none;
+               transition: opacity .6s; }
+  .pbar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; margin: -8px 0 14px; }
+  .pbar i { display: block; height: 100%; width: 0; background: var(--s1); transition: width .25s linear; }
+  .tile .v { transition: color .4s; }
+  .tile .v.up { color: var(--s3); } .tile .v.down { color: var(--s8); }
+  @media (prefers-reduced-motion: reduce) { .tile, .card, tr td { animation: none !important; } }
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="wrap">
+  <header>
+    <h1>Brain evolution</h1>
+    <select id="logsel" title="training log"></select>
+    <span class="sub" id="header"></span>
+    <button class="snd" id="snd" title="toggle sounds">🔊 sound on</button>
+    <span class="status"><span class="dot" id="dot"></span><span id="status">connecting…</span></span>
+  </header>
+
+  <div class="brain-wrap">
+    <canvas id="brain"></canvas>
+    <div class="brain-cap"><b id="cap-pop">–</b> brains thinking · <b id="cap-gen">–</b> generations · <span id="cap-life"></span></div>
+    <div class="brain-msg" id="msg">waking up…</div>
+  </div>
+  <div class="pbar"><i id="pbar"></i></div>
+
+  <div class="tiles">
+    <div class="tile"><div class="k">Generation</div><div class="v" id="t-gen">–</div><div class="d" id="t-time"></div></div>
+    <div class="tile"><div class="k">Longest life</div><div class="v" id="t-life">–</div><div class="d" id="t-lifed">games before first mistake</div></div>
+    <div class="tile"><div class="k">Survivors</div><div class="v" id="t-surv">–</div><div class="d">brains with zero mistakes</div></div>
+    <div class="tile"><div class="k">Best fitness</div><div class="v" id="t-best">–</div><div class="d" id="t-mean"></div></div>
+    <div class="tile"><div class="k">Best brain · win</div><div class="v" id="t-win">–</div><div class="d" id="t-ill"></div></div>
+    <div class="tile"><div class="k">Ticks to decide</div><div class="v" id="t-ticks">–</div><div class="d">best brain, average</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:12px">
+    <h2>Live battle: the latest brain vs itself</h2>
+    <p>Both players run the newest saved brain (same weights, separate thoughts) and tick through the whole game; a move is whatever output crosses the threshold, whenever that happens. An illegal fire (out of turn, or on a taken cell) does nothing: the board ignores it and the game keeps ticking. Sitting on your own turn for 30 ticks is a <b>timeout</b>, and the other side takes the game. X always plays on the left and moves first; the two bots swap marks (and sides) every game. The number above each head is the generation that brain was saved at.</p>
+    <div class="battle">
+      <div class="brains" id="wrapA">
+        <canvas class="brainviz" id="actA" title="bot A: every node's activation, live (blue +, red -)"></canvas>
+        <canvas class="brainviz" id="memA" title="bot A: memory. glow = what each node carries into the next tick, ring = how much it changed this tick"></canvas>
+      </div>
+      <div class="bot" id="botA"><span class="step">step –</span><div class="ph" id="phA">🤖</div><span class="who" id="whoA">bot A</span><span class="think" id="thA"></span><div class="stack" id="decA" title="decisions this game, newest on top: the output grid the moment it fired"></div></div>
+      <div class="board" id="board"></div>
+      <div class="bot" id="botB"><span class="step">step –</span><div class="ph" id="phB">🤖</div><span class="who" id="whoB">bot B</span><span class="think" id="thB"></span><div class="stack" id="decB" title="decisions this game, newest on top: the output grid the moment it fired"></div></div>
+      <div class="brains" id="wrapB">
+        <canvas class="brainviz" id="actB" title="bot B: every node's activation, live (blue +, red -)"></canvas>
+        <canvas class="brainviz" id="memB" title="bot B: memory. glow = what each node carries into the next tick, ring = how much it changed this tick"></canvas>
+      </div>
+      <div class="banner turn" id="banner"><span class="ic">🎲</span><span id="bannerText">loading…</span></div>
+      <div class="verdict" id="verdict">loading…</div>
+      <div class="timeline" id="timeline"></div>
+      <div class="legend"></div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="card"><h2>Lifespan</h2><p>games survived before the first illegal move or freeze</p><canvas id="c-life"></canvas></div>
+    <div class="card"><h2>Fitness</h2><p>score per game over the brain's whole life</p><canvas id="c-fit"></canvas></div>
+    <div class="card"><h2>Best brain outcomes</h2><p>share of its games this generation</p><canvas id="c-out"></canvas></div>
+    <div class="card"><h2>Survivors</h2><p>brains that made no mistake in any game</p><canvas id="c-surv"></canvas></div>
+    <div class="card" style="grid-column: 1 / -1"><h2>Evaluations of the best brain</h2><p>fresh games against a random player and a perfect (minimax) player</p>
+      <div id="evals"></div></div>
+  </div>
+</div>
+
+<script>
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const pct = v => v == null ? '–' : v.toFixed(1) + '%';
+let charts = {}, lastLen = -1, current = new URLSearchParams(location.search).get('log') || '';
+
+function mk(id, datasets, opts = {}) {
+  const ctx = document.getElementById(id);
+  const c = new Chart(ctx, {
+    type: 'line',
+    data: { labels: [], datasets },
+    options: {
+      animation: { duration: 1100, easing: 'easeOutQuart' }, responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      elements: { point: { radius: 0, hitRadius: 8 }, line: { borderWidth: 2, tension: 0 } },
+      plugins: {
+        legend: { display: datasets.length > 1, labels: { color: css('--text-2'), boxWidth: 10, boxHeight: 10, usePointStyle: true } },
+        tooltip: { callbacks: { title: i => 'gen ' + i[0].label } },
+      },
+      scales: {
+        x: { ticks: { color: css('--text-3'), maxTicksLimit: 8 }, grid: { display: false }, border: { color: css('--border') } },
+        y: { ticks: { color: css('--text-3') }, grid: { color: css('--grid') }, border: { display: false }, ...(opts.y || {}) },
+      },
+    },
+  });
+  charts[id] = c; return c;
+}
+function ds(label, color, extra = {}) {
+  return { label, borderColor: css(color), backgroundColor: css(color), fill: false, ...extra };
+}
+mk('c-life', [ds('longest', '--s1'), ds('average', '--s1', { borderDash: [4, 4] })], { y: { beginAtZero: true } });
+mk('c-fit', [ds('best', '--s2'), ds('population mean', '--s2', { borderDash: [4, 4] })]);
+mk('c-out', [
+  ds('win', '--s3', { fill: true, backgroundColor: css('--s3') }),
+  ds('draw', '--s1', { fill: true }),
+  ds('loss', '--s4', { fill: true }),
+  ds('illegal', '--s8', { fill: true }),
+  ds('timeout', '--s7', { fill: true }),
+  ds('opponent blundered', '--text-3', { fill: true }),
+], { y: { stacked: true, min: 0, max: 100, ticks: { callback: v => v + '%' } } });
+charts['c-out'].options.elements.line.borderWidth = 1;
+charts['c-out'].options.scales.y.stacked = true;
+mk('c-surv', [ds('survivors', '--s3')], { y: { beginAtZero: true } });
+
+// ---- the brain-vs-brain world: the population's play and the exams are the real measures;
+// pair wins are relative to the cousins (the mean is 50% by construction)
+let peerCharts = false;
+function peerUI(d, last) {
+  const lbl = (id, k, dsc) => { const el = document.getElementById(id); if (k != null) el.previousElementSibling.textContent = k; if (dsc != null && el.nextElementSibling) el.nextElementSibling.textContent = dsc; };
+  lbl('t-life', 'Population', null);
+  // games that reached the board, across every brain this generation
+  const st = document.getElementById('t-surv');
+  lbl('t-surv', 'Games reaching the board', null);
+  if (last.pop_board != null) {
+    st.textContent = pct(last.pop_board);
+    st.nextElementSibling.textContent = 'draws ' + pct(last.pop_draw) + ' · timeouts ' + pct(last.pop_freeze)
+      + (last.pop_fires != null ? ' · ' + last.pop_fires.toFixed(1) + ' illegal fires per brain' : '')
+      + (last.pop_ticks != null ? ' · ' + Math.round(last.pop_ticks) + ' ticks a game' : '');
+  } else { st.textContent = '–'; st.nextElementSibling.textContent = 'all brains, this generation'; }
+  // the exam: fixed opponents, so this is the only absolute skill measure
+  const rows = d.rows; let ex = null; for (let i = rows.length - 1; i >= 0; i--) if (rows[i].pf_draw != null || rows[i].exam_win != null) { ex = rows[i]; break; }
+  lbl('t-win', 'Exam · draws vs the perfect player', null);
+  const tw = document.getElementById('t-win');
+  if (ex) {
+    tween('t-win', ex.pf_draw, v => pct(v));
+    document.getElementById('t-ill').textContent = 'loss ' + pct(ex.pf_loss) + ' · timeout ' + pct(ex.pf_freeze)
+      + (ex.exam_win != null ? ' · vs the random mover: win ' + pct(ex.exam_win) + ', loss ' + pct(ex.exam_loss) : '')
+      + ' · generation ' + ex.gen + ' (every 5)';
+  } else { tw.textContent = '–'; document.getElementById('t-ill').textContent = 'no exam yet'; }
+  lbl('t-best', 'Best lineage · pair wins', null);
+  document.getElementById('t-mean').textContent = 'vs its cousins, so relative: the mean is 50% by construction · best genome this generation: '
+    + 'win ' + pct(last.win) + ', loss ' + pct(last.loss) + ', draw ' + pct(last.draw) + ', timeout ' + pct(last.timeout);
+  // charts: the lifespan and survivors cards become population play and exams
+  const lc = document.querySelector('#c-life').closest('.card'), sc = document.querySelector('#c-surv').closest('.card');
+  lc.style.display = ''; sc.style.display = '';
+  if (!peerCharts) {
+    peerCharts = true;
+    lc.querySelector('h2').textContent = 'Population play';
+    lc.querySelector('p').textContent = 'share of all games this generation that reached a board result, ended in a draw, or ran out the clock';
+    const c1 = charts['c-life'];
+    c1.data.datasets = [ds('reached the board', '--s3'), ds('draw', '--s1'), ds('timeout', '--s7')];
+    c1.options.scales.y = { min: 0, max: 100, ticks: { callback: v => v + '%' } }; c1.update();
+    sc.querySelector('h2').textContent = 'Exams';
+    sc.querySelector('p').textContent = 'the best genome against fixed opponents every fifth generation: draws vs the perfect player, wins vs the random mover';
+    const c2 = charts['c-surv'];
+    c2.data.datasets = [ds('draw vs perfect', '--s2'), ds('win vs random', '--s3')];
+    c2.options.scales.y = { min: 0, max: 100, ticks: { callback: v => v + '%' } }; c2.options.spanGaps = true; c2.update();
+    document.getElementById('evals').closest('.card').style.display = 'none';
+  }
+  const fc = document.querySelector('#c-fit').closest('.card');
+  fc.querySelector('h2').textContent = 'Pair wins (relative)';
+  fc.querySelector('p').textContent = 'share of games the best lineage survived against its cousins (solid) and the population mean (dashed, 50% by construction)';
+}
+function thin(rows, max = 600) {
+  if (rows.length <= max) return rows;
+  const step = Math.ceil(rows.length / max);
+  return rows.filter((_, i) => i % step === 0 || i === rows.length - 1);
+}
+
+function render(d) {
+  const rows = d.rows, last = rows[rows.length - 1];
+  document.getElementById('header').textContent = d.header.replace(/\s+/g, ' ');
+  const dot = document.getElementById('dot');
+  dot.classList.toggle('done', d.finished);
+  document.getElementById('status').textContent = d.finished ? 'finished' : 'training…  refreshing every 5 s';
+  if (!last) { document.getElementById('t-gen').textContent = '0'; return; }
+  const fmtT = s => s >= 3600 ? (s/3600).toFixed(1) + ' h' : s >= 60 ? Math.round(s/60) + ' min' : s + ' s';
+  tween('t-gen', last.gen, v => Math.round(v));
+  document.getElementById('t-time').textContent = fmtT(last.sec) + ' elapsed' + (last.vram ? ' · ' + last.vram.toFixed(1) + ' GB VRAM' : '');
+  const lifeKnown = last.life_max != null;
+  const lbl = (id, k, dsc) => { const el = document.getElementById(id); if (k != null) el.previousElementSibling.textContent = k; if (dsc != null && el.nextElementSibling) el.nextElementSibling.textContent = dsc; };
+  if (d.single) {
+    lbl('t-gen', 'Games played', null);
+    lbl('t-life', 'One brain', 'all parallel games share its weights');
+    document.getElementById('t-life').textContent = (d.header.match(/batch=(\d+)/) || [,'?'])[1] + ' games/step';
+    lbl('t-surv', 'Learning rate', 'averaged backprop per step');
+    document.getElementById('t-surv').textContent = last.lr != null ? String(last.lr) : (d.header.match(/lr=([\d.]+)/) || [,'?'])[1];
+    lbl('t-best', 'Weights |W|', null);
+    document.querySelector('#c-life').closest('.card').style.display = 'none';
+    document.querySelector('#c-surv').closest('.card').style.display = 'none';
+    const fc = document.querySelector('#c-fit').closest('.card');
+    fc.querySelector('h2').textContent = 'Weights';
+    fc.querySelector('p').textContent = 'mean |W| (solid) and largest |W| (dashed): growth means learning is moving the brain';
+  }
+  if (d.continuous) {
+    document.querySelector('#t-life').previousElementSibling.textContent = 'Oldest brain';
+    document.getElementById('t-lifed').textContent = 'games survived · average ' + last.life_mean.toFixed(1);
+    document.querySelector('#t-surv').previousElementSibling.textContent = 'Deaths';
+    document.querySelector('#t-surv').nextElementSibling.textContent = 'terminated in the last window';
+    document.querySelector('#t-best').previousElementSibling.textContent = 'Oldest ever';
+    document.querySelector('#t-gen').previousElementSibling.textContent = 'Games played';
+  }
+  if (d.evo) {
+    const gm = d.header.match(/genomes=(\d+) brains\/genome=(\d+)/), lf = d.header.match(/life=(\d+) games/);
+    lbl('t-life', 'Genomes', null);
+    document.getElementById('t-life').textContent = gm ? gm[1] + ' × ' + gm[2] : '?';
+    document.getElementById('t-lifed').textContent = 'lineages × brains each' + (lf ? ' · life ' + lf[1] + ' games' : '');
+    lbl('t-best', /select=(survival|pair)/.test(d.header) ? (/select=pair/.test(d.header) ? 'Best genome · pair wins' : 'Best genome · games survived') : 'Best genome fitness', null);
+    document.querySelector('#c-fit').parentElement.querySelector('p').textContent = /select=(survival|pair)/.test(d.header)
+      ? 'share of games survived (win, draw, or the opponent died first) over the last third of life: best genome (solid), population mean (dashed)'
+      : 'external score per game over the last third of life: best genome (solid), population mean (dashed)';
+    document.getElementById('t-ticks').parentElement.style.display = 'none';
+  } else if (lifeKnown && !d.single) tween('t-life', last.life_max, v => Math.round(v) + (d.games && !d.continuous ? ' / ' + d.games : ''));
+  else if (!d.single) document.getElementById('t-life').textContent = 'n/a';
+  if (!d.single && !d.evo) document.getElementById('t-lifed').textContent = lifeKnown ? 'average ' + last.life_mean.toFixed(1) + ' games' : 'no kill rule in this run';
+  if (last.survivors != null) tween('t-surv', last.survivors, v => Math.round(v)); else if (!d.single) document.getElementById('t-surv').textContent = 'n/a';
+  const survival = d.evo && /select=(survival|pair)/.test(d.header);     // fitness is a share of games survived, 0..1
+  if (survival) tween('t-best', last.best * 100, v => pct(v)); else tween('t-best', last.best, v => (v >= 0 ? '+' : '') + v.toFixed(3));
+  document.getElementById('t-mean').textContent = d.single ? 'largest weight ' + last.mean.toFixed(2)
+    : (d.evo ? "win/loss/illegal below are the best genome's · " : '') + 'population mean '
+      + (survival ? pct(last.mean * 100) : (last.mean >= 0 ? '+' : '') + last.mean.toFixed(3));
+  if (!d.pair) tween('t-win', last.win, v => pct(v));
+  if (last.exam_win != null) {
+    // co-evolution: the tile's win rate is against other brains; the exam line is against the random mover
+    lbl('t-win', 'Best brain · win vs peers', null);
+    document.getElementById('t-ill').textContent = 'illegal ' + pct(last.illegal) + ' · loss ' + pct(last.loss)
+      + ' · board draws ' + pct(last.draw) + (last.oppdied != null ? ' · opponent blundered ' + pct(last.oppdied) : '')
+      + ' · exam vs random: win ' + pct(last.exam_win) + ', illegal ' + pct(last.exam_illegal)
+      + (last.pf_draw != null ? ' · exam vs perfect: draw ' + pct(last.pf_draw) + ', loss ' + pct(last.pf_loss) + ', illegal ' + pct(last.pf_illegal) : '');
+  } else if (d.evo) {
+    // vs the perfect player a draw is the best possible result, so it goes on the tile too
+    const both = last.kind === 'both';
+    lbl('t-win', 'Best brain · win vs ' + (both ? 'peers' : (last.kind || 'random')), null);
+    document.getElementById('t-ill').textContent = 'illegal ' + pct(last.illegal) + ' · loss ' + pct(last.loss)
+      + ' · draw ' + pct(last.draw) + ' · freeze ' + pct(last.timeout)
+      + (both && last.oppdied != null ? ' · opponent blundered ' + pct(last.oppdied) : '')
+      + (last.pf_draw != null ? ' · vs perfect: draw ' + pct(last.pf_draw) + ', loss ' + pct(last.pf_loss) + ', illegal ' + pct(last.pf_illegal) : '');
+  } else
+  document.getElementById('t-ill').textContent = 'illegal ' + pct(last.illegal) + ' · loss ' + pct(last.loss);
+  if (d.pair) peerUI(d, last);                 // after the generic tiles, so its labels and values stand
+  tween('t-ticks', last.ticks, v => v.toFixed(1));
+  brainState.gen = last.gen; brainState.life = last.life_max ?? 0; brainState.games = d.games || 100;
+  brainState.illegal = last.illegal; brainState.win = last.win; brainState.survivors = last.survivors ?? 0;
+  brainState.pop = (d.header.match(/pop=(\d+)/) || [])[1];
+  document.getElementById('cap-pop').textContent = brainState.pop ? Number(brainState.pop).toLocaleString() : '–';
+  document.getElementById('cap-gen').textContent = last.gen;
+  document.getElementById('cap-life').textContent = lifeKnown ? 'longest life ' + last.life_max + ' games' : '';
+
+  // ---- events: compare with the previous snapshot
+  if (prev.log === d.log && prev.gen != null) {
+    if (last.gen > prev.gen) {
+      bump(['t-gen', 't-best', 't-win', 't-ticks']);
+      // one sound per generation: the tone says whether the best fitness rose or fell
+      const dBest = last.best - prev.best;
+      play(dBest > 0.0005 ? 'up' : dBest < -0.0005 ? 'down' : 'tick');
+      const record = last.life_max != null && last.life_max > (prev.lifeMax ?? -1);
+      if (record) { mark('t-life', 'record'); confetti(40, '--s4');
+        // pitch rises with how long the record brain lived
+        setTimeout(() => play('record', 0.85 + 0.6 * Math.min(1, last.life_max / (d.games || 100))), 350); }
+      if ((last.survivors ?? 0) > (prev.survivors ?? 0)) { mark('t-surv', 'alive'); confetti(120, '--s3'); setTimeout(() => play('survivor'), 400); }
+      else if (!record) bump(['t-life', 't-surv']);
+    }
+    if (d.evals.length > prev.evals) { document.getElementById('evals').closest('.card').classList.add('flash'); play('eval'); newEvalRows = d.evals.length - prev.evals; }
+  } else if (prev.log !== d.log) { newEvalRows = 0; }
+  prev = { log: d.log, gen: last.gen, best: last.best, lifeMax: last.life_max, survivors: last.survivors, evals: d.evals.length };
+
+  if (rows.length !== lastLen) {
+    lastLen = rows.length;
+    const r = thin(rows), labels = r.map(x => x.gen);
+    const set = (id, cols) => { const c = charts[id]; c.data.labels = labels; cols.forEach((col, i) => c.data.datasets[i].data = r.map(x => x[col])); c.update(); };
+    if (d.pair) { set('c-life', ['pop_board', 'pop_draw', 'pop_freeze']); set('c-surv', ['pf_draw', 'exam_win']); }
+    else { set('c-life', ['life_max', 'life_mean']); set('c-surv', ['survivors']); }
+    set('c-fit', ['best', 'mean']);
+    set('c-out', ['win', 'draw', 'loss', 'illegal', 'timeout', 'oppdied']);
+  }
+  const ev = d.evals.slice(-12).reverse();
+  document.getElementById('evals').innerHTML = ev.length ? `<table><thead><tr>
+      <th>gen</th><th>opponent</th><th>games</th><th>win</th><th>draw</th><th>loss</th><th>illegal</th><th>timeout</th><th>ticks</th></tr></thead><tbody>` +
+    ev.map((e, i) => `<tr class="${i < newEvalRows ? 'newrow' : ''}"><td>${e.gen}</td><td>${e.opp}</td><td>${e.games}</td><td>${pct(e.win)}</td><td>${pct(e.draw)}</td><td>${pct(e.loss)}</td><td>${pct(e.illegal)}</td><td>${pct(e.timeout)}</td><td>${e.ticks.toFixed(1)}</td></tr>`).join('') +
+    '</tbody></table>' : '<div class="empty">no evaluation yet</div>';
+}
+
+// ---- animation + sound helpers
+let prev = {}, newEvalRows = 0;
+let soundOn = true;
+try { soundOn = localStorage.getItem('brain-sound') !== 'off'; } catch (e) {}
+const sndBtn = document.getElementById('snd');
+function setSoundLabel(blocked) {
+  sndBtn.textContent = !soundOn ? '🔇 sound off' : blocked ? '🔈 click to enable sound' : '🔊 sound on';
+  sndBtn.classList.toggle('off', !soundOn);
+}
+setSoundLabel(false);
+const sounds = {};
+['tick', 'up', 'down', 'record', 'survivor', 'eval'].forEach(n => {
+  const a = new Audio('/sounds/' + n + '.wav'); a.preload = 'auto'; a.preservesPitch = false; sounds[n] = a; });
+sounds.tick.volume = 0.35; sounds.up.volume = 0.5; sounds.down.volume = 0.5; sounds.eval.volume = 0.5;
+function play(name, rate = 1) {
+  if (!soundOn || document.visibilityState !== 'visible') return;   // hidden tabs stay silent
+  const a = sounds[name]; a.currentTime = 0; a.playbackRate = rate;
+  a.play().then(() => setSoundLabel(false)).catch(() => setSoundLabel(true));
+}
+sndBtn.addEventListener('click', () => {
+  if (sndBtn.textContent.includes('enable')) { setSoundLabel(false); play('tick'); return; }
+  soundOn = !soundOn; try { localStorage.setItem('brain-sound', soundOn ? 'on' : 'off'); } catch (e) {}
+  setSoundLabel(false); if (soundOn) play('tick');
+});
+function restart(el, cls) { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+function bump(ids) { ids.forEach(id => restart(document.getElementById(id).closest('.tile'), 'bump')); }
+function mark(id, cls) { restart(document.getElementById(id).closest('.tile'), cls); }
+
+// ---- smooth number changes
+const tweens = {};
+function tween(id, target, fmt) {
+  const el = document.getElementById(id);
+  const from = tweens[id]?.value ?? target;
+  if (tweens[id]?.raf) cancelAnimationFrame(tweens[id].raf);
+  const t0 = performance.now(), dur = 900;
+  if (from !== target) { el.classList.remove('up', 'down'); void el.offsetWidth; el.classList.add(target > from ? 'up' : 'down'); setTimeout(() => el.classList.remove('up', 'down'), 1500); }
+  const go = now => {
+    const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    const v = from + (target - from) * e;
+    el.textContent = fmt(v);
+    tweens[id] = { value: v, raf: k < 1 ? requestAnimationFrame(go) : null };
+  };
+  go(t0);
+}
+
+// ---- ambient brain: a living network whose mood follows the training
+const brainState = { gen: 0, life: 0, games: 100, illegal: 80, win: 0, survivors: 0, pop: 0 };
+const bc = document.getElementById('brain'), bx = bc.getContext('2d');
+const NODES = 26, nodes = [], links = [], pulses = [];
+for (let i = 0; i < NODES; i++) nodes.push({ x: Math.random(), y: Math.random(), vx: (Math.random() - .5) * .0004, vy: (Math.random() - .5) * .0004,
+  r: 2.5 + Math.random() * 2, glow: 0, kind: i < 5 ? 'in' : i >= NODES - 4 ? 'out' : 'hid' });
+for (let i = 0; i < NODES; i++) for (let j = i + 1; j < NODES; j++) if (Math.random() < 0.16) links.push([i, j]);
+let lastPulse = 0, lastFrame = performance.now();
+function brainFrame(now) {
+  const dt = Math.min(50, now - lastFrame); lastFrame = now;
+  const W = bc.clientWidth, H = bc.clientHeight;
+  if (bc.width !== W * devicePixelRatio) { bc.width = W * devicePixelRatio; bc.height = H * devicePixelRatio; }
+  bx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+  bx.clearRect(0, 0, W, H);
+  const health = Math.max(0, Math.min(1, 1 - brainState.illegal / 100));  // calmer and greener as it learns
+  const pad = 18;
+  nodes.forEach(n => {
+    n.x += n.vx * dt; n.y += n.vy * dt;
+    if (n.x < 0 || n.x > 1) n.vx *= -1; if (n.y < 0 || n.y > 1) n.vy *= -1;
+    n.px = pad + n.x * (W - 2 * pad); n.py = pad + n.y * (H - 2 * pad);
+    n.glow = Math.max(0, n.glow - dt / 600);
+  });
+  bx.lineWidth = 1;
+  links.forEach(([a, b]) => {
+    const A = nodes[a], B = nodes[b], d = Math.hypot(A.px - B.px, A.py - B.py);
+    if (d > W * 0.28) return;
+    bx.strokeStyle = css('--text-3'); bx.globalAlpha = 0.10 + 0.12 * (1 - d / (W * 0.28));
+    bx.beginPath(); bx.moveTo(A.px, A.py); bx.lineTo(B.px, B.py); bx.stroke();
+  });
+  bx.globalAlpha = 1;
+  const rate = 120 + (1 - health) * 220;   // ms between signals; steadier as it learns
+  if (now - lastPulse > rate && links.length) {
+    lastPulse = now;
+    const L = links[Math.floor(Math.random() * links.length)];
+    const forward = Math.random() < 0.5;
+    pulses.push({ a: forward ? L[0] : L[1], b: forward ? L[1] : L[0], t: 0, c: Math.random() < health ? '--s3' : (Math.random() < 0.5 ? '--s1' : '--s2') });
+  }
+  for (let i = pulses.length - 1; i >= 0; i--) {
+    const p = pulses[i]; p.t += dt / 900;
+    const A = nodes[p.a], B = nodes[p.b];
+    if (p.t >= 1) { B.glow = 1; B.glowColor = p.c; pulses.splice(i, 1); continue; }
+    const e = p.t < .5 ? 2 * p.t * p.t : 1 - Math.pow(-2 * p.t + 2, 2) / 2;
+    const x = A.px + (B.px - A.px) * e, y = A.py + (B.py - A.py) * e;
+    bx.fillStyle = css(p.c); bx.globalAlpha = 0.9;
+    bx.beginPath(); bx.arc(x, y, 2.2, 0, 7); bx.fill();
+    bx.globalAlpha = 0.25; bx.beginPath(); bx.arc(x, y, 6, 0, 7); bx.fill(); bx.globalAlpha = 1;
+  }
+  nodes.forEach(n => {
+    const breathe = 1 + 0.12 * Math.sin(now / 900 + n.x * 9);
+    const base = n.kind === 'in' ? '--s1' : n.kind === 'out' ? '--s2' : '--text-3';
+    if (n.glow > 0) { bx.fillStyle = css(n.glowColor || '--s3'); bx.globalAlpha = n.glow * 0.35; bx.beginPath(); bx.arc(n.px, n.py, n.r * 3.2 * breathe, 0, 7); bx.fill(); }
+    bx.globalAlpha = n.kind === 'hid' ? 0.55 : 0.9; bx.fillStyle = n.glow > 0.5 ? css(n.glowColor || '--s3') : css(base);
+    bx.beginPath(); bx.arc(n.px, n.py, n.r * breathe, 0, 7); bx.fill();
+  });
+  bx.globalAlpha = 1;
+  requestAnimationFrame(brainFrame);
+}
+requestAnimationFrame(brainFrame);
+
+// ---- progress to next refresh + rotating messages
+const MSGS = [
+  'brains are thinking…', 'the unfit are quietly retiring', 'children inherit half of each parent',
+  'one of them might never make a mistake', 'counting legal moves before death',
+  'mutation sprinkles a little noise', 'watching for the first survivor',
+  'every output node waits for its moment', 'natural selection, but in silicon', 'the board is 18 lights, the answer is 9',
+];
+let lastTick = performance.now(), msgIdx = 0;
+setInterval(() => {
+  const k = Math.min(1, (performance.now() - lastTick) / 5000);
+  document.getElementById('pbar').style.width = (k * 100).toFixed(1) + '%';
+}, 100);
+function nextMsg() {
+  const el = document.getElementById('msg'); el.style.opacity = 0;
+  setTimeout(() => {
+    let m = MSGS[msgIdx++ % MSGS.length];
+    if (brainState.survivors > 0) m = brainState.survivors + ' brain' + (brainState.survivors > 1 ? 's have' : ' has') + ' never made a mistake';
+    else if (brainState.life > 0 && msgIdx % 3 === 0) m = 'the longest life so far: ' + brainState.life + ' of ' + brainState.games + ' games';
+    el.textContent = m; el.style.opacity = 1;
+  }, 600);
+}
+setInterval(nextMsg, 9000); setTimeout(nextMsg, 1500);
+
+// tiny confetti burst
+const cv = document.getElementById('confetti'), cx = cv.getContext('2d');
+let parts = [], raf = null;
+function confetti(n, colorVar) {
+  const color = css(colorVar), hues = [color, css('--s1'), css('--s5'), css('--s2')];
+  cv.width = innerWidth; cv.height = innerHeight;
+  for (let i = 0; i < n; i++) parts.push({ x: innerWidth / 2 + (Math.random() - .5) * 200, y: 80, vx: (Math.random() - .5) * 9, vy: -Math.random() * 7 - 3,
+    r: 3 + Math.random() * 4, c: hues[i % hues.length], a: 1, rot: Math.random() * 6 });
+  if (!raf) raf = requestAnimationFrame(step);
+}
+function step() {
+  cx.clearRect(0, 0, cv.width, cv.height);
+  parts.forEach(p => { p.vy += 0.25; p.x += p.vx; p.y += p.vy; p.rot += 0.1; p.a -= 0.012;
+    cx.save(); cx.globalAlpha = Math.max(p.a, 0); cx.translate(p.x, p.y); cx.rotate(p.rot); cx.fillStyle = p.c; cx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r); cx.restore(); });
+  parts = parts.filter(p => p.a > 0 && p.y < cv.height + 20);
+  raf = parts.length ? requestAnimationFrame(step) : (cx.clearRect(0, 0, cv.width, cv.height), null);
+}
+
+async function loadLogs() {
+  const logs = await (await fetch('/logs')).json();
+  const sel = document.getElementById('logsel');
+  if (sel.options.length !== logs.length) {
+    sel.innerHTML = logs.map(l => `<option value="${l}">${l}</option>`).join('');
+  }
+  if (!current || !logs.includes(current)) current = logs[0] || '';
+  sel.value = current;
+}
+async function tick() {
+  lastTick = performance.now();
+  try {
+    await loadLogs();
+    if (!current) return;
+    const d = await (await fetch('/data?log=' + encodeURIComponent(current))).json();
+    render(d);
+  } catch (e) {
+    document.getElementById('status').textContent = 'server not reachable';
+  }
+}
+document.getElementById('logsel').addEventListener('change', e => { current = e.target.value; lastLen = -1; tick(); });
+tick(); setInterval(tick, 5000);
+
+// ---------- live self-play battle ----------
+const boardEl = document.getElementById('board');
+for (let i = 0; i < 9; i++) { const c = document.createElement('div'); c.className = 'cell'; c.id = 'c' + i; boardEl.appendChild(c); }
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const iconStamp = Date.now();
+function setIcons(xBot, oBot, perfectBot) {
+  const pick = (bot, src) => (bot === perfectBot ? '/robot_perfect.png' : src);
+  for (const [id, src] of [['ph' + (xBot || 'A'), pick(xBot || 'A', '/robot_x.png')], ['ph' + (oBot || 'B'), pick(oBot || 'B', '/robot_o.png')]]) {
+    const img = new Image();
+    img.onload = () => { const ph = document.getElementById(id); if (!ph) return; img.alt = 'robot'; img.className = ph.className.replace('ph', '').trim(); ph.replaceWith(img); img.id = id; };
+    img.src = src + '?t=' + iconStamp;
+  }
+}
+setIcons();
+const confettiColors = ['--s1', '--s2', '--s3', '--s4', '--s5', '--s7'];
+function celebrate(botId) {
+  const el = document.getElementById('bot' + botId);
+  el.classList.add('winner');
+  document.getElementById('th' + botId).textContent = 'winner!';
+  for (let i = 0; i < 28; i++) {
+    const c = document.createElement('span');
+    c.className = 'confetti';
+    const ang = Math.random() * Math.PI * 2, dist = 50 + Math.random() * 70;
+    c.style.setProperty('--dx', (Math.cos(ang) * dist) + 'px');
+    c.style.setProperty('--dy', (Math.sin(ang) * dist * 0.8 + 50) + 'px');
+    c.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+    c.style.background = css(confettiColors[i % confettiColors.length]);
+    c.style.animationDelay = (Math.random() * 0.15) + 's';
+    el.appendChild(c);
+    setTimeout(() => c.remove(), 1700);
+  }
+}
+// state icons: PNGs in assets/ (assets/icon-<name>.png, served at /icon/<name>.png);
+// an emoji stands in for any icon that does not exist yet
+const ICONS = { thinking: '💭', waiting: '⏳', trophy: '🏆', draw: '🤝', illegal: '⛔', 'out-of-turn': '⏱', frozen: '❄️',
+                'no-winner': '😐', lost: '😵', turn: '▶' };
+const missingIcons = new Set(['turn']);
+function icon(name) {
+  const em = document.createElement('span'); em.textContent = ICONS[name] || '•';
+  if (missingIcons.has(name)) return em;
+  const img = new Image(); img.alt = name; img.src = '/icon/' + name + '.png';
+  img.onerror = () => { missingIcons.add(name); img.replaceWith(em); };
+  return img;
+}
+const LEGEND = [['thinking', 'thinking'], ['waiting', 'waiting for the other side'], ['trophy', 'wins on the board'], ['draw', 'draw'],
+                ['illegal', 'hit a taken cell (ignored)'], ['out-of-turn', 'fired out of turn (ignored)'], ['frozen', 'timed out'], ['no-winner', 'no winner']];
+(function buildLegend() {
+  const el = document.querySelector('.legend'); if (!el) return; el.textContent = '';
+  LEGEND.forEach(([n, t], i) => { if (i) el.append(' · '); el.appendChild(icon(n)); el.append(' ' + t); });
+})();
+// ---- live brain view: nodes lit by their activation, lines lit by the signal flowing over them
+// (source activation x weight) at this tick, like watching the current run through the wiring
+const RGB = { x: '42,120,214', o: '227,73,72', neg: '120,124,135', pos: '42,120,214', negv: '227,73,72',
+              up: '34,160,94', down: '232,140,40', fire: '242,194,48' };   // fire: yellow = an output over threshold
+function nodePos(i, L) {
+  const nIn = L.n_in, outLo = L.out_lo;
+  if (i < 27) { const g = Math.floor(i / 9), c = i % 9; return [14 + g * 66 + (c % 3) * 16 + 6, 20 + Math.floor(c / 3) * 16 + 6]; }
+  if (i < nIn) return [222, 30 + (i - 27) * 22];                                   // seat nodes
+  if (i < outLo) { const h = i - nIn; return [19 + (h % 12) * 18, 112 + Math.floor(h / 12) * 18]; }
+  const o = i - outLo; return [88 + (o % 3) * 20 + 9, 260 + Math.floor(o / 3) * 20 + 9];
+}
+function drawBrain(cv, vec, L, side, phase = 1) {
+  const dpr = window.devicePixelRatio || 1, W = cv.clientWidth, H = cv.clientHeight;
+  if (!W) return;
+  if (cv.width !== Math.round(W * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+  const sc = W / 236, x = cv.getContext('2d'); x.setTransform(dpr * sc, 0, 0, dpr * sc, 0, 0); x.clearRect(0, 0, 236, 330);
+  const ink = css('--text-3'), pos = RGB.pos;                 // same rule for both brains: blue +, red -
+  const tone = (v, lo) => 'rgba(' + (v >= 0 ? RGB.pos : RGB.negv) + ',' + (lo + (1 - lo) * Math.min(1, Math.abs(v))) + ')';
+  const label = (t, px, py) => { x.fillStyle = ink; x.font = '600 9px system-ui, sans-serif'; x.textAlign = 'left'; x.fillText(t, px, py); };
+  const nIn = L.n_in, outLo = L.out_lo, hm = L.hmask;
+  // 1. wiring: the strongest weights, each lit by the signal it carries right now
+  const edges = L.edges || [];
+  if (edges.length) {
+    let wmax = 0; for (const e of edges) wmax = Math.max(wmax, Math.abs(e[2]));
+    x.lineCap = 'round';
+    for (const [i, j, w] of edges) {
+      const sig = (vec[i] / 127) * w / wmax;                       // -1..1, share of the strongest possible signal
+      const a = Math.abs(sig);
+      if (a < 0.02) continue;
+      const [x1, y1] = nodePos(i, L), [x2, y2] = nodePos(j, L);
+      const bow = i >= nIn && j >= nIn && i < outLo && j < outLo;    // hidden-to-hidden: a bow, so loops stay visible
+      const mx = (x1 + x2) / 2 + (y2 - y1) * 0.25, my = (y1 + y2) / 2 - (x2 - x1) * 0.25;
+      const at = t => bow
+        ? [(1 - t) * (1 - t) * x1 + 2 * (1 - t) * t * mx + t * t * x2, (1 - t) * (1 - t) * y1 + 2 * (1 - t) * t * my + t * t * y2]
+        : [x1 + (x2 - x1) * t, y1 + (y2 - y1) * t];
+      const col = sig >= 0 ? RGB.pos : RGB.negv;
+      // the wire itself stays dim; what you see move is the signal: a lit stretch of the wire that
+      // travels from the sending neuron to the receiving one over the tick
+      x.strokeStyle = 'rgba(' + col + ',' + (0.04 + 0.06 * a) + ')';
+      x.lineWidth = 0.6;
+      x.beginPath(); x.moveTo(x1, y1);
+      if (bow) x.quadraticCurveTo(mx, my, x2, y2); else x.lineTo(x2, y2);
+      x.stroke();
+      if (a > 0.06) {
+        const tail = 0.28;                                             // how much of the wire glows behind the point
+        const segs = 6;
+        for (let k = 0; k < segs; k++) {                               // lit stretch: dim at the back, bright at the point
+          const tA = phase - tail * (1 - k / segs), tB = phase - tail * (1 - (k + 1) / segs);
+          if (tB <= 0) continue;
+          const [ax, ay] = at(Math.max(0, tA)), [bx, by] = at(tB);
+          x.strokeStyle = 'rgba(' + col + ',' + ((0.15 + 0.85 * a) * ((k + 1) / segs)) + ')';
+          x.lineWidth = 1 + 2.2 * a * ((k + 1) / segs);
+          x.beginPath(); x.moveTo(ax, ay); x.lineTo(bx, by); x.stroke();
+        }
+        // no point drawn: the lit stretch of wire is the signal
+      }
+    }
+  }
+  // 2. what it sees: three boards (empty / X / O) + the two seat nodes
+  label('SEES', 8, 12);
+  x.fillStyle = ink; x.font = '9px system-ui, sans-serif'; x.textAlign = 'right'; x.fillText('blue + \u00b7 red \u2212 \u00b7 yellow = fired', 228, 12);
+  ['empty', 'X', 'O'].forEach((name, g) => {
+    for (let c = 0; c < 9; c++) {
+      const [px, py] = nodePos(g * 9 + c, L);
+      x.fillStyle = tone(vec[g * 9 + c] / 127, 0.08); x.fillRect(px - 6, py - 6, 12, 12);
+    }
+    x.fillStyle = ink; x.font = '9px system-ui, sans-serif'; x.textAlign = 'center'; x.fillText(name, 14 + g * 66 + 22, 80);
+  });
+  for (let k = 27; k < nIn; k++) {
+    const [px, py] = nodePos(k, L);
+    x.fillStyle = tone(vec[k] / 127, 0.08); x.beginPath(); x.arc(px, py, 6, 0, Math.PI * 2); x.fill();
+    x.fillStyle = ink; x.font = '9px system-ui, sans-serif'; x.textAlign = 'center'; x.fillText(k === 27 ? 'I am X' : 'I am O', px, py + 15);
+  }
+  // 3. hidden nodes; the ones the genome switched off are hollow
+  label('THINKS', 8, 98);
+  for (let i = nIn; i < outLo; i++) {
+    const [cx, cy] = nodePos(i, L);
+    if (hm && !hm[i]) { x.strokeStyle = 'rgba(' + RGB.neg + ',0.25)'; x.lineWidth = 1; x.beginPath(); x.arc(cx, cy, 3, 0, Math.PI * 2); x.stroke(); continue; }
+    x.fillStyle = tone(vec[i] / 127, 0.1); x.beginPath(); x.arc(cx, cy, 5.5, 0, Math.PI * 2); x.fill();
+  }
+  // 4. what it wants: the nine outputs as a board; a red frame = over the firing threshold
+  label('WANTS', 8, 252);
+  // grey while the outputs are only building up; the bot's colour the moment one crosses the
+  // threshold (that is the decision), with a frame on the strongest one, which is the cell played
+  const thr = Math.round((L.threshold || 0.8) * 127);
+  let best = -1, bestV = -Infinity;
+  for (let o = 0; o < 9; o++) { const v = vec[outLo + o]; if (v > thr && v > bestV) { best = o; bestV = v; } }
+  for (let o = 0; o < 9; o++) {
+    const v = vec[outLo + o], [px, py] = nodePos(outLo + o, L);
+    x.fillStyle = v > thr ? 'rgba(' + RGB.fire + ',1)' : 'rgba(' + RGB.neg + ',' + (0.08 + 0.55 * Math.min(1, Math.abs(v) / 127)) + ')';
+    x.fillRect(px - 9, py - 9, 18, 18);
+    if (o === best) { x.strokeStyle = css('--text-1'); x.lineWidth = 2; x.strokeRect(px - 10, py - 10, 20, 20); }
+  }
+}
+function drawMemory(cv, vec, prev, L) {
+  // same layout as the activation view. Glow = what the node carries into the next tick (its leak
+  // gene x its value): blue positive, red negative, larger the more it holds. Ring = how much the
+  // node's value changed this tick: green rising, orange falling. Sensors carry nothing.
+  const dpr = window.devicePixelRatio || 1, W = cv.clientWidth, H = cv.clientHeight;
+  if (!W) return;
+  if (cv.width !== Math.round(W * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+  const sc = W / 236, x = cv.getContext('2d'); x.setTransform(dpr * sc, 0, 0, dpr * sc, 0, 0); x.clearRect(0, 0, 236, 330);
+  const ink = css('--text-3'), leak = L.leak || [], nIn = L.n_in;
+  x.fillStyle = ink; x.font = '600 9px system-ui, sans-serif'; x.textAlign = 'left'; x.fillText('MEMORY', 8, 12);
+  x.font = '9px system-ui, sans-serif'; x.textAlign = 'right';
+  x.fillText('glow = carried to next tick (blue + \u00b7 red \u2212)', 228, 12);
+  x.fillText('ring = change this tick (green \u2191 \u00b7 orange \u2193)', 228, 24);
+  for (let i = 0; i < vec.length; i++) {
+    const [cx, cy] = nodePos(i, L);
+    if (i < nIn) {                                                  // sensors: just the layout, no memory
+      x.fillStyle = 'rgba(' + RGB.neg + ',0.12)'; x.fillRect(cx - 4, cy - 4, 8, 8); continue;
+    }
+    if (L.hmask && !L.hmask[i]) continue;
+    const v = vec[i] / 127, carried = (leak[i] || 0) * v, d = (vec[i] - (prev ? prev[i] : 0)) / 127;
+    const mag = Math.min(1, Math.abs(carried));
+    if (mag > 0.02) {
+      const r = 4 + 11 * mag, col = carried >= 0 ? RGB.pos : RGB.negv;
+      const grd = x.createRadialGradient(cx, cy, 0, cx, cy, r);
+      grd.addColorStop(0, 'rgba(' + col + ',' + (0.35 + 0.6 * mag) + ')'); grd.addColorStop(1, 'rgba(' + col + ',0)');
+      x.fillStyle = grd; x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.fill();
+    }
+    x.fillStyle = 'rgba(' + RGB.neg + ',0.35)'; x.beginPath(); x.arc(cx, cy, 2, 0, Math.PI * 2); x.fill();
+    const ch = Math.min(1, Math.abs(d));
+    if (ch > 0.03) {
+      x.strokeStyle = 'rgba(' + (d > 0 ? RGB.up : RGB.down) + ',' + (0.25 + 0.75 * ch) + ')';
+      x.lineWidth = 1 + 2.5 * ch; x.beginPath(); x.arc(cx, cy, 5.5 + 2 * ch, 0, Math.PI * 2); x.stroke();
+    }
+  }
+}
+async function battleLoop() {
+  while (true) {
+    let g;
+    try { g = await (await fetch('/battle')).json(); } catch (e) { await sleep(3000); continue; }
+    if (g.error) { document.getElementById('verdict').textContent = 'brain file busy, retrying…'; await sleep(2000); continue; }
+    for (const el of boardEl.children) { el.textContent = ''; el.className = 'cell'; }
+    document.querySelectorAll('.bot').forEach(b => b.classList.remove('dead', 'winner'));
+    document.querySelectorAll('.bot .step').forEach(s => s.textContent = 'gen ' + g.step.toLocaleString());
+    const bot = s => (s === 1 ? g.x_bot : g.o_bot);       // which bot holds X / O this game
+    setIcons(g.x_bot, g.o_bot, g.perfect_bot);            // blue for X, red for O; steel for the perfect player
+    // a different face for the exam games: cold tint on the panel, the perfect robot's slot styled apart
+    const card = document.querySelector('.battle').closest('.card');
+    card.classList.toggle('vs-perfect', !!g.perfect_bot);
+    card.querySelector('h2').textContent = g.perfect_bot ? 'Live battle: the latest brain vs the perfect player' : 'Live battle: the latest brain vs itself';
+    document.querySelectorAll('.bot').forEach(b => b.classList.toggle('perfect', b.id === 'bot' + g.perfect_bot));
+    // X (moves first) always on the left, O on the right: reorder the grid instead of the reader
+    document.getElementById('wrap' + g.x_bot).style.order = 1; document.getElementById('bot' + g.x_bot).style.order = 2;
+    boardEl.style.order = 3;
+    document.getElementById('bot' + g.o_bot).style.order = 4; document.getElementById('wrap' + g.o_bot).style.order = 5;
+    // memory panels on the outside, activation panels next to the robots (mirror image left/right)
+    document.getElementById('mem' + g.x_bot).style.order = 1; document.getElementById('act' + g.x_bot).style.order = 2;
+    document.getElementById('act' + g.o_bot).style.order = 1; document.getElementById('mem' + g.o_bot).style.order = 2;
+    const pb = g.perfect_bot;                                   // this slot is the perfect player this game
+    const nm = b => (b === pb ? 'perfect player' : 'bot ' + b);
+    document.getElementById('who' + g.x_bot).textContent = nm(g.x_bot) + ' · X, moves first';
+    document.getElementById('who' + g.o_bot).textContent = nm(g.o_bot) + ' · O, moves second';
+    document.querySelectorAll('.bot .step').forEach(s => { if (s.parentElement.id === 'bot' + pb) s.textContent = 'minimax table'; });
+    document.getElementById('verdict').textContent = 'game ' + g.games_total + ' · brain from generation ' + g.step.toLocaleString()
+      + (g.memory_level ? ' · memory A ' + g.memory_level.A.toFixed(2) + ' / B ' + g.memory_level.B.toFixed(2) : '');
+    const CELL = ['top-left', 'top', 'top-right', 'left', 'center', 'right', 'bottom-left', 'bottom', 'bottom-right'];
+    const mark = sd => (sd === 1 ? 'X' : 'O');
+    const tl = document.getElementById('timeline'); tl.innerHTML = '';
+    const badge = (id, ic, pulse) => { const b = document.getElementById('bot' + id); b.querySelectorAll('.badge').forEach(e => e.remove());
+      if (!ic) return; const e = document.createElement('span'); e.className = 'badge' + (pulse ? ' pulse' : ''); e.appendChild(icon(ic)); b.appendChild(e); };
+    const banner = (cls, ic, text) => { const b = document.getElementById('banner'); b.className = 'banner ' + cls;
+      const h = b.querySelector('.ic'); h.textContent = ''; h.appendChild(icon(ic)); document.getElementById('bannerText').textContent = text; };
+    badge(g.x_bot); badge(g.o_bot);
+    for (const id of ['decA', 'decB']) document.getElementById(id).textContent = '';   // new game: empty stacks
+    banner('turn', 'turn', 'X to move');
+    // one chip per event; a run of the same ignored fire (same side, reason, cell) folds into one chip with a count
+    let lastKey = null, lastChip = null, lastN = 0;
+    const chip = (cls, text, key) => {
+      if (key && key === lastKey && lastChip) { lastN++; let n = lastChip.querySelector('.n'); if (!n) { n = document.createElement('span'); n.className = 'n'; lastChip.appendChild(n); } n.textContent = '×' + lastN; tl.scrollTop = tl.scrollHeight; return; }
+      const e = document.createElement('span'); e.className = 'ev ' + cls; e.textContent = text; tl.appendChild(e);
+      lastKey = key || null; lastChip = key ? e : null; lastN = 1;
+      tl.scrollTop = tl.scrollHeight;
+    };
+    const setTurn = sd => {
+      document.getElementById('bot' + bot(sd)).classList.add('active'); document.getElementById('bot' + bot(3 - sd)).classList.remove('active');
+      document.getElementById('th' + bot(sd)).textContent = 'thinking…';
+      document.getElementById('th' + bot(3 - sd)).textContent = 'waiting';
+      badge(bot(sd), 'thinking', true); badge(bot(3 - sd), 'waiting');
+      banner('turn', 'turn', mark(sd) + ' to move');
+    };
+    const showDecision = m => {
+      // freeze the mover's output grid as it was at the tick it fired and slide it in on top of
+      // its decision stack; older decisions move down and fade, the fifth slides out
+      const stack = document.getElementById('dec' + bot(m.side));
+      const tr = g.trace && g.layout ? g.trace[bot(m.side)] : null;
+      const vec = tr ? tr[m.ticks] : null;
+      const pos = RGB[m.side === 1 ? 'x' : 'o'];
+      const d = document.createElement('div'); d.className = 'decision enter';
+      const grid = document.createElement('div'); grid.className = 'g';
+      for (let o = 0; o < 9; o++) {
+        const sp = document.createElement('span');
+        const v = vec ? vec[g.layout.out_lo + o] / 127 : 0;
+        if (o === m.cell) { sp.style.background = 'rgb(' + RGB.fire + ')'; sp.classList.add('pick'); if (m.illegal) sp.classList.add('bad'); }
+        else sp.style.background = 'rgba(' + RGB.neg + ',' + (0.1 + 0.55 * Math.min(1, Math.abs(v))) + ')';
+        grid.appendChild(sp);
+      }
+      const t = document.createElement('span'); t.className = 't'; t.textContent = 'tick ' + m.ticks;
+      d.append(grid, t);
+      stack.prepend(d);
+      requestAnimationFrame(() => requestAnimationFrame(() => d.classList.remove('enter')));
+      [...stack.children].slice(4).forEach(old => { old.classList.add('leave'); setTimeout(() => old.remove(), 500); });
+    };
+    const applyMove = m => {
+      showDecision(m);
+      const c = document.getElementById('c' + m.cell);
+      boardEl.querySelectorAll('.last').forEach(e => e.classList.remove('last'));
+      if (m.illegal) {
+        const outOfTurn = (m.reason || '').includes('turn');
+        const wasEmpty = !c.textContent;
+        c.classList.add('bad', outOfTurn ? 'turn' : 'occ');
+        if (outOfTurn && wasEmpty) { c.textContent = mark(m.side); c.classList.add(m.side === 1 ? 'x' : 'o', 'ghost'); }
+        setTimeout(() => { c.classList.remove('bad', 'turn', 'occ'); if (c.classList.contains('ghost')) { c.textContent = ''; c.classList.remove('ghost', 'x', 'o'); } }, 900);
+        document.getElementById('th' + bot(m.side)).textContent = (outOfTurn ? 'fired out of turn' : 'hit a taken cell') + ' · ignored';
+        badge(bot(m.side), outOfTurn ? 'out-of-turn' : 'illegal');
+        chip('bad', mark(m.side) + ' ' + (outOfTurn ? 'fired out of turn' : 'hit a taken cell') + ' (' + CELL[m.cell] + ') · from tick ' + m.ticks + ' · ignored', 'ill:' + m.side + ':' + (outOfTurn ? 't' : 'o') + ':' + m.cell);
+      } else {
+        c.classList.remove('bad', 'turn', 'occ', 'ghost', 'x', 'o');
+        c.textContent = mark(m.side); c.classList.add(m.side === 1 ? 'x' : 'o', 'last');
+        document.getElementById('th' + bot(m.side)).textContent = CELL[m.cell] + ' · tick ' + m.ticks;
+        chip(m.side === 1 ? 'x' : 'o', mark(m.side) + ' → ' + CELL[m.cell] + ' · tick ' + m.ticks);
+      }
+    };
+    const cvA = document.getElementById('actA'), cvB = document.getElementById('actB');
+    const mA = document.getElementById('memA'), mB = document.getElementById('memB');
+    if (g.trace && (g.trace.A || g.trace.B) && g.layout) {
+      // continuous brains: replay the game tick by tick, both brains lit up as they were
+      const brainBot = pb ? (pb === 'A' ? 'B' : 'A') : null;
+      const TR = g.trace[brainBot || 'A'] || g.trace.B;
+      const T = TR.length, dt = Math.max(60, Math.min(140, 7000 / T));
+      let mi = 0, turn = 1;
+      setTurn(1);
+      // the frame before the first tick: a blank brain, as every game starts
+      const blank = new Array(TR[0].length).fill(0);
+      const placeholder = cv => { const x = cv.getContext('2d'); const dpr = window.devicePixelRatio || 1, W = cv.clientWidth, H = cv.clientHeight;
+        if (cv.width !== Math.round(W * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+        x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, W, H); x.fillStyle = css('--text-3'); x.font = '12px system-ui, sans-serif'; x.textAlign = 'center';
+        x.fillText('perfect player', W / 2, H / 2 - 10); x.fillText('a lookup table, no brain', W / 2, H / 2 + 8); };
+      const draw = (bot, vec, prev, phase = 1) => {
+        const cv = document.getElementById('act' + bot), mv = document.getElementById('mem' + bot);
+        if (bot === pb) { placeholder(cv); placeholder(mv); return; }
+        drawBrain(cv, vec, g.layout, g.x_bot === bot ? 'x' : 'o', phase);
+        if (prev !== undefined) drawMemory(mv, vec, prev, g.layout);
+      };
+      // run `frame(phase)` every display frame for `ms` milliseconds, phase going 0 -> 1
+      const animateTick = (ms, frame) => new Promise(res => { const t0 = performance.now();
+        const step = now => { const ph = Math.min(1, (now - t0) / ms); frame(ph); if (ph < 1) requestAnimationFrame(step); else res(); };
+        requestAnimationFrame(step); });
+      draw('A', blank, null); draw('B', blank, null);
+      document.getElementById('bannerText').textContent = 'new game · both brains blank';
+      await sleep(700);
+      for (let t = 0; t < T; t++) {
+        for (const bot of ['A', 'B']) {                              // memory panel: once per tick
+          const tr = g.trace[bot];
+          if (tr) draw(bot, tr[t], t ? tr[t - 1] : null, 0);
+        }
+        document.getElementById('bannerText').textContent = mark(turn) + ' to move · tick ' + t;
+        while (mi < g.moves.length && g.moves[mi].ticks === t) {
+          const m = g.moves[mi++];
+          applyMove(m);
+          if (!m.illegal && t < T - 1) { turn = 3 - m.side; setTurn(turn); }
+        }
+        // activation panels: every frame of this tick, the sparks travelling along their wires
+        await animateTick(dt, ph => { for (const bot of ['A', 'B']) { const tr = g.trace[bot]; if (tr) draw(bot, tr[t], undefined, ph); } });
+      }
+      await sleep(400);
+    } else {
+      for (const m of g.moves) {
+        setTurn(m.side);
+        await sleep(250 + Math.min(m.ticks, 40) * 60);
+        applyMove(m);
+        await sleep(500);
+      }
+    }
+    document.querySelectorAll('.bot').forEach(b => b.classList.remove('active'));
+    const r = g.result || {};
+    document.querySelectorAll('.bot').forEach(b => b.classList.remove('winner', 'spared'));
+    const name = s => mark(s) + ' (bot ' + bot(s) + ')';
+    let text = '';
+    if (r.kind === 'timeout') {
+      // the clock ran out on the loser's turn: the other side takes the game
+      document.getElementById('bot' + bot(r.loser)).classList.add('dead');
+      document.getElementById('th' + bot(r.loser)).textContent = 'timed out';
+      badge(bot(r.loser), 'frozen');
+      celebrate(bot(3 - r.loser));
+      badge(bot(3 - r.loser), 'trophy');
+      chip('bad', mark(r.loser) + ' timed out: no legal move for ' + (g.max_ticks || 30) + ' ticks');
+      banner('win', 'trophy', mark(3 - r.loser) + ' wins · ' + mark(r.loser) + ' timed out');
+      text = name(r.loser) + ' timed out, no legal move for ' + (g.max_ticks || 30) + ' ticks · ' + name(3 - r.loser) + ' wins';
+    } else if (r.kind === 'win') {
+      document.getElementById('bot' + bot(3 - r.winner)).classList.add('dead');
+      document.getElementById('th' + bot(3 - r.winner)).textContent = 'lost';
+      celebrate(bot(r.winner));
+      badge(bot(r.winner), 'trophy'); badge(bot(3 - r.winner), 'lost');
+      banner('win', 'trophy', mark(r.winner) + ' wins on the board');
+      chip('win', mark(r.winner) + ' wins on the board');
+      text = name(r.winner) + ' wins on the board';
+    } else if (r.kind === 'draw') {
+      document.querySelectorAll('.bot .think').forEach(t => t.textContent = 'draw');
+      chip('win', 'draw · full board');
+      badge(g.x_bot, 'draw'); badge(g.o_bot, 'draw');
+      banner('draw', 'draw', 'draw · full board');
+      text = 'draw: full board, nobody lost';
+    }
+    document.getElementById('verdict').textContent = text + ' · next game: sides swap, fresh state, newest weights';
+    await sleep(2500);
+  }
+}
+battleLoop();
+</script>
+</body>
+</html>

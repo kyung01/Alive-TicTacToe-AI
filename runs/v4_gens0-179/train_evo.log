@@ -1,0 +1,553 @@
+device=cuda evolution-only, no plasticity  genomes=256 brains/genome=512 total brains=131072  life=1 games  opponent=peer  select=pair win=100 legal=1 attempt=0 wait/tick=0.001 elite=0.1 mutation x2.5  noise seed=3178497659355373747  continuous game: 30 ticks per turn, opponent answers in 1..30 ticks  nodes<=120  scalar genes=['thr', 'n_hid', 'log_mw'] vector genes=['log_noise', 'b', 'd0'] matrix genes=['W0']
+gen    0 game   1  all brains: win= 23.9% loss= 23.9% illegal=  0.0% freeze= 24.9%  ticks/game=  41  illegal fires/brain=15.3  [    3s]
+GEN    0  best=+0.686 mean=+0.500 median=+0.533  best genome (last 1 peer games): win= 37.5% loss= 22.9% illegal=  0.0% draw=  4.1% freeze=  7.2% | exam vs random: win= 40.1% loss= 39.2% illegal=  0.0% freeze=  9.9% | oppdied= 28.3% | vs perfect: loss= 88.8% illegal=  0.0% draw=  8.9% freeze=  2.3%  thr=0.41 hid=49 mw=0.008 noise=0.39 |W0|=0.080 leak=0.51  [   45s]
+saved evo_pop_00000.npz and best_evo_00000.npz
+gen    1 game   1  all brains: win= 32.5% loss= 32.5% illegal=  0.0% freeze= 15.3%  ticks/game=  33  illegal fires/brain=14.8  [   48s]
+GEN    1  best=+0.637 mean=+0.500 median=+0.510  best genome (last 1 peer games): win= 40.6% loss= 29.3% illegal=  0.0% draw=  6.4% freeze=  4.5% | oppdied= 19.1%  thr=0.05 hid=55 mw=0.009 noise=0.34 |W0|=0.082 leak=0.44  [   48s]
+saved evo_pop_00001.npz and best_evo_00001.npz
+gen    2 game   1  all brains: win= 34.5% loss= 34.5% illegal=  0.0% freeze= 12.9%  ticks/game=  31  illegal fires/brain=14.7  [   51s]
+GEN    2  best=+0.604 mean=+0.500 median=+0.510  best genome (last 1 peer games): win= 43.8% loss= 36.5% illegal=  0.0% draw=  6.2% freeze=  0.4% | oppdied= 13.1%  thr=0.07 hid=68 mw=0.009 noise=0.55 |W0|=0.353 leak=0.48  [   51s]
+saved evo_pop_00002.npz and best_evo_00002.npz
+gen    3 game   1  all brains: win= 35.1% loss= 35.1% illegal=  0.0% freeze= 12.0%  ticks/game=  30  illegal fires/brain=14.8  [   53s]
+GEN    3  best=+0.609 mean=+0.500 median=+0.514  best genome (last 1 peer games): win= 42.6% loss= 33.6% illegal=  0.0% draw=  5.5% freeze=  2.7% | oppdied= 15.6%  thr=0.12 hid=82 mw=0.007 noise=0.46 |W0|=0.225 leak=0.49  [   53s]
+saved evo_pop_00003.npz and best_evo_00003.npz
+gen    4 game   1  all brains: win= 37.5% loss= 37.5% illegal=  0.0% freeze=  8.9%  ticks/game=  26  illegal fires/brain=14.4  [   56s]
+GEN    4  best=+0.580 mean=+0.500 median=+0.512  best genome (last 1 peer games): win= 41.6% loss= 33.6% illegal=  0.0% draw=  9.2% freeze=  4.7% | oppdied= 10.9%  thr=0.05 hid=59 mw=0.011 noise=0.48 |W0|=0.227 leak=0.54  [   56s]
+saved evo_pop_00004.npz and best_evo_00004.npz
+gen    5 game   1  all brains: win= 38.5% loss= 38.5% illegal=  0.0% freeze=  7.5%  ticks/game=  25  illegal fires/brain=14.2  [   58s]
+GEN    5  best=+0.602 mean=+0.500 median=+0.506  best genome (last 1 peer games): win= 43.8% loss= 32.6% illegal=  0.0% draw= 11.9% freeze=  2.9% | exam vs random: win= 47.1% loss= 36.3% illegal=  0.0% freeze=  2.9% | oppdied=  8.8% | vs perfect: loss= 84.8% illegal=  0.0% draw= 13.8% freeze=  1.4%  thr=0.29 hid=82 mw=0.030 noise=0.67 |W0|=0.452 leak=0.45  [  109s]
+saved evo_pop_00005.npz and best_evo_00005.npz
+gen    6 game   1  all brains: win= 39.8% loss= 39.8% illegal=  0.0% freeze=  5.9%  ticks/game=  24  illegal fires/brain=14.0  [  110s]
+GEN    6  best=+0.605 mean=+0.500 median=+0.504  best genome (last 1 peer games): win= 48.2% loss= 33.0% illegal=  0.0% draw= 10.0% freeze=  1.8% | oppdied=  7.0%  thr=0.29 hid=82 mw=0.030 noise=0.67 |W0|=0.452 leak=0.45  [  110s]
+saved evo_pop_00006.npz and best_evo_00006.npz
+gen    7 game   1  all brains: win= 40.9% loss= 40.9% illegal=  0.0% freeze=  5.0%  ticks/game=  23  illegal fires/brain=13.9  [  112s]
+GEN    7  best=+0.584 mean=+0.500 median=+0.508  best genome (last 1 peer games): win= 47.9% loss= 34.8% illegal=  0.0% draw=  9.0% freeze=  2.1% | oppdied=  6.2%  thr=0.05 hid=81 mw=0.016 noise=0.69 |W0|=0.447 leak=0.44  [  112s]
+saved evo_pop_00007.npz and best_evo_00007.npz
+gen    8 game   1  all brains: win= 39.9% loss= 39.9% illegal=  0.0% freeze=  6.0%  ticks/game=  23  illegal fires/brain=14.0  [  113s]
+GEN    8  best=+0.611 mean=+0.500 median=+0.508  best genome (last 1 peer games): win= 49.6% loss= 34.6% illegal=  0.0% draw=  7.6% freeze=  1.6% | oppdied=  6.6%  thr=0.48 hid=73 mw=0.006 noise=0.68 |W0|=0.437 leak=0.51  [  113s]
+saved evo_pop_00008.npz and best_evo_00008.npz
+gen    9 game   1  all brains: win= 40.4% loss= 40.4% illegal=  0.0% freeze=  5.3%  ticks/game=  23  illegal fires/brain=14.2  [  115s]
+GEN    9  best=+0.623 mean=+0.500 median=+0.502  best genome (last 1 peer games): win= 49.8% loss= 31.2% illegal=  0.0% draw=  8.2% freeze=  2.9% | oppdied=  7.8%  thr=0.05 hid=82 mw=0.015 noise=0.64 |W0|=0.473 leak=0.49  [  115s]
+saved evo_pop_00009.npz and best_evo_00009.npz
+gen   10 game   1  all brains: win= 41.2% loss= 41.2% illegal=  0.0% freeze=  4.4%  ticks/game=  22  illegal fires/brain=13.9  [  117s]
+resuming from evo_pop_00009.npz at generation 10
+device=cuda evolution-only, no plasticity  genomes=256 brains/genome=512 total brains=131072  life=1 games  opponent=peer  select=pair win=100 legal=1 attempt=-0.001 wait/tick=0.001 elite=0.1 mutation x2.5  noise seed=4024114508569822596  continuous game: 30 ticks per turn, opponent answers in 1..30 ticks  nodes<=120  scalar genes=['thr', 'n_hid', 'log_mw'] vector genes=['log_noise', 'b', 'd0'] matrix genes=['W0']
+gen   10 game   1  all brains: win= 40.5% loss= 40.5% illegal=  0.0% freeze=  5.3%  ticks/game=  23  illegal fires/brain=14.2  [    2s]
+GEN   10  best=+0.613 mean=+0.500 median=+0.506  best genome (last 1 peer games): win= 49.2% loss= 34.2% illegal=  0.0% draw=  9.4% freeze=  1.2% | exam vs random: win= 52.0% loss= 35.6% illegal=  0.0% freeze=  2.1% | oppdied=  6.1% | vs perfect: loss= 83.6% illegal=  0.0% draw= 15.0% freeze=  1.4%  thr=0.05 hid=82 mw=0.015 noise=0.64 |W0|=0.473 leak=0.49  [   53s]
+saved evo_pop_00010.npz and best_evo_00010.npz
+gen   11 game   1  all brains: win= 40.5% loss= 40.5% illegal=  0.0% freeze=  5.5%  ticks/game=  23  illegal fires/brain=14.0  [   55s]
+GEN   11  best=+0.602 mean=+0.500 median=+0.506  best genome (last 1 peer games): win= 50.6% loss= 35.2% illegal=  0.0% draw=  6.4% freeze=  2.1% | oppdied=  5.7%  thr=0.06 hid=71 mw=0.006 noise=0.64 |W0|=0.481 leak=0.46  [   55s]
+saved evo_pop_00011.npz and best_evo_00011.npz
+gen   12 game   1  all brains: win= 41.0% loss= 41.0% illegal=  0.0% freeze=  5.1%  ticks/game=  23  illegal fires/brain=13.9  [   57s]
+GEN   12  best=+0.604 mean=+0.500 median=+0.502  best genome (last 1 peer games): win= 50.8% loss= 31.1% illegal=  0.0% draw=  8.2% freeze=  5.3% | oppdied=  4.7%  thr=0.31 hid=58 mw=0.014 noise=0.64 |W0|=0.482 leak=0.47  [   57s]
+saved evo_pop_00012.npz and best_evo_00012.npz
+gen   13 game   1  all brains: win= 41.7% loss= 41.7% illegal=  0.0% freeze=  4.7%  ticks/game=  22  illegal fires/brain=14.0  [   59s]
+GEN   13  best=+0.588 mean=+0.500 median=+0.502  best genome (last 1 peer games): win= 49.6% loss= 34.4% illegal=  0.0% draw=  6.2% freeze=  5.5% | oppdied=  4.3%  thr=0.44 hid=75 mw=0.015 noise=0.61 |W0|=0.470 leak=0.49  [   59s]
+saved evo_pop_00013.npz and best_evo_00013.npz
+gen   14 game   1  all brains: win= 41.3% loss= 41.3% illegal=  0.0% freeze=  5.2%  ticks/game=  23  illegal fires/brain=14.2  [   60s]
+GEN   14  best=+0.598 mean=+0.500 median=+0.510  best genome (last 1 peer games): win= 47.1% loss= 34.8% illegal=  0.0% draw= 10.0% freeze=  0.8% | oppdied=  7.4%  thr=0.31 hid=82 mw=0.035 noise=0.77 |W0|=0.462 leak=0.51  [   60s]
+saved evo_pop_00014.npz and best_evo_00014.npz
+gen   15 game   1  all brains: win= 41.0% loss= 41.0% illegal=  0.0% freeze=  5.5%  ticks/game=  22  illegal fires/brain=14.1  [   62s]
+GEN   15  best=+0.602 mean=+0.500 median=+0.518  best genome (last 1 peer games): win= 50.2% loss= 36.1% illegal=  0.0% draw=  6.8% freeze=  2.0% | exam vs random: win= 54.3% loss= 33.7% illegal=  0.0% freeze=  2.1% | oppdied=  4.9% | vs perfect: loss= 88.2% illegal=  0.0% draw= 10.3% freeze=  1.5%  thr=0.14 hid=82 mw=0.007 noise=0.66 |W0|=0.480 leak=0.48  [  103s]
+saved evo_pop_00015.npz and best_evo_00015.npz
+gen   16 game   1  all brains: win= 42.2% loss= 42.2% illegal=  0.0% freeze=  4.3%  ticks/game=  22  illegal fires/brain=14.0  [  104s]
+GEN   16  best=+0.590 mean=+0.500 median=+0.512  best genome (last 1 peer games): win= 51.0% loss= 37.1% illegal=  0.0% draw=  4.3% freeze=  2.5% | oppdied=  5.1%  thr=0.05 hid=73 mw=0.007 noise=0.67 |W0|=0.482 leak=0.49  [  104s]
+saved evo_pop_00016.npz and best_evo_00016.npz
+gen   17 game   1  all brains: win= 42.7% loss= 42.7% illegal=  0.0% freeze=  3.8%  ticks/game=  21  illegal fires/brain=14.1  [  105s]
+GEN   17  best=+0.604 mean=+0.500 median=+0.504  best genome (last 1 peer games): win= 52.3% loss= 35.4% illegal=  0.0% draw=  6.8% freeze=  1.6% | oppdied=  3.9%  thr=0.05 hid=69 mw=0.006 noise=0.65 |W0|=0.469 leak=0.48  [  105s]
+saved evo_pop_00017.npz and best_evo_00017.npz
+gen   18 game   1  all brains: win= 42.2% loss= 42.2% illegal=  0.0% freeze=  4.6%  ticks/game=  22  illegal fires/brain=14.7  [  106s]
+GEN   18  best=+0.584 mean=+0.500 median=+0.508  best genome (last 1 peer games): win= 49.4% loss= 36.9% illegal=  0.0% draw=  6.1% freeze=  2.5% | oppdied=  5.1%  thr=0.27 hid=76 mw=0.001 noise=0.68 |W0|=0.466 leak=0.47  [  106s]
+saved evo_pop_00018.npz and best_evo_00018.npz
+gen   19 game   1  all brains: win= 41.8% loss= 41.8% illegal=  0.0% freeze=  4.8%  ticks/game=  22  illegal fires/brain=14.6  [  107s]
+GEN   19  best=+0.604 mean=+0.500 median=+0.516  best genome (last 1 peer games): win= 53.5% loss= 34.0% illegal=  0.0% draw=  4.5% freeze=  3.7% | oppdied=  4.3%  thr=0.27 hid=73 mw=0.007 noise=0.67 |W0|=0.483 leak=0.49  [  107s]
+saved evo_pop_00019.npz and best_evo_00019.npz
+gen   20 game   1  all brains: win= 42.0% loss= 42.0% illegal=  0.0% freeze=  4.7%  ticks/game=  22  illegal fires/brain=14.6  [  108s]
+GEN   20  best=+0.607 mean=+0.500 median=+0.504  best genome (last 1 peer games): win= 52.5% loss= 32.2% illegal=  0.0% draw=  5.1% freeze=  4.1% | exam vs random: win= 54.7% loss= 32.4% illegal=  0.0% freeze=  4.0% | oppdied=  6.1% | vs perfect: loss= 78.9% illegal=  0.0% draw=  5.1% freeze= 16.0%  thr=0.18 hid=71 mw=0.009 noise=0.63 |W0|=0.475 leak=0.48  [  132s]
+saved evo_pop_00020.npz and best_evo_00020.npz
+gen   21 game   1  all brains: win= 42.4% loss= 42.4% illegal=  0.0% freeze=  4.0%  ticks/game=  23  illegal fires/brain=15.0  [  133s]
+GEN   21  best=+0.600 mean=+0.500 median=+0.504  best genome (last 1 peer games): win= 51.8% loss= 30.9% illegal=  0.0% draw= 10.0% freeze=  4.5% | oppdied=  2.9%  thr=0.17 hid=71 mw=0.004 noise=0.61 |W0|=0.476 leak=0.48  [  133s]
+saved evo_pop_00021.npz and best_evo_00021.npz
+gen   22 game   1  all brains: win= 42.4% loss= 42.4% illegal=  0.0% freeze=  4.1%  ticks/game=  23  illegal fires/brain=15.2  [  134s]
+GEN   22  best=+0.580 mean=+0.500 median=+0.506  best genome (last 1 peer games): win= 51.0% loss= 35.7% illegal=  0.0% draw=  5.7% freeze=  3.1% | oppdied=  4.5%  thr=0.27 hid=82 mw=0.002 noise=0.65 |W0|=0.476 leak=0.46  [  134s]
+saved evo_pop_00022.npz and best_evo_00022.npz
+gen   23 game   1  all brains: win= 42.2% loss= 42.2% illegal=  0.0% freeze=  4.3%  ticks/game=  23  illegal fires/brain=15.3  [  135s]
+GEN   23  best=+0.586 mean=+0.500 median=+0.506  best genome (last 1 peer games): win= 51.2% loss= 36.7% illegal=  0.0% draw=  6.2% freeze=  1.4% | oppdied=  4.5%  thr=0.09 hid=63 mw=0.003 noise=0.65 |W0|=0.482 leak=0.48  [  135s]
+saved evo_pop_00023.npz and best_evo_00023.npz
+gen   24 game   1  all brains: win= 41.8% loss= 41.8% illegal=  0.0% freeze=  4.9%  ticks/game=  23  illegal fires/brain=15.3  [  136s]
+GEN   24  best=+0.604 mean=+0.500 median=+0.514  best genome (last 1 peer games): win= 53.3% loss= 34.6% illegal=  0.0% draw=  5.7% freeze=  3.1% | oppdied=  3.3%  thr=0.10 hid=70 mw=0.013 noise=0.65 |W0|=0.489 leak=0.48  [  136s]
+saved evo_pop_00024.npz and best_evo_00024.npz
+gen   25 game   1  all brains: win= 41.6% loss= 41.6% illegal=  0.0% freeze=  4.9%  ticks/game=  24  illegal fires/brain=15.5  [  137s]
+GEN   25  best=+0.605 mean=+0.500 median=+0.512  best genome (last 1 peer games): win= 52.5% loss= 30.9% illegal=  0.0% draw=  7.2% freeze=  4.3% | exam vs random: win= 53.6% loss= 34.7% illegal=  0.0% freeze=  2.6% | oppdied=  5.1% | vs perfect: loss= 79.9% illegal=  0.0% draw= 17.7% freeze=  2.3%  thr=0.05 hid=60 mw=0.021 noise=0.66 |W0|=0.479 leak=0.45  [  160s]
+saved evo_pop_00025.npz and best_evo_00025.npz
+gen   26 game   1  all brains: win= 41.5% loss= 41.5% illegal=  0.0% freeze=  5.2%  ticks/game=  24  illegal fires/brain=15.4  [  160s]
+GEN   26  best=+0.604 mean=+0.500 median=+0.514  best genome (last 1 peer games): win= 52.7% loss= 32.4% illegal=  0.0% draw=  8.2% freeze=  2.9% | oppdied=  3.7%  thr=0.05 hid=60 mw=0.021 noise=0.66 |W0|=0.479 leak=0.45  [  160s]
+saved evo_pop_00026.npz and best_evo_00026.npz
+gen   27 game   1  all brains: win= 41.2% loss= 41.2% illegal=  0.0% freeze=  5.6%  ticks/game=  24  illegal fires/brain=15.4  [  161s]
+GEN   27  best=+0.598 mean=+0.500 median=+0.512  best genome (last 1 peer games): win= 52.1% loss= 34.8% illegal=  0.0% draw=  5.3% freeze=  2.1% | oppdied=  5.7%  thr=0.28 hid=53 mw=0.019 noise=0.67 |W0|=0.488 leak=0.47  [  161s]
+saved evo_pop_00027.npz and best_evo_00027.npz
+gen   28 game   1  all brains: win= 40.5% loss= 40.5% illegal=  0.0% freeze=  6.5%  ticks/game=  25  illegal fires/brain=15.2  [  162s]
+GEN   28  best=+0.600 mean=+0.500 median=+0.512  best genome (last 1 peer games): win= 48.8% loss= 32.8% illegal=  0.0% draw=  6.6% freeze=  3.3% | oppdied=  8.4%  thr=0.34 hid=55 mw=0.006 noise=0.67 |W0|=0.483 leak=0.47  [  162s]
+saved evo_pop_00028.npz and best_evo_00028.npz
+gen   29 game   1  all brains: win= 40.5% loss= 40.5% illegal=  0.0% freeze=  6.6%  ticks/game=  25  illegal fires/brain=15.2  [  163s]
+GEN   29  best=+0.604 mean=+0.500 median=+0.514  best genome (last 1 peer games): win= 51.2% loss= 31.8% illegal=  0.0% draw=  7.2% freeze=  4.3% | oppdied=  5.5%  thr=0.05 hid=55 mw=0.000 noise=0.64 |W0|=0.480 leak=0.49  [  163s]
+saved evo_pop_00029.npz and best_evo_00029.npz
+gen   30 game   1  all brains: win= 40.5% loss= 40.5% illegal=  0.0% freeze=  6.6%  ticks/game=  25  illegal fires/brain=15.1  [  164s]
+GEN   30  best=+0.633 mean=+0.500 median=+0.516  best genome (last 1 peer games): win= 51.2% loss= 30.3% illegal=  0.0% draw=  6.6% freeze=  3.9% | exam vs random: win= 52.7% loss= 34.9% illegal=  0.0% freeze=  4.5% | oppdied=  8.0% | vs perfect: loss= 77.9% illegal=  0.0% draw= 17.9% freeze=  4.2%  thr=0.25 hid=55 mw=0.001 noise=0.64 |W0|=0.475 leak=0.46  [  187s]
+saved evo_pop_00030.npz and best_evo_00030.npz
+gen   31 game   1  all brains: win= 40.8% loss= 40.8% illegal=  0.0% freeze=  6.3%  ticks/game=  25  illegal fires/brain=15.3  [  188s]
+GEN   31  best=+0.609 mean=+0.500 median=+0.516  best genome (last 1 peer games): win= 50.6% loss= 31.4% illegal=  0.0% draw=  6.2% freeze=  5.7% | oppdied=  6.1%  thr=0.28 hid=54 mw=0.000 noise=0.64 |W0|=0.480 leak=0.48  [  188s]
+saved evo_pop_00031.npz and best_evo_00031.npz
+gen   32 game   1  all brains: win= 39.9% loss= 39.9% illegal=  0.0% freeze=  7.1%  ticks/game=  26  illegal fires/brain=15.5  [  189s]
+GEN   32  best=+0.596 mean=+0.500 median=+0.518  best genome (last 1 peer games): win= 48.4% loss= 31.6% illegal=  0.0% draw=  7.8% freeze=  4.9% | oppdied=  7.2%  thr=0.16 hid=53 mw=0.000 noise=0.61 |W0|=0.481 leak=0.49  [  189s]
+saved evo_pop_00032.npz and best_evo_00032.npz
+gen   33 game   1  all brains: win= 40.7% loss= 40.7% illegal=  0.0% freeze=  6.3%  ticks/game=  25  illegal fires/brain=15.2  [  190s]
+GEN   33  best=+0.588 mean=+0.500 median=+0.516  best genome (last 1 peer games): win= 48.6% loss= 34.0% illegal=  0.0% draw=  6.6% freeze=  3.7% | oppdied=  7.0%  thr=0.27 hid=54 mw=0.000 noise=0.61 |W0|=0.481 leak=0.49  [  190s]
+saved evo_pop_00033.npz and best_evo_00033.npz
+gen   34 game   1  all brains: win= 40.9% loss= 40.9% illegal=  0.0% freeze=  5.9%  ticks/game=  25  illegal fires/brain=15.3  [  191s]
+GEN   34  best=+0.594 mean=+0.500 median=+0.510  best genome (last 1 peer games): win= 49.2% loss= 34.0% illegal=  0.0% draw=  7.0% freeze=  2.5% | oppdied=  7.2%  thr=0.20 hid=56 mw=0.003 noise=0.64 |W0|=0.480 leak=0.49  [  191s]
+saved evo_pop_00034.npz and best_evo_00034.npz
+gen   35 game   1  all brains: win= 40.3% loss= 40.3% illegal=  0.0% freeze=  6.8%  ticks/game=  26  illegal fires/brain=15.7  [  192s]
+GEN   35  best=+0.584 mean=+0.500 median=+0.510  best genome (last 1 peer games): win= 44.9% loss= 35.7% illegal=  0.0% draw=  6.6% freeze=  2.9% | exam vs random: win= 52.6% loss= 33.9% illegal=  0.0% freeze=  3.7% | oppdied=  9.8% | vs perfect: loss= 78.9% illegal=  0.0% draw= 18.3% freeze=  2.8%  thr=0.11 hid=56 mw=0.003 noise=0.63 |W0|=0.478 leak=0.49  [  216s]
+saved evo_pop_00035.npz and best_evo_00035.npz
+gen   36 game   1  all brains: win= 40.4% loss= 40.4% illegal=  0.0% freeze=  6.4%  ticks/game=  26  illegal fires/brain=15.3  [  218s]
+GEN   36  best=+0.592 mean=+0.500 median=+0.512  best genome (last 1 peer games): win= 45.9% loss= 35.5% illegal=  0.0% draw=  7.0% freeze=  3.7% | oppdied=  7.8%  thr=0.28 hid=56 mw=0.001 noise=0.63 |W0|=0.474 leak=0.47  [  218s]
+saved evo_pop_00036.npz and best_evo_00036.npz
+gen   37 game   1  all brains: win= 40.4% loss= 40.4% illegal=  0.0% freeze=  6.8%  ticks/game=  26  illegal fires/brain=15.4  [  219s]
+GEN   37  best=+0.602 mean=+0.500 median=+0.518  best genome (last 1 peer games): win= 49.2% loss= 32.8% illegal=  0.0% draw=  5.1% freeze=  5.1% | oppdied=  7.8%  thr=0.20 hid=57 mw=0.001 noise=0.61 |W0|=0.481 leak=0.50  [  219s]
+saved evo_pop_00037.npz and best_evo_00037.npz
+gen   38 game   1  all brains: win= 39.7% loss= 39.7% illegal=  0.0% freeze=  7.6%  ticks/game=  26  illegal fires/brain=15.4  [  221s]
+GEN   38  best=+0.611 mean=+0.500 median=+0.518  best genome (last 1 peer games): win= 46.5% loss= 33.6% illegal=  0.0% draw=  6.6% freeze=  4.1% | oppdied=  9.2%  thr=0.46 hid=55 mw=0.010 noise=0.60 |W0|=0.478 leak=0.51  [  221s]
+saved evo_pop_00038.npz and best_evo_00038.npz
+gen   39 game   1  all brains: win= 39.5% loss= 39.5% illegal=  0.0% freeze=  8.0%  ticks/game=  26  illegal fires/brain=15.4  [  223s]
+GEN   39  best=+0.592 mean=+0.500 median=+0.520  best genome (last 1 peer games): win= 47.3% loss= 35.0% illegal=  0.0% draw=  4.9% freeze=  3.7% | oppdied=  9.2%  thr=0.37 hid=54 mw=0.007 noise=0.63 |W0|=0.481 leak=0.49  [  223s]
+saved evo_pop_00039.npz and best_evo_00039.npz
+gen   40 game   1  all brains: win= 38.5% loss= 38.5% illegal=  0.0% freeze=  8.7%  ticks/game=  27  illegal fires/brain=15.7  [  226s]
+GEN   40  best=+0.615 mean=+0.500 median=+0.514  best genome (last 1 peer games): win= 45.9% loss= 29.9% illegal=  0.0% draw=  7.6% freeze=  5.5% | exam vs random: win= 52.1% loss= 36.1% illegal=  0.0% freeze=  3.9% | oppdied= 11.1% | vs perfect: loss= 84.0% illegal=  0.0% draw= 14.0% freeze=  2.1%  thr=0.51 hid=55 mw=0.001 noise=0.62 |W0|=0.483 leak=0.50  [  279s]
+saved evo_pop_00040.npz and best_evo_00040.npz
+gen   41 game   1  all brains: win= 39.1% loss= 39.1% illegal=  0.0% freeze=  7.9%  ticks/game=  27  illegal fires/brain=15.8  [  282s]
+GEN   41  best=+0.607 mean=+0.500 median=+0.516  best genome (last 1 peer games): win= 47.9% loss= 31.2% illegal=  0.0% draw=  7.2% freeze=  4.7% | oppdied=  9.0%  thr=0.27 hid=54 mw=0.001 noise=0.63 |W0|=0.480 leak=0.50  [  282s]
+saved evo_pop_00041.npz and best_evo_00041.npz
+gen   42 game   1  all brains: win= 38.9% loss= 38.9% illegal=  0.0% freeze=  7.8%  ticks/game=  27  illegal fires/brain=15.8  [  285s]
+GEN   42  best=+0.604 mean=+0.500 median=+0.518  best genome (last 1 peer games): win= 50.0% loss= 27.9% illegal=  0.0% draw=  7.4% freeze=  8.0% | oppdied=  6.6%  thr=0.44 hid=55 mw=0.000 noise=0.63 |W0|=0.479 leak=0.47  [  285s]
+saved evo_pop_00042.npz and best_evo_00042.npz
+gen   43 game   1  all brains: win= 38.5% loss= 38.5% illegal=  0.0% freeze=  8.1%  ticks/game=  28  illegal fires/brain=16.0  [  287s]
+GEN   43  best=+0.609 mean=+0.500 median=+0.518  best genome (last 1 peer games): win= 45.3% loss= 31.1% illegal=  0.0% draw=  9.4% freeze=  4.5% | oppdied=  9.8%  thr=0.35 hid=56 mw=0.000 noise=0.64 |W0|=0.479 leak=0.48  [  287s]
+saved evo_pop_00043.npz and best_evo_00043.npz
+gen   44 game   1  all brains: win= 38.2% loss= 38.2% illegal=  0.0% freeze=  8.2%  ticks/game=  29  illegal fires/brain=16.6  [  290s]
+GEN   44  best=+0.623 mean=+0.500 median=+0.518  best genome (last 1 peer games): win= 44.3% loss= 29.1% illegal=  0.0% draw=  9.4% freeze=  5.3% | oppdied= 11.9%  thr=0.45 hid=55 mw=0.001 noise=0.64 |W0|=0.482 leak=0.47  [  290s]
+saved evo_pop_00044.npz and best_evo_00044.npz
+gen   45 game   1  all brains: win= 38.5% loss= 38.5% illegal=  0.0% freeze=  7.7%  ticks/game=  28  illegal fires/brain=16.5  [  293s]
+GEN   45  best=+0.592 mean=+0.500 median=+0.514  best genome (last 1 peer games): win= 45.1% loss= 31.8% illegal=  0.0% draw=  7.8% freeze=  5.5% | exam vs random: win= 52.1% loss= 33.0% illegal=  0.0% freeze=  5.7% | oppdied=  9.8% | vs perfect: loss= 77.6% illegal=  0.0% draw= 20.7% freeze=  1.7%  thr=0.36 hid=55 mw=0.004 noise=0.63 |W0|=0.481 leak=0.50  [  342s]
+saved evo_pop_00045.npz and best_evo_00045.npz
+gen   46 game   1  all brains: win= 37.9% loss= 37.9% illegal=  0.0% freeze=  8.1%  ticks/game=  29  illegal fires/brain=17.0  [  345s]
+GEN   46  best=+0.605 mean=+0.500 median=+0.518  best genome (last 1 peer games): win= 42.4% loss= 31.6% illegal=  0.0% draw=  8.4% freeze=  4.9% | oppdied= 12.7%  thr=0.56 hid=55 mw=0.001 noise=0.63 |W0|=0.479 leak=0.49  [  345s]
+saved evo_pop_00046.npz and best_evo_00046.npz
+gen   47 game   1  all brains: win= 37.7% loss= 37.7% illegal=  0.0% freeze=  8.1%  ticks/game=  29  illegal fires/brain=16.6  [  347s]
+GEN   47  best=+0.623 mean=+0.500 median=+0.512  best genome (last 1 peer games): win= 43.2% loss= 26.2% illegal=  0.0% draw= 11.5% freeze=  7.8% | oppdied= 11.3%  thr=0.49 hid=55 mw=0.001 noise=0.62 |W0|=0.482 leak=0.48  [  347s]
+saved evo_pop_00047.npz and best_evo_00047.npz
+gen   48 game   1  all brains: win= 37.6% loss= 37.6% illegal=  0.0% freeze=  8.1%  ticks/game=  30  illegal fires/brain=17.1  [  350s]
+GEN   48  best=+0.604 mean=+0.500 median=+0.518  best genome (last 1 peer games): win= 44.9% loss= 28.7% illegal=  0.0% draw=  8.8% freeze=  7.0% | oppdied= 10.5%  thr=0.48 hid=55 mw=0.004 noise=0.63 |W0|=0.482 leak=0.50  [  350s]
+saved evo_pop_00048.npz and best_evo_00048.npz
+gen   49 game   1  all brains: win= 35.8% loss= 35.8% illegal=  0.0% freeze= 10.1%  ticks/game=  30  illegal fires/brain=17.4  [  352s]
+GEN   49  best=+0.621 mean=+0.500 median=+0.523  best genome (last 1 peer games): win= 43.4% loss= 28.3% illegal=  0.0% draw= 11.7% freeze=  4.1% | oppdied= 12.5%  thr=0.65 hid=55 mw=0.004 noise=0.62 |W0|=0.484 leak=0.51  [  352s]
+saved evo_pop_00049.npz and best_evo_00049.npz
+gen   50 game   1  all brains: win= 36.2% loss= 36.2% illegal=  0.0% freeze=  9.1%  ticks/game=  30  illegal fires/brain=17.6  [  355s]
+GEN   50  best=+0.605 mean=+0.500 median=+0.520  best genome (last 1 peer games): win= 43.0% loss= 31.4% illegal=  0.0% draw= 11.7% freeze=  4.3% | exam vs random: win= 51.4% loss= 35.5% illegal=  0.0% freeze=  4.4% | oppdied=  9.6% | vs perfect: loss= 77.9% illegal=  0.0% draw= 20.6% freeze=  1.5%  thr=0.46 hid=55 mw=0.003 noise=0.65 |W0|=0.482 leak=0.51  [  405s]
+saved evo_pop_00050.npz and best_evo_00050.npz
+gen   51 game   1  all brains: win= 35.6% loss= 35.6% illegal=  0.0% freeze=  9.5%  ticks/game=  31  illegal fires/brain=17.9  [  408s]
+GEN   51  best=+0.611 mean=+0.500 median=+0.523  best genome (last 1 peer games): win= 45.3% loss= 25.0% illegal=  0.0% draw=  8.6% freeze= 10.5% | oppdied= 10.5%  thr=0.38 hid=53 mw=0.004 noise=0.62 |W0|=0.480 leak=0.50  [  408s]
+saved evo_pop_00051.npz and best_evo_00051.npz
+gen   52 game   1  all brains: win= 36.1% loss= 36.1% illegal=  0.0% freeze=  8.7%  ticks/game=  31  illegal fires/brain=18.0  [  411s]
+GEN   52  best=+0.592 mean=+0.500 median=+0.516  best genome (last 1 peer games): win= 41.4% loss= 31.1% illegal=  0.0% draw= 12.5% freeze=  4.1% | oppdied= 10.9%  thr=0.46 hid=55 mw=0.001 noise=0.63 |W0|=0.481 leak=0.50  [  411s]
+saved evo_pop_00052.npz and best_evo_00052.npz
+gen   53 game   1  all brains: win= 35.4% loss= 35.4% illegal=  0.0% freeze=  9.5%  ticks/game=  30  illegal fires/brain=17.9  [  414s]
+GEN   53  best=+0.615 mean=+0.500 median=+0.525  best genome (last 1 peer games): win= 43.9% loss= 25.8% illegal=  0.0% draw= 12.9% freeze=  6.1% | oppdied= 11.3%  thr=0.41 hid=55 mw=0.001 noise=0.63 |W0|=0.477 leak=0.49  [  414s]
+saved evo_pop_00053.npz and best_evo_00053.npz
+gen   54 game   1  all brains: win= 35.8% loss= 35.8% illegal=  0.0% freeze=  9.2%  ticks/game=  31  illegal fires/brain=18.2  [  416s]
+GEN   54  best=+0.619 mean=+0.500 median=+0.521  best genome (last 1 peer games): win= 42.6% loss= 23.6% illegal=  0.0% draw= 13.3% freeze=  9.2% | oppdied= 11.3%  thr=0.41 hid=55 mw=0.001 noise=0.64 |W0|=0.481 leak=0.48  [  416s]
+saved evo_pop_00054.npz and best_evo_00054.npz
+gen   55 game   1  all brains: win= 35.4% loss= 35.4% illegal=  0.0% freeze=  9.4%  ticks/game=  31  illegal fires/brain=18.6  [  419s]
+GEN   55  best=+0.615 mean=+0.500 median=+0.523  best genome (last 1 peer games): win= 41.4% loss= 25.4% illegal=  0.0% draw= 16.2% freeze=  5.9% | exam vs random: win= 52.2% loss= 34.6% illegal=  0.0% freeze=  4.6% | oppdied= 11.1% | vs perfect: loss= 79.3% illegal=  0.0% draw= 17.9% freeze=  2.7%  thr=0.49 hid=55 mw=0.001 noise=0.62 |W0|=0.477 leak=0.52  [  470s]
+saved evo_pop_00055.npz and best_evo_00055.npz
+gen   56 game   1  all brains: win= 34.6% loss= 34.6% illegal=  0.0% freeze= 10.3%  ticks/game=  32  illegal fires/brain=19.0  [  473s]
+GEN   56  best=+0.615 mean=+0.500 median=+0.521  best genome (last 1 peer games): win= 44.3% loss= 26.0% illegal=  0.0% draw= 11.5% freeze=  7.0% | oppdied= 11.1%  thr=0.28 hid=55 mw=0.002 noise=0.60 |W0|=0.478 leak=0.51  [  473s]
+saved evo_pop_00056.npz and best_evo_00056.npz
+gen   57 game   1  all brains: win= 33.8% loss= 33.8% illegal=  0.0% freeze= 10.6%  ticks/game=  32  illegal fires/brain=18.9  [  476s]
+GEN   57  best=+0.615 mean=+0.500 median=+0.525  best genome (last 1 peer games): win= 42.8% loss= 27.9% illegal=  0.0% draw= 10.7% freeze=  5.5% | oppdied= 13.1%  thr=0.50 hid=55 mw=0.004 noise=0.60 |W0|=0.481 leak=0.49  [  476s]
+saved evo_pop_00057.npz and best_evo_00057.npz
+gen   58 game   1  all brains: win= 34.2% loss= 34.2% illegal=  0.0% freeze= 10.1%  ticks/game=  32  illegal fires/brain=18.8  [  479s]
+GEN   58  best=+0.615 mean=+0.500 median=+0.521  best genome (last 1 peer games): win= 42.4% loss= 24.2% illegal=  0.0% draw= 14.6% freeze=  6.4% | oppdied= 12.3%  thr=0.39 hid=55 mw=0.001 noise=0.61 |W0|=0.481 leak=0.50  [  479s]
+saved evo_pop_00058.npz and best_evo_00058.npz
+gen   59 game   1  all brains: win= 34.5% loss= 34.5% illegal=  0.0% freeze= 10.2%  ticks/game=  32  illegal fires/brain=18.4  [  482s]
+GEN   59  best=+0.613 mean=+0.500 median=+0.527  best genome (last 1 peer games): win= 39.6% loss= 27.3% illegal=  0.0% draw= 13.9% freeze=  4.7% | oppdied= 14.5%  thr=0.30 hid=55 mw=0.001 noise=0.61 |W0|=0.481 leak=0.50  [  482s]
+saved evo_pop_00059.npz and best_evo_00059.npz
+gen   60 game   1  all brains: win= 34.2% loss= 34.2% illegal=  0.0% freeze= 10.1%  ticks/game=  32  illegal fires/brain=18.7  [  485s]
+GEN   60  best=+0.607 mean=+0.500 median=+0.521  best genome (last 1 peer games): win= 43.6% loss= 26.0% illegal=  0.0% draw=  8.0% freeze= 10.2% | exam vs random: win= 50.3% loss= 35.6% illegal=  0.0% freeze=  6.9% | oppdied= 12.3% | vs perfect: loss= 77.2% illegal=  0.0% draw= 20.2% freeze=  2.5%  thr=0.48 hid=55 mw=0.001 noise=0.62 |W0|=0.481 leak=0.48  [  530s]
+saved evo_pop_00060.npz and best_evo_00060.npz
+gen   61 game   1  all brains: win= 34.8% loss= 34.8% illegal=  0.0% freeze= 10.0%  ticks/game=  32  illegal fires/brain=18.9  [  532s]
+GEN   61  best=+0.611 mean=+0.500 median=+0.523  best genome (last 1 peer games): win= 40.2% loss= 22.9% illegal=  0.0% draw= 15.4% freeze=  9.0% | oppdied= 12.5%  thr=0.50 hid=55 mw=0.001 noise=0.63 |W0|=0.482 leak=0.49  [  532s]
+saved evo_pop_00061.npz and best_evo_00061.npz
+gen   62 game   1  all brains: win= 33.7% loss= 33.7% illegal=  0.0% freeze= 11.1%  ticks/game=  33  illegal fires/brain=19.1  [  534s]
+GEN   62  best=+0.613 mean=+0.500 median=+0.523  best genome (last 1 peer games): win= 40.0% loss= 25.6% illegal=  0.0% draw= 15.8% freeze=  6.1% | oppdied= 12.5%  thr=0.50 hid=55 mw=0.000 noise=0.61 |W0|=0.481 leak=0.49  [  534s]
+saved evo_pop_00062.npz and best_evo_00062.npz
+gen   63 game   1  all brains: win= 33.0% loss= 33.0% illegal=  0.0% freeze= 10.9%  ticks/game=  32  illegal fires/brain=18.8  [  536s]
+GEN   63  best=+0.611 mean=+0.500 median=+0.529  best genome (last 1 peer games): win= 44.5% loss= 26.4% illegal=  0.0% draw= 12.5% freeze=  5.1% | oppdied= 11.5%  thr=0.36 hid=55 mw=0.000 noise=0.61 |W0|=0.484 leak=0.47  [  536s]
+saved evo_pop_00063.npz and best_evo_00063.npz
+gen   64 game   1  all brains: win= 33.7% loss= 33.7% illegal=  0.0% freeze= 10.5%  ticks/game=  32  illegal fires/brain=18.5  [  538s]
+GEN   64  best=+0.609 mean=+0.500 median=+0.525  best genome (last 1 peer games): win= 41.8% loss= 25.4% illegal=  0.0% draw= 10.5% freeze=  9.4% | oppdied= 12.9%  thr=0.51 hid=57 mw=0.000 noise=0.61 |W0|=0.478 leak=0.52  [  538s]
+saved evo_pop_00064.npz and best_evo_00064.npz
+gen   65 game   1  all brains: win= 34.1% loss= 34.1% illegal=  0.0% freeze=  9.9%  ticks/game=  32  illegal fires/brain=18.7  [  540s]
+resuming from evo_pop_00064.npz at generation 65
+device=cuda evolution-only, no plasticity  genomes=256 brains/genome=512 total brains=131072  life=1 games  opponent=peer  select=pair win=100 legal=1 attempt=-1 wait/tick=0.001 elite=0.1 mutation x2.5  noise seed=4523304465738406487  continuous game: 30 ticks per turn, opponent answers in 1..30 ticks  nodes<=120  scalar genes=['thr', 'n_hid', 'log_mw'] vector genes=['log_noise', 'b', 'd0'] matrix genes=['W0']
+gen   65 game   1  all brains: win= 33.8% loss= 33.8% illegal=  0.0% freeze= 10.4%  ticks/game=  32  illegal fires/brain=18.5  [    3s]
+GEN   65  best=+0.600 mean=+0.500 median=+0.528  best genome (last 1 peer games): win= 39.5% loss= 26.8% illegal=  0.0% draw= 15.8% freeze=  4.1% | exam vs random: win= 49.8% loss= 37.1% illegal=  0.0% freeze=  4.1% | oppdied= 13.9% | vs perfect: loss= 79.8% illegal=  0.0% draw= 18.5% freeze=  1.7%  thr=0.49 hid=55 mw=0.000 noise=0.63 |W0|=0.480 leak=0.50  [   52s]
+saved evo_pop_00065.npz and best_evo_00065.npz
+gen   66 game   1  all brains: win= 33.3% loss= 33.3% illegal=  0.0% freeze= 10.5%  ticks/game=  32  illegal fires/brain=18.3  [   55s]
+GEN   66  best=+0.596 mean=+0.500 median=+0.527  best genome (last 1 peer games): win= 41.2% loss= 26.6% illegal=  0.0% draw= 11.3% freeze=  9.0% | oppdied= 11.9%  thr=0.48 hid=51 mw=0.000 noise=0.63 |W0|=0.484 leak=0.50  [   55s]
+saved evo_pop_00066.npz and best_evo_00066.npz
+gen   67 game   1  all brains: win= 33.9% loss= 33.9% illegal=  0.0% freeze= 10.2%  ticks/game=  32  illegal fires/brain=18.4  [   57s]
+GEN   67  best=+0.596 mean=+0.500 median=+0.520  best genome (last 1 peer games): win= 41.2% loss= 29.7% illegal=  0.0% draw= 11.1% freeze=  7.4% | oppdied= 10.5%  thr=0.50 hid=51 mw=0.001 noise=0.62 |W0|=0.478 leak=0.49  [   57s]
+saved evo_pop_00067.npz and best_evo_00067.npz
+gen   68 game   1  all brains: win= 33.5% loss= 33.5% illegal=  0.0% freeze= 10.9%  ticks/game=  33  illegal fires/brain=17.9  [   60s]
+GEN   68  best=+0.603 mean=+0.500 median=+0.523  best genome (last 1 peer games): win= 40.4% loss= 27.3% illegal=  0.0% draw= 12.5% freeze=  6.1% | oppdied= 13.7%  thr=0.55 hid=53 mw=0.005 noise=0.62 |W0|=0.479 leak=0.50  [   60s]
+saved evo_pop_00068.npz and best_evo_00068.npz
+gen   69 game   1  all brains: win= 32.8% loss= 32.8% illegal=  0.0% freeze= 11.4%  ticks/game=  33  illegal fires/brain=18.4  [   62s]
+GEN   69  best=+0.611 mean=+0.500 median=+0.520  best genome (last 1 peer games): win= 38.1% loss= 24.4% illegal=  0.0% draw= 15.4% freeze=  9.6% | oppdied= 12.5%  thr=0.51 hid=51 mw=0.001 noise=0.62 |W0|=0.484 leak=0.51  [   62s]
+saved evo_pop_00069.npz and best_evo_00069.npz
+gen   70 game   1  all brains: win= 32.6% loss= 32.6% illegal=  0.0% freeze= 11.7%  ticks/game=  33  illegal fires/brain=17.4  [   64s]
+GEN   70  best=+0.650 mean=+0.500 median=+0.531  best genome (last 1 peer games): win= 41.6% loss= 22.1% illegal=  0.0% draw= 13.5% freeze=  7.8% | exam vs random: win= 48.4% loss= 36.3% illegal=  0.0% freeze=  8.7% | oppdied= 15.0% | vs perfect: loss= 71.9% illegal=  0.0% draw= 15.9% freeze= 12.3%  thr=0.57 hid=51 mw=0.000 noise=0.62 |W0|=0.479 leak=0.51  [  101s]
+saved evo_pop_00070.npz and best_evo_00070.npz
+gen   71 game   1  all brains: win= 32.6% loss= 32.6% illegal=  0.0% freeze= 12.3%  ticks/game=  33  illegal fires/brain=17.3  [  104s]
+GEN   71  best=+0.625 mean=+0.500 median=+0.533  best genome (last 1 peer games): win= 39.6% loss= 26.6% illegal=  0.0% draw= 14.3% freeze=  6.4% | oppdied= 13.1%  thr=0.67 hid=51 mw=0.000 noise=0.61 |W0|=0.479 leak=0.51  [  104s]
+saved evo_pop_00071.npz and best_evo_00071.npz
+gen   72 game   1  all brains: win= 33.6% loss= 33.6% illegal=  0.0% freeze= 10.5%  ticks/game=  33  illegal fires/brain=17.2  [  106s]
+GEN   72  best=+0.602 mean=+0.500 median=+0.525  best genome (last 1 peer games): win= 40.2% loss= 30.7% illegal=  0.0% draw= 11.9% freeze=  5.1% | oppdied= 12.1%  thr=0.55 hid=51 mw=0.000 noise=0.61 |W0|=0.478 leak=0.52  [  106s]
+saved evo_pop_00072.npz and best_evo_00072.npz
+gen   73 game   1  all brains: win= 33.3% loss= 33.3% illegal=  0.0% freeze= 11.0%  ticks/game=  33  illegal fires/brain=17.0  [  109s]
+GEN   73  best=+0.604 mean=+0.500 median=+0.535  best genome (last 1 peer games): win= 39.6% loss= 23.6% illegal=  0.0% draw= 11.5% freeze= 12.9% | oppdied= 12.3%  thr=0.71 hid=51 mw=0.002 noise=0.63 |W0|=0.478 leak=0.53  [  109s]
+saved evo_pop_00073.npz and best_evo_00073.npz
+gen   74 game   1  all brains: win= 32.7% loss= 32.7% illegal=  0.0% freeze= 11.9%  ticks/game=  33  illegal fires/brain=17.3  [  112s]
+GEN   74  best=+0.610 mean=+0.500 median=+0.525  best genome (last 1 peer games): win= 39.6% loss= 25.0% illegal=  0.0% draw= 13.5% freeze=  7.8% | oppdied= 14.1%  thr=0.52 hid=51 mw=0.000 noise=0.62 |W0|=0.480 leak=0.51  [  112s]
+saved evo_pop_00074.npz and best_evo_00074.npz
+gen   75 game   1  all brains: win= 32.8% loss= 32.8% illegal=  0.0% freeze= 12.0%  ticks/game=  33  illegal fires/brain=17.0  [  114s]
+GEN   75  best=+0.627 mean=+0.500 median=+0.539  best genome (last 1 peer games): win= 38.5% loss= 27.0% illegal=  0.0% draw= 12.3% freeze=  6.6% | exam vs random: win= 50.5% loss= 34.9% illegal=  0.0% freeze=  7.8% | oppdied= 15.6% | vs perfect: loss= 71.5% illegal=  0.0% draw= 16.7% freeze= 11.8%  thr=0.56 hid=51 mw=0.001 noise=0.62 |W0|=0.479 leak=0.51  [  153s]
+saved evo_pop_00075.npz and best_evo_00075.npz
+gen   76 game   1  all brains: win= 33.5% loss= 33.5% illegal=  0.0% freeze= 10.8%  ticks/game=  33  illegal fires/brain=17.6  [  155s]
+GEN   76  best=+0.634 mean=+0.500 median=+0.523  best genome (last 1 peer games): win= 43.0% loss= 26.0% illegal=  0.0% draw= 15.0% freeze=  3.9% | oppdied= 12.1%  thr=0.34 hid=51 mw=0.000 noise=0.64 |W0|=0.479 leak=0.51  [  155s]
+saved evo_pop_00076.npz and best_evo_00076.npz
+gen   77 game   1  all brains: win= 33.3% loss= 33.3% illegal=  0.0% freeze= 11.2%  ticks/game=  34  illegal fires/brain=17.7  [  157s]
+GEN   77  best=+0.627 mean=+0.500 median=+0.525  best genome (last 1 peer games): win= 39.5% loss= 27.3% illegal=  0.0% draw= 18.2% freeze=  3.5% | oppdied= 11.5%  thr=0.60 hid=51 mw=0.000 noise=0.63 |W0|=0.480 leak=0.52  [  157s]
+saved evo_pop_00077.npz and best_evo_00077.npz
+gen   78 game   1  all brains: win= 32.4% loss= 32.4% illegal=  0.0% freeze= 11.9%  ticks/game=  34  illegal fires/brain=17.4  [  159s]
+GEN   78  best=+0.623 mean=+0.500 median=+0.531  best genome (last 1 peer games): win= 37.5% loss= 24.0% illegal=  0.0% draw= 14.5% freeze=  7.2% | oppdied= 16.8%  thr=0.76 hid=54 mw=0.000 noise=0.62 |W0|=0.480 leak=0.53  [  159s]
+saved evo_pop_00078.npz and best_evo_00078.npz
+gen   79 game   1  all brains: win= 31.6% loss= 31.6% illegal=  0.0% freeze= 12.6%  ticks/game=  35  illegal fires/brain=17.6  [  161s]
+GEN   79  best=+0.616 mean=+0.500 median=+0.531  best genome (last 1 peer games): win= 36.9% loss= 18.6% illegal=  0.0% draw= 16.2% freeze= 13.3% | oppdied= 15.0%  thr=0.60 hid=53 mw=0.000 noise=0.59 |W0|=0.478 leak=0.51  [  161s]
+saved evo_pop_00079.npz and best_evo_00079.npz
+gen   80 game   1  all brains: win= 31.9% loss= 31.9% illegal=  0.0% freeze= 12.6%  ticks/game=  35  illegal fires/brain=17.8  [  163s]
+GEN   80  best=+0.635 mean=+0.500 median=+0.527  best genome (last 1 peer games): win= 41.6% loss= 25.0% illegal=  0.0% draw= 10.7% freeze=  6.4% | exam vs random: win= 49.3% loss= 35.1% illegal=  0.0% freeze=  8.7% | oppdied= 16.2% | vs perfect: loss= 73.5% illegal=  0.0% draw= 12.3% freeze= 14.2%  thr=0.61 hid=51 mw=0.000 noise=0.60 |W0|=0.480 leak=0.52  [  202s]
+saved evo_pop_00080.npz and best_evo_00080.npz
+gen   81 game   1  all brains: win= 32.3% loss= 32.3% illegal=  0.0% freeze= 12.2%  ticks/game=  34  illegal fires/brain=17.1  [  205s]
+GEN   81  best=+0.625 mean=+0.500 median=+0.529  best genome (last 1 peer games): win= 38.1% loss= 24.4% illegal=  0.0% draw= 16.2% freeze=  6.4% | oppdied= 14.8%  thr=0.67 hid=51 mw=0.000 noise=0.64 |W0|=0.478 leak=0.51  [  205s]
+saved evo_pop_00081.npz and best_evo_00081.npz
+gen   82 game   1  all brains: win= 31.2% loss= 31.2% illegal=  0.0% freeze= 13.2%  ticks/game=  35  illegal fires/brain=17.3  [  208s]
+GEN   82  best=+0.619 mean=+0.500 median=+0.529  best genome (last 1 peer games): win= 37.3% loss= 25.4% illegal=  0.0% draw= 15.2% freeze=  7.0% | oppdied= 15.0%  thr=0.59 hid=51 mw=0.000 noise=0.61 |W0|=0.481 leak=0.51  [  208s]
+saved evo_pop_00082.npz and best_evo_00082.npz
+gen   83 game   1  all brains: win= 31.7% loss= 31.7% illegal=  0.0% freeze= 12.6%  ticks/game=  35  illegal fires/brain=17.1  [  210s]
+GEN   83  best=+0.631 mean=+0.500 median=+0.531  best genome (last 1 peer games): win= 40.6% loss= 21.1% illegal=  0.0% draw= 15.4% freeze=  8.6% | oppdied= 14.3%  thr=0.53 hid=51 mw=0.001 noise=0.61 |W0|=0.478 leak=0.52  [  210s]
+saved evo_pop_00083.npz and best_evo_00083.npz
+gen   84 game   1  all brains: win= 30.9% loss= 30.9% illegal=  0.0% freeze= 13.3%  ticks/game=  35  illegal fires/brain=17.3  [  213s]
+GEN   84  best=+0.633 mean=+0.500 median=+0.533  best genome (last 1 peer games): win= 36.3% loss= 23.4% illegal=  0.0% draw= 16.2% freeze=  6.2% | oppdied= 17.8%  thr=0.63 hid=51 mw=0.000 noise=0.61 |W0|=0.478 leak=0.53  [  213s]
+saved evo_pop_00084.npz and best_evo_00084.npz
+gen   85 game   1  all brains: win= 31.3% loss= 31.3% illegal=  0.0% freeze= 12.6%  ticks/game=  35  illegal fires/brain=17.3  [  215s]
+GEN   85  best=+0.629 mean=+0.500 median=+0.533  best genome (last 1 peer games): win= 37.1% loss= 20.5% illegal=  0.0% draw= 18.8% freeze=  7.2% | exam vs random: win= 49.8% loss= 33.6% illegal=  0.0% freeze= 10.2% | oppdied= 16.4% | vs perfect: loss= 72.3% illegal=  0.0% draw= 14.8% freeze= 12.9%  thr=0.66 hid=51 mw=0.000 noise=0.60 |W0|=0.478 leak=0.52  [  253s]
+saved evo_pop_00085.npz and best_evo_00085.npz
+gen   86 game   1  all brains: win= 30.1% loss= 30.1% illegal=  0.0% freeze= 14.2%  ticks/game=  36  illegal fires/brain=17.7  [  255s]
+GEN   86  best=+0.653 mean=+0.500 median=+0.541  best genome (last 1 peer games): win= 39.3% loss= 20.3% illegal=  0.0% draw= 15.6% freeze=  7.6% | oppdied= 17.2%  thr=0.59 hid=51 mw=0.002 noise=0.62 |W0|=0.478 leak=0.52  [  255s]
+saved evo_pop_00086.npz and best_evo_00086.npz
+gen   87 game   1  all brains: win= 28.8% loss= 28.8% illegal=  0.0% freeze= 15.3%  ticks/game=  37  illegal fires/brain=17.6  [  257s]
+GEN   87  best=+0.641 mean=+0.500 median=+0.545  best genome (last 1 peer games): win= 35.5% loss= 19.3% illegal=  0.0% draw= 14.6% freeze= 11.7% | oppdied= 18.8%  thr=0.63 hid=51 mw=0.000 noise=0.60 |W0|=0.478 leak=0.53  [  257s]
+saved evo_pop_00087.npz and best_evo_00087.npz
+gen   88 game   1  all brains: win= 30.6% loss= 30.6% illegal=  0.0% freeze= 13.1%  ticks/game=  36  illegal fires/brain=17.4  [  259s]
+GEN   88  best=+0.641 mean=+0.500 median=+0.529  best genome (last 1 peer games): win= 37.1% loss= 22.5% illegal=  0.0% draw= 14.5% freeze=  7.8% | oppdied= 18.2%  thr=0.57 hid=51 mw=0.001 noise=0.61 |W0|=0.478 leak=0.54  [  259s]
+saved evo_pop_00088.npz and best_evo_00088.npz
+gen   89 game   1  all brains: win= 30.4% loss= 30.4% illegal=  0.0% freeze= 13.4%  ticks/game=  37  illegal fires/brain=17.9  [  261s]
+GEN   89  best=+0.654 mean=+0.500 median=+0.533  best genome (last 1 peer games): win= 37.7% loss= 22.3% illegal=  0.0% draw= 15.4% freeze=  6.4% | oppdied= 18.2%  thr=0.55 hid=51 mw=0.001 noise=0.60 |W0|=0.478 leak=0.54  [  261s]
+saved evo_pop_00089.npz and best_evo_00089.npz
+gen   90 game   1  all brains: win= 30.4% loss= 30.4% illegal=  0.0% freeze= 13.2%  ticks/game=  37  illegal fires/brain=17.7  [  263s]
+GEN   90  best=+0.619 mean=+0.500 median=+0.531  best genome (last 1 peer games): win= 35.4% loss= 23.2% illegal=  0.0% draw= 18.6% freeze=  6.8% | exam vs random: win= 47.8% loss= 34.3% illegal=  0.0% freeze= 10.8% | oppdied= 16.0% | vs perfect: loss= 76.9% illegal=  0.0% draw= 12.3% freeze= 10.8%  thr=0.57 hid=51 mw=0.000 noise=0.59 |W0|=0.478 leak=0.56  [  300s]
+saved evo_pop_00090.npz and best_evo_00090.npz
+gen   91 game   1  all brains: win= 29.8% loss= 29.8% illegal=  0.0% freeze= 14.0%  ticks/game=  37  illegal fires/brain=17.5  [  303s]
+GEN   91  best=+0.654 mean=+0.500 median=+0.539  best genome (last 1 peer games): win= 39.8% loss= 20.5% illegal=  0.0% draw= 16.4% freeze=  7.8% | oppdied= 15.4%  thr=0.60 hid=51 mw=0.001 noise=0.62 |W0|=0.478 leak=0.55  [  303s]
+saved evo_pop_00091.npz and best_evo_00091.npz
+gen   92 game   1  all brains: win= 31.0% loss= 31.0% illegal=  0.0% freeze= 13.2%  ticks/game=  36  illegal fires/brain=17.3  [  305s]
+GEN   92  best=+0.637 mean=+0.500 median=+0.531  best genome (last 1 peer games): win= 38.1% loss= 20.9% illegal=  0.0% draw= 16.2% freeze=  8.2% | oppdied= 16.6%  thr=0.60 hid=51 mw=0.001 noise=0.62 |W0|=0.478 leak=0.55  [  305s]
+saved evo_pop_00092.npz and best_evo_00092.npz
+gen   93 game   1  all brains: win= 29.7% loss= 29.7% illegal=  0.0% freeze= 14.4%  ticks/game=  37  illegal fires/brain=17.1  [  307s]
+GEN   93  best=+0.613 mean=+0.500 median=+0.543  best genome (last 1 peer games): win= 33.4% loss= 20.1% illegal=  0.0% draw= 15.0% freeze= 11.1% | oppdied= 20.3%  thr=0.60 hid=51 mw=0.007 noise=0.59 |W0|=0.478 leak=0.55  [  307s]
+saved evo_pop_00093.npz and best_evo_00093.npz
+gen   94 game   1  all brains: win= 30.7% loss= 30.7% illegal=  0.0% freeze= 14.0%  ticks/game=  36  illegal fires/brain=16.5  [  310s]
+GEN   94  best=+0.633 mean=+0.500 median=+0.543  best genome (last 1 peer games): win= 35.4% loss= 22.5% illegal=  0.0% draw= 13.9% freeze=  7.6% | oppdied= 20.7%  thr=0.55 hid=51 mw=0.000 noise=0.58 |W0|=0.478 leak=0.56  [  310s]
+saved evo_pop_00094.npz and best_evo_00094.npz
+gen   95 game   1  all brains: win= 30.6% loss= 30.6% illegal=  0.0% freeze= 14.0%  ticks/game=  36  illegal fires/brain=16.4  [  313s]
+GEN   95  best=+0.652 mean=+0.500 median=+0.541  best genome (last 1 peer games): win= 42.6% loss= 19.1% illegal=  0.0% draw= 14.1% freeze=  8.6% | exam vs random: win= 49.2% loss= 32.2% illegal=  0.0% freeze= 12.4% | oppdied= 15.6% | vs perfect: loss= 76.1% illegal=  0.0% draw=  8.2% freeze= 15.7%  thr=0.66 hid=51 mw=0.000 noise=0.58 |W0|=0.478 leak=0.54  [  351s]
+saved evo_pop_00095.npz and best_evo_00095.npz
+gen   96 game   1  all brains: win= 31.0% loss= 31.0% illegal=  0.0% freeze= 13.4%  ticks/game=  36  illegal fires/brain=16.5  [  352s]
+GEN   96  best=+0.625 mean=+0.500 median=+0.543  best genome (last 1 peer games): win= 36.9% loss= 20.9% illegal=  0.0% draw= 18.8% freeze=  7.2% | oppdied= 16.2%  thr=0.48 hid=51 mw=0.000 noise=0.59 |W0|=0.478 leak=0.52  [  352s]
+saved evo_pop_00096.npz and best_evo_00096.npz
+gen   97 game   1  all brains: win= 30.7% loss= 30.7% illegal=  0.0% freeze= 14.3%  ticks/game=  36  illegal fires/brain=16.2  [  354s]
+GEN   97  best=+0.637 mean=+0.500 median=+0.527  best genome (last 1 peer games): win= 39.8% loss= 21.3% illegal=  0.0% draw= 12.5% freeze=  7.2% | oppdied= 19.1%  thr=0.66 hid=51 mw=0.000 noise=0.58 |W0|=0.478 leak=0.51  [  354s]
+saved evo_pop_00097.npz and best_evo_00097.npz
+gen   98 game   1  all brains: win= 31.3% loss= 31.3% illegal=  0.0% freeze= 14.1%  ticks/game=  36  illegal fires/brain=16.1  [  356s]
+GEN   98  best=+0.646 mean=+0.500 median=+0.537  best genome (last 1 peer games): win= 40.4% loss= 22.1% illegal=  0.0% draw= 10.5% freeze=  7.6% | oppdied= 19.3%  thr=0.66 hid=51 mw=0.000 noise=0.60 |W0|=0.478 leak=0.55  [  356s]
+saved evo_pop_00098.npz and best_evo_00098.npz
+gen   99 game   1  all brains: win= 30.6% loss= 30.6% illegal=  0.0% freeze= 13.8%  ticks/game=  37  illegal fires/brain=16.6  [  358s]
+GEN   99  best=+0.635 mean=+0.500 median=+0.541  best genome (last 1 peer games): win= 36.3% loss= 21.1% illegal=  0.0% draw= 15.8% freeze=  8.6% | oppdied= 18.2%  thr=0.64 hid=51 mw=0.001 noise=0.59 |W0|=0.478 leak=0.54  [  358s]
+saved evo_pop_00099.npz and best_evo_00099.npz
+gen  100 game   1  all brains: win= 31.1% loss= 31.1% illegal=  0.0% freeze= 13.2%  ticks/game=  36  illegal fires/brain=16.4  [  360s]
+GEN  100  best=+0.645 mean=+0.500 median=+0.545  best genome (last 1 peer games): win= 37.3% loss= 22.9% illegal=  0.0% draw= 14.3% freeze=  8.2% | exam vs random: win= 50.0% loss= 32.0% illegal=  0.0% freeze= 12.2% | oppdied= 17.4% | vs perfect: loss= 73.7% illegal=  0.0% draw= 10.5% freeze= 15.8%  thr=0.70 hid=51 mw=0.000 noise=0.59 |W0|=0.478 leak=0.55  [  408s]
+saved evo_pop_00100.npz and best_evo_00100.npz
+gen  101 game   1  all brains: win= 30.3% loss= 30.3% illegal=  0.0% freeze= 13.8%  ticks/game=  37  illegal fires/brain=16.7  [  410s]
+GEN  101  best=+0.621 mean=+0.500 median=+0.541  best genome (last 1 peer games): win= 38.5% loss= 22.9% illegal=  0.0% draw= 12.9% freeze=  8.6% | oppdied= 17.2%  thr=0.70 hid=51 mw=0.001 noise=0.59 |W0|=0.478 leak=0.54  [  410s]
+saved evo_pop_00101.npz and best_evo_00101.npz
+gen  102 game   1  all brains: win= 31.6% loss= 31.6% illegal=  0.0% freeze= 13.7%  ticks/game=  36  illegal fires/brain=15.9  [  411s]
+GEN  102  best=+0.645 mean=+0.500 median=+0.541  best genome (last 1 peer games): win= 40.2% loss= 22.1% illegal=  0.0% draw= 12.1% freeze=  8.0% | oppdied= 17.6%  thr=0.56 hid=51 mw=0.001 noise=0.61 |W0|=0.478 leak=0.54  [  411s]
+saved evo_pop_00102.npz and best_evo_00102.npz
+gen  103 game   1  all brains: win= 30.9% loss= 30.9% illegal=  0.0% freeze= 14.1%  ticks/game=  36  illegal fires/brain=16.0  [  414s]
+GEN  103  best=+0.645 mean=+0.500 median=+0.542  best genome (last 1 peer games): win= 39.1% loss= 20.1% illegal=  0.0% draw= 14.6% freeze=  9.8% | oppdied= 16.4%  thr=0.73 hid=51 mw=0.000 noise=0.60 |W0|=0.478 leak=0.56  [  414s]
+saved evo_pop_00103.npz and best_evo_00103.npz
+gen  104 game   1  all brains: win= 29.9% loss= 29.9% illegal=  0.0% freeze= 15.2%  ticks/game=  37  illegal fires/brain=16.4  [  416s]
+GEN  104  best=+0.646 mean=+0.500 median=+0.553  best genome (last 1 peer games): win= 37.7% loss= 18.9% illegal=  0.0% draw= 14.6% freeze=  8.6% | oppdied= 20.1%  thr=0.70 hid=51 mw=0.001 noise=0.59 |W0|=0.478 leak=0.53  [  416s]
+saved evo_pop_00104.npz and best_evo_00104.npz
+gen  105 game   1  all brains: win= 30.9% loss= 30.9% illegal=  0.0% freeze= 13.7%  ticks/game=  36  illegal fires/brain=16.2  [  418s]
+GEN  105  best=+0.654 mean=+0.500 median=+0.547  best genome (last 1 peer games): win= 41.2% loss= 21.1% illegal=  0.0% draw= 16.6% freeze=  5.7% | exam vs random: win= 48.1% loss= 33.5% illegal=  0.0% freeze= 10.7% | oppdied= 15.4% | vs perfect: loss= 70.5% illegal=  0.0% draw= 16.7% freeze= 12.9%  thr=0.70 hid=51 mw=0.001 noise=0.59 |W0|=0.478 leak=0.53  [  464s]
+saved evo_pop_00105.npz and best_evo_00105.npz
+gen  106 game   1  all brains: win= 29.4% loss= 29.4% illegal=  0.0% freeze= 15.0%  ticks/game=  38  illegal fires/brain=16.6  [  467s]
+GEN  106  best=+0.650 mean=+0.500 median=+0.547  best genome (last 1 peer games): win= 39.1% loss= 23.8% illegal=  0.0% draw= 13.5% freeze=  5.3% | oppdied= 18.4%  thr=0.70 hid=51 mw=0.001 noise=0.56 |W0|=0.478 leak=0.56  [  467s]
+saved evo_pop_00106.npz and best_evo_00106.npz
+gen  107 game   1  all brains: win= 29.6% loss= 29.6% illegal=  0.0% freeze= 14.8%  ticks/game=  38  illegal fires/brain=16.8  [  471s]
+GEN  107  best=+0.629 mean=+0.500 median=+0.539  best genome (last 1 peer games): win= 35.2% loss= 22.3% illegal=  0.0% draw= 18.9% freeze=  5.9% | oppdied= 17.8%  thr=0.75 hid=51 mw=0.000 noise=0.60 |W0|=0.478 leak=0.54  [  471s]
+saved evo_pop_00107.npz and best_evo_00107.npz
+gen  108 game   1  all brains: win= 29.0% loss= 29.0% illegal=  0.0% freeze= 15.8%  ticks/game=  38  illegal fires/brain=16.6  [  473s]
+GEN  108  best=+0.652 mean=+0.500 median=+0.547  best genome (last 1 peer games): win= 35.5% loss= 18.9% illegal=  0.0% draw= 17.0% freeze=  9.0% | oppdied= 19.5%  thr=0.70 hid=51 mw=0.001 noise=0.58 |W0|=0.478 leak=0.55  [  473s]
+saved evo_pop_00108.npz and best_evo_00108.npz
+gen  109 game   1  all brains: win= 29.6% loss= 29.6% illegal=  0.0% freeze= 15.3%  ticks/game=  38  illegal fires/brain=16.7  [  476s]
+GEN  109  best=+0.637 mean=+0.500 median=+0.545  best genome (last 1 peer games): win= 37.9% loss= 20.5% illegal=  0.0% draw= 12.9% freeze= 10.4% | oppdied= 18.4%  thr=0.73 hid=51 mw=0.001 noise=0.59 |W0|=0.478 leak=0.55  [  476s]
+saved evo_pop_00109.npz and best_evo_00109.npz
+gen  110 game   1  all brains: win= 29.6% loss= 29.6% illegal=  0.0% freeze= 15.1%  ticks/game=  38  illegal fires/brain=16.6  [  480s]
+GEN  110  best=+0.632 mean=+0.500 median=+0.549  best genome (last 1 peer games): win= 36.3% loss= 20.7% illegal=  0.0% draw= 13.5% freeze= 11.1% | exam vs random: win= 48.3% loss= 33.5% illegal=  0.0% freeze= 12.7% | oppdied= 18.4% | vs perfect: loss= 71.2% illegal=  0.0% draw= 10.6% freeze= 18.2%  thr=0.76 hid=51 mw=0.002 noise=0.59 |W0|=0.478 leak=0.54  [  532s]
+saved evo_pop_00110.npz and best_evo_00110.npz
+gen  111 game   1  all brains: win= 29.2% loss= 29.2% illegal=  0.0% freeze= 15.8%  ticks/game=  38  illegal fires/brain=16.9  [  535s]
+GEN  111  best=+0.633 mean=+0.500 median=+0.549  best genome (last 1 peer games): win= 37.1% loss= 21.7% illegal=  0.0% draw= 15.6% freeze=  9.0% | oppdied= 16.6%  thr=0.70 hid=51 mw=0.000 noise=0.58 |W0|=0.478 leak=0.57  [  535s]
+saved evo_pop_00111.npz and best_evo_00111.npz
+gen  112 game   1  all brains: win= 29.2% loss= 29.2% illegal=  0.0% freeze= 15.6%  ticks/game=  38  illegal fires/brain=16.6  [  538s]
+GEN  112  best=+0.647 mean=+0.500 median=+0.551  best genome (last 1 peer games): win= 36.3% loss= 20.1% illegal=  0.0% draw= 15.8% freeze=  8.2% | oppdied= 19.5%  thr=0.76 hid=51 mw=0.002 noise=0.59 |W0|=0.478 leak=0.54  [  538s]
+saved evo_pop_00112.npz and best_evo_00112.npz
+gen  113 game   1  all brains: win= 29.4% loss= 29.4% illegal=  0.0% freeze= 15.5%  ticks/game=  38  illegal fires/brain=16.6  [  541s]
+GEN  113  best=+0.639 mean=+0.500 median=+0.553  best genome (last 1 peer games): win= 31.6% loss= 19.5% illegal=  0.0% draw= 15.2% freeze= 11.5% | oppdied= 22.1%  thr=0.80 hid=51 mw=0.001 noise=0.57 |W0|=0.478 leak=0.55  [  541s]
+saved evo_pop_00113.npz and best_evo_00113.npz
+resuming from evo_pop_00113.npz at generation 114
+device=cuda evolution-only, no plasticity  genomes=256 brains/genome=512 total brains=131072  life=1 games  opponent=peer  select=pair win=100 legal=1 attempt=-0.001 wait/tick=0.001 elite=0.1 mutation x2.5  noise seed=3651497249920901261  continuous game: 30 ticks per turn, opponent answers in 1..30 ticks  nodes<=120  scalar genes=['thr', 'n_hid', 'log_mw'] vector genes=['log_noise', 'b', 'd0'] matrix genes=['W0']
+gen  114 game   1  all brains: win= 29.1% loss= 29.1% illegal=  0.0% freeze= 15.7%  ticks/game=  38  illegal fires/brain=16.7  [    4s]
+GEN  114  best=+0.645 mean=+0.500 median=+0.555  best genome (last 1 peer games): win= 35.4% loss= 24.0% illegal=  0.0% draw= 14.5% freeze=  6.2% | oppdied= 19.9%  thr=0.79 hid=51 mw=0.000 noise=0.60 |W0|=0.478 leak=0.54  [    4s]
+saved evo_pop_00114.npz and best_evo_00114.npz
+gen  115 game   1  all brains: win= 28.8% loss= 28.8% illegal=  0.0% freeze= 15.9%  ticks/game=  38  illegal fires/brain=16.3  [    7s]
+GEN  115  best=+0.643 mean=+0.500 median=+0.543  best genome (last 1 peer games): win= 33.8% loss= 19.1% illegal=  0.0% draw= 17.8% freeze=  8.6% | exam vs random: win= 49.6% loss= 33.5% illegal=  0.0% freeze= 10.5% | oppdied= 20.7% | vs perfect: loss= 70.0% illegal=  0.0% draw= 15.7% freeze= 14.4%  thr=0.79 hid=51 mw=0.000 noise=0.57 |W0|=0.478 leak=0.55  [   59s]
+saved evo_pop_00115.npz and best_evo_00115.npz
+gen  116 game   1  all brains: win= 28.9% loss= 28.9% illegal=  0.0% freeze= 15.4%  ticks/game=  39  illegal fires/brain=17.2  [   62s]
+GEN  116  best=+0.643 mean=+0.500 median=+0.547  best genome (last 1 peer games): win= 34.6% loss= 20.1% illegal=  0.0% draw= 13.5% freeze= 10.9% | oppdied= 20.9%  thr=0.78 hid=51 mw=0.002 noise=0.59 |W0|=0.478 leak=0.53  [   62s]
+saved evo_pop_00116.npz and best_evo_00116.npz
+gen  117 game   1  all brains: win= 29.3% loss= 29.3% illegal=  0.0% freeze= 15.0%  ticks/game=  38  illegal fires/brain=17.1  [   65s]
+GEN  117  best=+0.645 mean=+0.500 median=+0.545  best genome (last 1 peer games): win= 37.7% loss= 21.7% illegal=  0.0% draw= 16.2% freeze=  4.9% | oppdied= 19.5%  thr=0.70 hid=51 mw=0.000 noise=0.56 |W0|=0.478 leak=0.56  [   65s]
+saved evo_pop_00117.npz and best_evo_00117.npz
+gen  118 game   1  all brains: win= 29.0% loss= 29.0% illegal=  0.0% freeze= 14.4%  ticks/game=  38  illegal fires/brain=17.5  [   67s]
+GEN  118  best=+0.617 mean=+0.500 median=+0.541  best genome (last 1 peer games): win= 32.0% loss= 23.4% illegal=  0.0% draw= 14.6% freeze=  9.0% | oppdied= 20.9%  thr=0.71 hid=51 mw=0.000 noise=0.57 |W0|=0.478 leak=0.55  [   67s]
+saved evo_pop_00118.npz and best_evo_00118.npz
+gen  119 game   1  all brains: win= 29.1% loss= 29.1% illegal=  0.0% freeze= 14.3%  ticks/game=  37  illegal fires/brain=16.9  [   70s]
+GEN  119  best=+0.623 mean=+0.500 median=+0.545  best genome (last 1 peer games): win= 34.2% loss= 21.1% illegal=  0.0% draw= 18.8% freeze=  9.0% | oppdied= 17.0%  thr=0.72 hid=54 mw=0.000 noise=0.59 |W0|=0.479 leak=0.55  [   70s]
+saved evo_pop_00119.npz and best_evo_00119.npz
+gen  120 game   1  all brains: win= 29.0% loss= 29.0% illegal=  0.0% freeze= 15.0%  ticks/game=  38  illegal fires/brain=16.9  [   73s]
+GEN  120  best=+0.648 mean=+0.500 median=+0.549  best genome (last 1 peer games): win= 36.5% loss= 17.8% illegal=  0.0% draw= 16.6% freeze=  9.2% | exam vs random: win= 49.3% loss= 32.3% illegal=  0.0% freeze= 11.8% | oppdied= 19.9% | vs perfect: loss= 66.4% illegal=  0.0% draw= 17.9% freeze= 15.7%  thr=0.74 hid=51 mw=0.000 noise=0.56 |W0|=0.478 leak=0.54  [  125s]
+saved evo_pop_00120.npz and best_evo_00120.npz
+gen  121 game   1  all brains: win= 29.9% loss= 29.9% illegal=  0.0% freeze= 13.6%  ticks/game=  37  illegal fires/brain=17.0  [  128s]
+GEN  121  best=+0.627 mean=+0.500 median=+0.549  best genome (last 1 peer games): win= 34.0% loss= 23.8% illegal=  0.0% draw= 19.7% freeze=  5.1% | oppdied= 17.4%  thr=0.67 hid=51 mw=0.003 noise=0.57 |W0|=0.478 leak=0.56  [  128s]
+saved evo_pop_00121.npz and best_evo_00121.npz
+gen  122 game   1  all brains: win= 29.2% loss= 29.2% illegal=  0.0% freeze= 14.4%  ticks/game=  37  illegal fires/brain=17.0  [  131s]
+GEN  122  best=+0.658 mean=+0.500 median=+0.549  best genome (last 1 peer games): win= 38.5% loss= 18.8% illegal=  0.0% draw= 17.8% freeze=  9.0% | oppdied= 16.0%  thr=0.77 hid=52 mw=0.001 noise=0.59 |W0|=0.478 leak=0.55  [  131s]
+saved evo_pop_00122.npz and best_evo_00122.npz
+gen  123 game   1  all brains: win= 29.9% loss= 29.9% illegal=  0.0% freeze= 13.4%  ticks/game=  37  illegal fires/brain=17.0  [  134s]
+GEN  123  best=+0.637 mean=+0.500 median=+0.547  best genome (last 1 peer games): win= 37.1% loss= 21.9% illegal=  0.0% draw= 21.5% freeze=  3.9% | oppdied= 15.6%  thr=0.62 hid=51 mw=0.001 noise=0.57 |W0|=0.478 leak=0.53  [  134s]
+saved evo_pop_00123.npz and best_evo_00123.npz
+gen  124 game   1  all brains: win= 29.8% loss= 29.8% illegal=  0.0% freeze= 13.8%  ticks/game=  36  illegal fires/brain=16.4  [  137s]
+GEN  124  best=+0.652 mean=+0.500 median=+0.547  best genome (last 1 peer games): win= 36.1% loss= 19.1% illegal=  0.0% draw= 20.1% freeze=  6.2% | oppdied= 18.4%  thr=0.66 hid=51 mw=0.001 noise=0.56 |W0|=0.479 leak=0.59  [  137s]
+saved evo_pop_00124.npz and best_evo_00124.npz
+gen  125 game   1  all brains: win= 30.7% loss= 30.7% illegal=  0.0% freeze= 11.5%  ticks/game=  36  illegal fires/brain=17.1  [  140s]
+GEN  125  best=+0.629 mean=+0.500 median=+0.537  best genome (last 1 peer games): win= 35.0% loss= 21.1% illegal=  0.0% draw= 20.7% freeze=  6.1% | exam vs random: win= 51.0% loss= 33.7% illegal=  0.0% freeze=  8.1% | oppdied= 17.2% | vs perfect: loss= 67.4% illegal=  0.0% draw= 22.6% freeze= 10.0%  thr=0.67 hid=51 mw=0.001 noise=0.57 |W0|=0.478 leak=0.57  [  196s]
+saved evo_pop_00125.npz and best_evo_00125.npz
+gen  126 game   1  all brains: win= 30.3% loss= 30.3% illegal=  0.0% freeze= 12.8%  ticks/game=  37  illegal fires/brain=17.5  [  199s]
+GEN  126  best=+0.637 mean=+0.500 median=+0.539  best genome (last 1 peer games): win= 35.7% loss= 21.7% illegal=  0.0% draw= 19.1% freeze=  7.2% | oppdied= 16.2%  thr=0.57 hid=51 mw=0.006 noise=0.56 |W0|=0.479 leak=0.58  [  199s]
+saved evo_pop_00126.npz and best_evo_00126.npz
+gen  127 game   1  all brains: win= 28.6% loss= 28.6% illegal=  0.0% freeze= 14.6%  ticks/game=  37  illegal fires/brain=17.4  [  202s]
+GEN  127  best=+0.652 mean=+0.500 median=+0.555  best genome (last 1 peer games): win= 36.5% loss= 21.7% illegal=  0.0% draw= 18.9% freeze=  3.9% | oppdied= 18.9%  thr=0.63 hid=51 mw=0.000 noise=0.56 |W0|=0.479 leak=0.56  [  202s]
+saved evo_pop_00127.npz and best_evo_00127.npz
+gen  128 game   1  all brains: win= 28.9% loss= 28.9% illegal=  0.0% freeze= 13.6%  ticks/game=  36  illegal fires/brain=16.9  [  205s]
+GEN  128  best=+0.643 mean=+0.500 median=+0.547  best genome (last 1 peer games): win= 36.7% loss= 19.1% illegal=  0.0% draw= 16.8% freeze=  9.0% | oppdied= 18.4%  thr=0.60 hid=52 mw=0.002 noise=0.58 |W0|=0.478 leak=0.56  [  205s]
+saved evo_pop_00128.npz and best_evo_00128.npz
+gen  129 game   1  all brains: win= 30.2% loss= 30.2% illegal=  0.0% freeze= 12.7%  ticks/game=  36  illegal fires/brain=16.9  [  208s]
+GEN  129  best=+0.656 mean=+0.500 median=+0.539  best genome (last 1 peer games): win= 38.9% loss= 18.6% illegal=  0.0% draw= 21.5% freeze=  4.9% | oppdied= 16.2%  thr=0.65 hid=51 mw=0.000 noise=0.58 |W0|=0.478 leak=0.58  [  208s]
+saved evo_pop_00129.npz and best_evo_00129.npz
+gen  130 game   1  all brains: win= 30.8% loss= 30.8% illegal=  0.0% freeze= 12.0%  ticks/game=  35  illegal fires/brain=16.5  [  211s]
+GEN  130  best=+0.631 mean=+0.500 median=+0.547  best genome (last 1 peer games): win= 41.2% loss= 15.0% illegal=  0.0% draw= 21.1% freeze=  8.2% | exam vs random: win= 48.5% loss= 31.6% illegal=  0.0% freeze= 13.1% | oppdied= 14.5% | vs perfect: loss= 70.6% illegal=  0.0% draw= 17.5% freeze= 11.8%  thr=0.52 hid=51 mw=0.002 noise=0.58 |W0|=0.478 leak=0.60  [  262s]
+saved evo_pop_00130.npz and best_evo_00130.npz
+gen  131 game   1  all brains: win= 30.8% loss= 30.8% illegal=  0.0% freeze= 12.4%  ticks/game=  35  illegal fires/brain=16.7  [  265s]
+GEN  131  best=+0.652 mean=+0.500 median=+0.533  best genome (last 1 peer games): win= 36.9% loss= 21.7% illegal=  0.0% draw= 18.2% freeze=  5.9% | oppdied= 17.4%  thr=0.69 hid=51 mw=0.003 noise=0.58 |W0|=0.478 leak=0.56  [  265s]
+saved evo_pop_00131.npz and best_evo_00131.npz
+gen  132 game   1  all brains: win= 30.1% loss= 30.1% illegal=  0.0% freeze= 13.1%  ticks/game=  35  illegal fires/brain=16.4  [  268s]
+GEN  132  best=+0.652 mean=+0.500 median=+0.537  best genome (last 1 peer games): win= 34.2% loss= 16.4% illegal=  0.0% draw= 20.9% freeze=  6.6% | oppdied= 21.9%  thr=0.64 hid=51 mw=0.001 noise=0.59 |W0|=0.478 leak=0.57  [  268s]
+saved evo_pop_00132.npz and best_evo_00132.npz
+gen  133 game   1  all brains: win= 29.8% loss= 29.8% illegal=  0.0% freeze= 13.0%  ticks/game=  36  illegal fires/brain=17.1  [  270s]
+GEN  133  best=+0.658 mean=+0.500 median=+0.551  best genome (last 1 peer games): win= 37.5% loss= 19.3% illegal=  0.0% draw= 17.6% freeze=  9.4% | oppdied= 16.2%  thr=0.79 hid=51 mw=0.000 noise=0.56 |W0|=0.478 leak=0.56  [  270s]
+saved evo_pop_00133.npz and best_evo_00133.npz
+gen  134 game   1  all brains: win= 30.6% loss= 30.6% illegal=  0.0% freeze= 11.9%  ticks/game=  35  illegal fires/brain=17.1  [  272s]
+GEN  134  best=+0.650 mean=+0.500 median=+0.543  best genome (last 1 peer games): win= 37.3% loss= 19.9% illegal=  0.0% draw= 21.5% freeze=  6.1% | oppdied= 15.2%  thr=0.64 hid=51 mw=0.003 noise=0.58 |W0|=0.479 leak=0.57  [  272s]
+saved evo_pop_00134.npz and best_evo_00134.npz
+gen  135 game   1  all brains: win= 30.1% loss= 30.1% illegal=  0.0% freeze= 12.7%  ticks/game=  35  illegal fires/brain=17.3  [  274s]
+GEN  135  best=+0.645 mean=+0.500 median=+0.545  best genome (last 1 peer games): win= 35.7% loss= 22.1% illegal=  0.0% draw= 18.9% freeze=  6.4% | exam vs random: win= 50.1% loss= 32.9% illegal=  0.0% freeze=  8.0% | oppdied= 16.8% | vs perfect: loss= 71.5% illegal=  0.0% draw= 23.2% freeze=  5.3%  thr=0.41 hid=56 mw=0.000 noise=0.59 |W0|=0.478 leak=0.56  [  321s]
+saved evo_pop_00135.npz and best_evo_00135.npz
+gen  136 game   1  all brains: win= 28.6% loss= 28.6% illegal=  0.0% freeze= 13.7%  ticks/game=  36  illegal fires/brain=17.5  [  323s]
+GEN  136  best=+0.643 mean=+0.500 median=+0.557  best genome (last 1 peer games): win= 33.2% loss= 23.4% illegal=  0.0% draw= 20.7% freeze=  5.1% | oppdied= 17.6%  thr=0.72 hid=51 mw=0.001 noise=0.57 |W0|=0.478 leak=0.56  [  323s]
+saved evo_pop_00136.npz and best_evo_00136.npz
+gen  137 game   1  all brains: win= 29.8% loss= 29.8% illegal=  0.0% freeze= 11.7%  ticks/game=  35  illegal fires/brain=17.5  [  325s]
+GEN  137  best=+0.635 mean=+0.500 median=+0.543  best genome (last 1 peer games): win= 33.6% loss= 23.8% illegal=  0.0% draw= 21.3% freeze=  4.1% | oppdied= 17.2%  thr=0.63 hid=51 mw=0.000 noise=0.57 |W0|=0.478 leak=0.56  [  325s]
+saved evo_pop_00137.npz and best_evo_00137.npz
+gen  138 game   1  all brains: win= 30.3% loss= 30.3% illegal=  0.0% freeze= 11.5%  ticks/game=  36  illegal fires/brain=17.6  [  327s]
+GEN  138  best=+0.631 mean=+0.500 median=+0.539  best genome (last 1 peer games): win= 37.3% loss= 25.0% illegal=  0.0% draw= 19.1% freeze=  3.5% | oppdied= 15.0%  thr=0.69 hid=51 mw=0.001 noise=0.59 |W0|=0.479 leak=0.54  [  327s]
+saved evo_pop_00138.npz and best_evo_00138.npz
+gen  139 game   1  all brains: win= 30.6% loss= 30.6% illegal=  0.0% freeze= 11.2%  ticks/game=  35  illegal fires/brain=17.4  [  329s]
+GEN  139  best=+0.627 mean=+0.500 median=+0.545  best genome (last 1 peer games): win= 37.9% loss= 18.0% illegal=  0.0% draw= 20.1% freeze=  9.0% | oppdied= 15.0%  thr=0.69 hid=51 mw=0.000 noise=0.56 |W0|=0.479 leak=0.57  [  329s]
+saved evo_pop_00139.npz and best_evo_00139.npz
+gen  140 game   1  all brains: win= 30.9% loss= 30.9% illegal=  0.0% freeze= 12.1%  ticks/game=  35  illegal fires/brain=17.3  [  332s]
+GEN  140  best=+0.641 mean=+0.500 median=+0.547  best genome (last 1 peer games): win= 36.1% loss= 21.5% illegal=  0.0% draw= 17.8% freeze=  6.4% | exam vs random: win= 49.9% loss= 35.4% illegal=  0.0% freeze=  7.9% | oppdied= 18.2% | vs perfect: loss= 70.0% illegal=  0.0% draw= 21.1% freeze=  8.9%  thr=0.66 hid=51 mw=0.000 noise=0.58 |W0|=0.478 leak=0.54  [  377s]
+saved evo_pop_00140.npz and best_evo_00140.npz
+gen  141 game   1  all brains: win= 32.4% loss= 32.4% illegal=  0.0% freeze= 10.8%  ticks/game=  34  illegal fires/brain=16.7  [  380s]
+GEN  141  best=+0.656 mean=+0.500 median=+0.535  best genome (last 1 peer games): win= 51.0% loss= 29.7% illegal=  0.0% draw=  8.2% freeze=  1.6% | oppdied=  9.6%  thr=0.05 hid=51 mw=0.300 noise=0.72 |W0|=4.349 leak=0.46  [  380s]
+saved evo_pop_00141.npz and best_evo_00141.npz
+gen  142 game   1  all brains: win= 30.8% loss= 30.8% illegal=  0.0% freeze= 11.8%  ticks/game=  34  illegal fires/brain=16.7  [  382s]
+GEN  142  best=+0.635 mean=+0.500 median=+0.543  best genome (last 1 peer games): win= 40.2% loss= 20.9% illegal=  0.0% draw= 19.1% freeze=  6.2% | oppdied= 13.5%  thr=0.74 hid=51 mw=0.000 noise=0.55 |W0|=0.478 leak=0.54  [  382s]
+saved evo_pop_00142.npz and best_evo_00142.npz
+gen  143 game   1  all brains: win= 31.4% loss= 31.4% illegal=  0.0% freeze= 11.9%  ticks/game=  34  illegal fires/brain=16.7  [  385s]
+GEN  143  best=+0.633 mean=+0.500 median=+0.547  best genome (last 1 peer games): win= 38.7% loss= 22.7% illegal=  0.0% draw= 19.5% freeze=  6.1% | oppdied= 13.1%  thr=0.60 hid=51 mw=0.001 noise=0.56 |W0|=0.479 leak=0.54  [  385s]
+saved evo_pop_00143.npz and best_evo_00143.npz
+gen  144 game   1  all brains: win= 32.8% loss= 32.8% illegal=  0.0% freeze= 11.5%  ticks/game=  32  illegal fires/brain=15.5  [  388s]
+GEN  144  best=+0.680 mean=+0.500 median=+0.535  best genome (last 1 peer games): win= 54.5% loss= 24.6% illegal=  0.0% draw=  5.3% freeze=  5.1% | oppdied= 10.5%  thr=0.74 hid=55 mw=0.000 noise=0.58 |W0|=2.255 leak=0.53  [  388s]
+saved evo_pop_00144.npz and best_evo_00144.npz
+gen  145 game   1  all brains: win= 32.9% loss= 32.9% illegal=  0.0% freeze= 11.7%  ticks/game=  33  illegal fires/brain=16.1  [  391s]
+GEN  145  best=+0.637 mean=+0.500 median=+0.527  best genome (last 1 peer games): win= 51.2% loss= 28.1% illegal=  0.0% draw=  3.3% freeze=  7.0% | exam vs random: win= 53.9% loss= 32.4% illegal=  0.0% freeze=  5.5% | oppdied= 10.4% | vs perfect: loss= 77.3% illegal=  0.0% draw= 17.7% freeze=  5.0%  thr=0.74 hid=55 mw=0.000 noise=0.58 |W0|=2.255 leak=0.53  [  442s]
+saved evo_pop_00145.npz and best_evo_00145.npz
+gen  146 game   1  all brains: win= 31.9% loss= 31.9% illegal=  0.0% freeze= 12.5%  ticks/game=  34  illegal fires/brain=16.4  [  445s]
+GEN  146  best=+0.682 mean=+0.500 median=+0.533  best genome (last 1 peer games): win= 55.7% loss= 24.4% illegal=  0.0% draw=  4.7% freeze=  4.9% | oppdied= 10.4%  thr=0.74 hid=55 mw=0.000 noise=0.58 |W0|=2.255 leak=0.53  [  445s]
+saved evo_pop_00146.npz and best_evo_00146.npz
+gen  147 game   1  all brains: win= 33.0% loss= 33.0% illegal=  0.0% freeze= 12.9%  ticks/game=  32  illegal fires/brain=15.8  [  447s]
+GEN  147  best=+0.652 mean=+0.500 median=+0.514  best genome (last 1 peer games): win= 42.2% loss= 23.8% illegal=  0.0% draw= 13.5% freeze=  5.1% | oppdied= 15.4%  thr=0.71 hid=51 mw=0.001 noise=0.59 |W0|=0.479 leak=0.57  [  447s]
+saved evo_pop_00147.npz and best_evo_00147.npz
+gen  148 game   1  all brains: win= 33.8% loss= 33.8% illegal=  0.0% freeze= 13.0%  ticks/game=  32  illegal fires/brain=16.2  [  450s]
+GEN  148  best=+0.654 mean=+0.500 median=+0.518  best genome (last 1 peer games): win= 47.3% loss= 23.8% illegal=  0.0% draw=  4.7% freeze=  7.6% | oppdied= 16.6%  thr=0.86 hid=67 mw=0.000 noise=0.61 |W0|=1.809 leak=0.50  [  450s]
+saved evo_pop_00148.npz and best_evo_00148.npz
+gen  149 game   1  all brains: win= 35.9% loss= 35.9% illegal=  0.0% freeze= 11.0%  ticks/game=  30  illegal fires/brain=16.2  [  452s]
+GEN  149  best=+0.619 mean=+0.500 median=+0.514  best genome (last 1 peer games): win= 44.9% loss= 28.1% illegal=  0.0% draw=  6.8% freeze=  7.4% | oppdied= 12.7%  thr=0.59 hid=53 mw=0.000 noise=0.57 |W0|=2.254 leak=0.54  [  452s]
+saved evo_pop_00149.npz and best_evo_00149.npz
+gen  150 game   1  all brains: win= 35.4% loss= 35.4% illegal=  0.0% freeze= 11.5%  ticks/game=  30  illegal fires/brain=19.3  [  455s]
+GEN  150  best=+0.648 mean=+0.500 median=+0.520  best genome (last 1 peer games): win= 61.1% loss= 11.9% illegal=  0.0% draw=  1.0% freeze= 23.2% | exam vs random: win= 18.7% loss= 29.1% illegal=  0.0% freeze= 50.7% | oppdied=  2.7% | vs perfect: loss= 96.5% illegal=  0.0% draw=  0.1% freeze=  3.5%  thr=0.05 hid=4 mw=0.000 noise=0.64 |W0|=1.376 leak=0.51  [  504s]
+saved evo_pop_00150.npz and best_evo_00150.npz
+gen  151 game   1  all brains: win= 34.9% loss= 34.9% illegal=  0.0% freeze= 11.8%  ticks/game=  30  illegal fires/brain=19.9  [  506s]
+GEN  151  best=+0.656 mean=+0.500 median=+0.516  best genome (last 1 peer games): win= 49.2% loss= 26.4% illegal=  0.0% draw= 12.1% freeze=  3.1% | oppdied=  9.2%  thr=0.10 hid=19 mw=0.000 noise=0.57 |W0|=1.807 leak=0.52  [  506s]
+saved evo_pop_00151.npz and best_evo_00151.npz
+gen  152 game   1  all brains: win= 33.1% loss= 33.1% illegal=  0.0% freeze= 13.8%  ticks/game=  29  illegal fires/brain=18.1  [  509s]
+GEN  152  best=+0.695 mean=+0.500 median=+0.527  best genome (last 1 peer games): win= 51.8% loss= 23.6% illegal=  0.0% draw=  9.4% freeze=  2.7% | oppdied= 12.5%  thr=0.05 hid=21 mw=0.000 noise=0.63 |W0|=1.509 leak=0.51  [  509s]
+saved evo_pop_00152.npz and best_evo_00152.npz
+gen  153 game   1  all brains: win= 33.4% loss= 33.4% illegal=  0.0% freeze= 14.0%  ticks/game=  28  illegal fires/brain=15.5  [  511s]
+GEN  153  best=+0.691 mean=+0.500 median=+0.533  best genome (last 1 peer games): win= 52.3% loss= 25.4% illegal=  0.0% draw=  5.9% freeze=  2.3% | oppdied= 14.1%  thr=0.05 hid=21 mw=0.000 noise=0.63 |W0|=1.509 leak=0.51  [  511s]
+saved evo_pop_00153.npz and best_evo_00153.npz
+gen  154 game   1  all brains: win= 33.5% loss= 33.5% illegal=  0.0% freeze= 13.7%  ticks/game=  28  illegal fires/brain=14.4  [  513s]
+GEN  154  best=+0.658 mean=+0.500 median=+0.523  best genome (last 1 peer games): win= 47.5% loss= 24.8% illegal=  0.0% draw=  5.9% freeze=  9.4% | oppdied= 12.5%  thr=0.20 hid=12 mw=0.000 noise=0.58 |W0|=1.605 leak=0.53  [  513s]
+saved evo_pop_00154.npz and best_evo_00154.npz
+gen  155 game   1  all brains: win= 33.5% loss= 33.5% illegal=  0.0% freeze= 14.2%  ticks/game=  28  illegal fires/brain=13.7  [  515s]
+GEN  155  best=+0.680 mean=+0.500 median=+0.529  best genome (last 1 peer games): win= 52.0% loss= 23.6% illegal=  0.0% draw=  2.7% freeze=  8.4% | exam vs random: win= 43.0% loss= 29.5% illegal=  0.0% freeze= 21.1% | oppdied= 13.3% | vs perfect: loss= 91.2% illegal=  0.0% draw=  6.8% freeze=  1.9%  thr=0.05 hid=16 mw=0.000 noise=0.59 |W0|=1.704 leak=0.52  [  566s]
+saved evo_pop_00155.npz and best_evo_00155.npz
+gen  156 game   1  all brains: win= 36.9% loss= 36.9% illegal=  0.0% freeze= 10.7%  ticks/game=  26  illegal fires/brain=13.9  [  568s]
+GEN  156  best=+0.676 mean=+0.500 median=+0.514  best genome (last 1 peer games): win= 54.7% loss= 27.1% illegal=  0.0% draw=  3.5% freeze=  3.7% | oppdied= 10.9%  thr=0.10 hid=17 mw=0.000 noise=0.62 |W0|=1.542 leak=0.54  [  568s]
+saved evo_pop_00156.npz and best_evo_00156.npz
+gen  157 game   1  all brains: win= 34.8% loss= 34.8% illegal=  0.0% freeze= 13.7%  ticks/game=  27  illegal fires/brain=13.4  [  570s]
+GEN  157  best=+0.662 mean=+0.500 median=+0.514  best genome (last 1 peer games): win= 47.7% loss= 27.0% illegal=  0.0% draw=  2.1% freeze=  5.7% | oppdied= 17.6%  thr=0.16 hid=17 mw=0.000 noise=0.59 |W0|=1.638 leak=0.53  [  570s]
+saved evo_pop_00157.npz and best_evo_00157.npz
+gen  158 game   1  all brains: win= 37.9% loss= 37.9% illegal=  0.0% freeze= 10.5%  ticks/game=  26  illegal fires/brain=12.8  [  573s]
+GEN  158  best=+0.691 mean=+0.500 median=+0.529  best genome (last 1 peer games): win= 51.0% loss= 27.5% illegal=  0.0% draw=  3.9% freeze=  2.7% | oppdied= 14.8%  thr=0.05 hid=17 mw=0.000 noise=0.64 |W0|=1.674 leak=0.48  [  573s]
+saved evo_pop_00158.npz and best_evo_00158.npz
+gen  159 game   1  all brains: win= 38.6% loss= 38.6% illegal=  0.0% freeze=  9.8%  ticks/game=  25  illegal fires/brain=12.2  [  575s]
+GEN  159  best=+0.648 mean=+0.500 median=+0.537  best genome (last 1 peer games): win= 51.4% loss= 29.9% illegal=  0.0% draw=  2.1% freeze=  5.3% | oppdied= 11.3%  thr=0.05 hid=17 mw=0.000 noise=0.62 |W0|=1.576 leak=0.50  [  575s]
+saved evo_pop_00159.npz and best_evo_00159.npz
+gen  160 game   1  all brains: win= 38.6% loss= 38.6% illegal=  0.0% freeze=  9.6%  ticks/game=  25  illegal fires/brain=12.1  [  577s]
+GEN  160  best=+0.645 mean=+0.500 median=+0.549  best genome (last 1 peer games): win= 53.1% loss= 31.4% illegal=  0.0% draw=  1.6% freeze=  4.1% | exam vs random: win= 43.1% loss= 34.2% illegal=  0.0% freeze= 13.2% | oppdied=  9.8% | vs perfect: loss= 92.5% illegal=  0.0% draw=  6.2% freeze=  1.2%  thr=0.05 hid=17 mw=0.000 noise=0.59 |W0|=1.579 leak=0.51  [  638s]
+saved evo_pop_00160.npz and best_evo_00160.npz
+gen  161 game   1  all brains: win= 38.8% loss= 38.8% illegal=  0.0% freeze=  9.6%  ticks/game=  24  illegal fires/brain=11.9  [  640s]
+GEN  161  best=+0.633 mean=+0.500 median=+0.549  best genome (last 1 peer games): win= 51.6% loss= 30.9% illegal=  0.0% draw=  2.3% freeze=  4.7% | oppdied= 10.5%  thr=0.09 hid=17 mw=0.000 noise=0.59 |W0|=1.642 leak=0.50  [  640s]
+saved evo_pop_00161.npz and best_evo_00161.npz
+gen  162 game   1  all brains: win= 39.6% loss= 39.6% illegal=  0.0% freeze=  8.6%  ticks/game=  23  illegal fires/brain=11.5  [  643s]
+GEN  162  best=+0.656 mean=+0.500 median=+0.553  best genome (last 1 peer games): win= 52.1% loss= 30.3% illegal=  0.0% draw=  1.6% freeze=  3.3% | oppdied= 12.7%  thr=0.05 hid=17 mw=0.000 noise=0.60 |W0|=1.641 leak=0.50  [  643s]
+saved evo_pop_00162.npz and best_evo_00162.npz
+gen  163 game   1  all brains: win= 39.2% loss= 39.2% illegal=  0.0% freeze=  9.1%  ticks/game=  24  illegal fires/brain=11.4  [  645s]
+GEN  163  best=+0.650 mean=+0.500 median=+0.553  best genome (last 1 peer games): win= 52.1% loss= 28.5% illegal=  0.0% draw=  2.0% freeze=  5.9% | oppdied= 11.5%  thr=0.19 hid=17 mw=0.000 noise=0.59 |W0|=1.639 leak=0.52  [  645s]
+saved evo_pop_00163.npz and best_evo_00163.npz
+gen  164 game   1  all brains: win= 39.5% loss= 39.5% illegal=  0.0% freeze=  9.1%  ticks/game=  24  illegal fires/brain=11.5  [  647s]
+GEN  164  best=+0.641 mean=+0.500 median=+0.559  best genome (last 1 peer games): win= 53.3% loss= 31.8% illegal=  0.0% draw=  3.3% freeze=  2.7% | oppdied=  8.8%  thr=0.09 hid=17 mw=0.000 noise=0.58 |W0|=1.644 leak=0.51  [  647s]
+saved evo_pop_00164.npz and best_evo_00164.npz
+gen  165 game   1  all brains: win= 40.2% loss= 40.2% illegal=  0.0% freeze=  8.4%  ticks/game=  23  illegal fires/brain=11.5  [  650s]
+resuming from evo_pop_00164.npz at generation 165
+device=cuda evolution-only, no plasticity  genomes=256 brains/genome=512 total brains=131072  life=1 games  opponent=peer  select=pair win=100 legal=1 attempt=-0.001 wait/tick=0 elite=0.1 mutation x2.5  noise seed=4598239808590133431  continuous game: 30 ticks per turn, opponent answers in 1..30 ticks  nodes<=120  scalar genes=['thr', 'n_hid', 'log_mw'] vector genes=['log_noise', 'b', 'd0'] matrix genes=['W0']
+gen  165 game   1  all brains: win= 39.5% loss= 39.5% illegal=  0.0% freeze=  8.4%  ticks/game=  23  illegal fires/brain=11.0  [    2s]
+GEN  165  best=+0.644 mean=+0.500 median=+0.556  best genome (last 1 peer games): win= 52.5% loss= 28.7% illegal=  0.0% draw=  2.9% freeze=  5.7% | exam vs random: win= 43.8% loss= 28.7% illegal=  0.0% freeze= 18.5% | oppdied= 10.2% | vs perfect: loss= 90.5% illegal=  0.0% draw=  6.8% freeze=  2.7%  thr=0.08 hid=17 mw=0.000 noise=0.59 |W0|=1.608 leak=0.51  [   54s]
+saved evo_pop_00165.npz and best_evo_00165.npz
+gen  166 game   1  all brains: win= 38.5% loss= 38.5% illegal=  0.0% freeze=  9.5%  ticks/game=  24  illegal fires/brain=11.0  [   56s]
+GEN  166  best=+0.641 mean=+0.500 median=+0.553  best genome (last 1 peer games): win= 49.8% loss= 31.8% illegal=  0.0% draw=  4.1% freeze=  2.3% | oppdied= 11.9%  thr=0.09 hid=17 mw=0.000 noise=0.58 |W0|=1.579 leak=0.53  [   56s]
+saved evo_pop_00166.npz and best_evo_00166.npz
+gen  167 game   1  all brains: win= 39.5% loss= 39.5% illegal=  0.0% freeze=  8.1%  ticks/game=  23  illegal fires/brain=11.0  [   59s]
+GEN  167  best=+0.645 mean=+0.500 median=+0.551  best genome (last 1 peer games): win= 50.4% loss= 30.5% illegal=  0.0% draw=  4.3% freeze=  3.1% | oppdied= 11.7%  thr=0.09 hid=17 mw=0.000 noise=0.58 |W0|=1.579 leak=0.53  [   59s]
+saved evo_pop_00167.npz and best_evo_00167.npz
+gen  168 game   1  all brains: win= 39.1% loss= 39.1% illegal=  0.0% freeze=  8.6%  ticks/game=  23  illegal fires/brain=11.0  [   60s]
+GEN  168  best=+0.656 mean=+0.500 median=+0.554  best genome (last 1 peer games): win= 52.5% loss= 30.9% illegal=  0.0% draw=  3.5% freeze=  2.7% | oppdied= 10.4%  thr=0.24 hid=17 mw=0.000 noise=0.58 |W0|=1.610 leak=0.50  [   60s]
+saved evo_pop_00168.npz and best_evo_00168.npz
+gen  169 game   1  all brains: win= 39.5% loss= 39.5% illegal=  0.0% freeze=  8.1%  ticks/game=  23  illegal fires/brain=10.9  [   63s]
+GEN  169  best=+0.646 mean=+0.500 median=+0.554  best genome (last 1 peer games): win= 53.5% loss= 29.3% illegal=  0.0% draw=  4.1% freeze=  4.9% | oppdied=  8.2%  thr=0.16 hid=17 mw=0.000 noise=0.58 |W0|=1.675 leak=0.52  [   63s]
+saved evo_pop_00169.npz and best_evo_00169.npz
+gen  170 game   1  all brains: win= 39.0% loss= 39.0% illegal=  0.0% freeze=  8.7%  ticks/game=  23  illegal fires/brain=10.9  [   64s]
+GEN  170  best=+0.657 mean=+0.500 median=+0.560  best genome (last 1 peer games): win= 53.7% loss= 30.5% illegal=  0.0% draw=  5.1% freeze=  1.8% | exam vs random: win= 47.8% loss= 30.3% illegal=  0.0% freeze= 13.2% | oppdied=  9.0% | vs perfect: loss= 89.4% illegal=  0.0% draw=  7.8% freeze=  2.8%  thr=0.19 hid=17 mw=0.000 noise=0.58 |W0|=1.640 leak=0.48  [  111s]
+saved evo_pop_00170.npz and best_evo_00170.npz
+gen  171 game   1  all brains: win= 38.5% loss= 38.5% illegal=  0.0% freeze=  9.0%  ticks/game=  23  illegal fires/brain=10.9  [  114s]
+GEN  171  best=+0.654 mean=+0.500 median=+0.557  best genome (last 1 peer games): win= 50.6% loss= 30.7% illegal=  0.0% draw=  4.1% freeze=  2.7% | oppdied= 11.9%  thr=0.38 hid=17 mw=0.001 noise=0.59 |W0|=1.641 leak=0.50  [  114s]
+saved evo_pop_00171.npz and best_evo_00171.npz
+gen  172 game   1  all brains: win= 39.1% loss= 39.1% illegal=  0.0% freeze=  8.9%  ticks/game=  23  illegal fires/brain=10.7  [  115s]
+GEN  172  best=+0.650 mean=+0.500 median=+0.560  best genome (last 1 peer games): win= 53.5% loss= 29.1% illegal=  0.0% draw=  5.1% freeze=  3.9% | oppdied=  8.4%  thr=0.05 hid=17 mw=0.000 noise=0.57 |W0|=1.643 leak=0.51  [  115s]
+saved evo_pop_00172.npz and best_evo_00172.npz
+gen  173 game   1  all brains: win= 37.9% loss= 37.9% illegal=  0.0% freeze=  9.9%  ticks/game=  24  illegal fires/brain=11.0  [  117s]
+GEN  173  best=+0.654 mean=+0.500 median=+0.553  best genome (last 1 peer games): win= 49.2% loss= 28.9% illegal=  0.0% draw=  3.9% freeze=  3.9% | oppdied= 14.1%  thr=0.05 hid=17 mw=0.003 noise=0.57 |W0|=1.642 leak=0.49  [  117s]
+saved evo_pop_00173.npz and best_evo_00173.npz
+gen  174 game   1  all brains: win= 38.6% loss= 38.6% illegal=  0.0% freeze=  9.3%  ticks/game=  23  illegal fires/brain=10.7  [  120s]
+GEN  174  best=+0.666 mean=+0.500 median=+0.562  best genome (last 1 peer games): win= 52.9% loss= 29.5% illegal=  0.0% draw=  3.9% freeze=  2.1% | oppdied= 11.5%  thr=0.08 hid=17 mw=0.000 noise=0.57 |W0|=1.576 leak=0.49  [  120s]
+saved evo_pop_00174.npz and best_evo_00174.npz
+gen  175 game   1  all brains: win= 37.9% loss= 37.9% illegal=  0.0% freeze= 10.1%  ticks/game=  23  illegal fires/brain=10.8  [  122s]
+GEN  175  best=+0.675 mean=+0.500 median=+0.557  best genome (last 1 peer games): win= 52.5% loss= 29.1% illegal=  0.0% draw=  3.9% freeze=  1.4% | exam vs random: win= 46.7% loss= 33.9% illegal=  0.0% freeze= 10.9% | oppdied= 13.1% | vs perfect: loss= 90.7% illegal=  0.0% draw=  8.2% freeze=  1.1%  thr=0.05 hid=17 mw=0.000 noise=0.58 |W0|=1.576 leak=0.51  [  175s]
+saved evo_pop_00175.npz and best_evo_00175.npz
+gen  176 game   1  all brains: win= 38.6% loss= 38.6% illegal=  0.0% freeze=  9.5%  ticks/game=  23  illegal fires/brain=10.8  [  177s]
+GEN  176  best=+0.650 mean=+0.500 median=+0.559  best genome (last 1 peer games): win= 51.0% loss= 30.1% illegal=  0.0% draw=  3.7% freeze=  3.9% | oppdied= 11.3%  thr=0.21 hid=17 mw=0.000 noise=0.56 |W0|=1.607 leak=0.49  [  177s]
+saved evo_pop_00176.npz and best_evo_00176.npz
+gen  177 game   1  all brains: win= 38.3% loss= 38.3% illegal=  0.0% freeze=  9.7%  ticks/game=  23  illegal fires/brain=10.7  [  179s]
+GEN  177  best=+0.662 mean=+0.500 median=+0.552  best genome (last 1 peer games): win= 53.1% loss= 29.7% illegal=  0.0% draw=  3.7% freeze=  3.5% | oppdied= 10.0%  thr=0.30 hid=17 mw=0.000 noise=0.59 |W0|=1.673 leak=0.50  [  179s]
+saved evo_pop_00177.npz and best_evo_00177.npz
+gen  178 game   1  all brains: win= 37.8% loss= 37.8% illegal=  0.0% freeze= 10.3%  ticks/game=  23  illegal fires/brain=10.4  [  181s]
+GEN  178  best=+0.653 mean=+0.500 median=+0.564  best genome (last 1 peer games): win= 52.7% loss= 30.5% illegal=  0.0% draw=  4.1% freeze=  2.7% | oppdied= 10.0%  thr=0.05 hid=17 mw=0.001 noise=0.57 |W0|=1.642 leak=0.50  [  181s]
+saved evo_pop_00178.npz and best_evo_00178.npz
+gen  179 game   1  all brains: win= 37.5% loss= 37.5% illegal=  0.0% freeze= 10.8%  ticks/game=  23  illegal fires/brain=10.4  [  184s]
+GEN  179  best=+0.652 mean=+0.500 median=+0.567  best genome (last 1 peer games): win= 50.4% loss= 28.7% illegal=  0.0% draw=  2.3% freeze=  5.1% | oppdied= 13.5%  thr=0.32 hid=17 mw=0.000 noise=0.58 |W0|=1.605 leak=0.50  [  184s]
+saved evo_pop_00179.npz and best_evo_00179.npz
+gen  180 game   1  all brains: win= 38.4% loss= 38.4% illegal=  0.0% freeze=  9.7%  ticks/game=  23  illegal fires/brain=10.5  [  185s]
