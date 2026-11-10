@@ -4,68 +4,107 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Alive Brain 3D</title>
-<meta name="description" content="The best evolved brain from Alive Tic-Tac-Toe AI in 3D: rotate it, inspect every neuron, watch it think, or play against it.">
+<meta name="description" content="The best evolved brain from Alive Tic-Tac-Toe AI in 3D: watch it think while it plays, rotate it, inspect every neuron, or play against it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #070b16; --panel: rgba(13, 19, 36, 0.82); --line: rgba(140, 160, 200, 0.18);
-    --text: #e6ebf5; --muted: #8d98ae; --blue: #4f9dff; --red: #ff5a4f; --mint: #38e3b8; --gold: #ffc94d;
+    --bg: #050814; --panel: rgba(10, 16, 32, 0.78); --line: rgba(120, 200, 255, 0.16);
+    --text: #e8eefb; --muted: #8592ab; --blue: #4f9dff; --red: #ff5a4f; --mint: #38e3b8; --gold: #ffc94d;
+    --game: "Orbitron", system-ui, sans-serif;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
     font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; overflow: hidden; }
   #app { position: fixed; inset: 0; }
   #app canvas { display: block; }
-  .hud { position: fixed; z-index: 5; background: var(--panel); border: 1px solid var(--line);
-    border-radius: 12px; padding: 12px 14px; backdrop-filter: blur(6px); }
-  #title { top: 16px; left: 16px; max-width: 420px; }
-  #title h1 { margin: 0 0 4px; font-size: 18px; letter-spacing: 0.2px; }
-  #title p { margin: 0; color: var(--muted); font-size: 13px; }
-  #title .stats { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
-  #title .stats b { color: var(--mint); font-variant-numeric: tabular-nums; }
-  #controls { top: 16px; right: 16px; width: 270px; }
+  .hud { position: fixed; z-index: 5; background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 12px 14px; backdrop-filter: blur(8px); box-shadow: 0 0 24px rgba(56, 227, 184, 0.08), inset 0 0 18px rgba(79, 157, 255, 0.05); }
+  h1, .game-font { font-family: var(--game); letter-spacing: 1px; }
+  #title { top: 16px; left: 16px; max-width: 400px; }
+  #title h1 { margin: 0 0 4px; font-size: 17px; font-weight: 800; color: #fff; text-shadow: 0 0 12px rgba(56,227,184,.5); }
+  #title p { margin: 0; color: var(--muted); font-size: 12.5px; }
+  #title a { color: var(--mint); }
+  #title .stats { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; }
+  #title .stats b { color: var(--mint); font-family: var(--game); font-weight: 700; }
+  #controls { top: 16px; right: 16px; width: 272px; }
   .seg { display: flex; gap: 4px; margin-bottom: 10px; }
-  .seg button { flex: 1; padding: 7px 4px; border-radius: 8px; border: 1px solid var(--line); background: transparent;
-    color: var(--text); font: inherit; font-size: 12.5px; cursor: pointer; }
-  .seg button.on { background: var(--mint); color: #06221a; border-color: var(--mint); font-weight: 600; }
-  .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 6px 0; font-size: 13px; }
-  .row input[type=range] { width: 120px; accent-color: var(--mint); }
+  .seg button { flex: 1; padding: 8px 4px; border-radius: 9px; border: 1px solid var(--line); background: rgba(255,255,255,0.02);
+    color: var(--text); font: 700 11px var(--game); letter-spacing: .5px; cursor: pointer; transition: all .15s; }
+  .seg button:hover { border-color: var(--mint); }
+  .seg button.on { background: var(--mint); color: #04201a; border-color: var(--mint); box-shadow: 0 0 14px rgba(56,227,184,.55); }
+  .seg.small button { padding: 6px 4px; font-size: 10px; }
+  .seg.small button.on { background: var(--gold); border-color: var(--gold); color: #2a1d00; box-shadow: 0 0 12px rgba(255,201,77,.5); }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 6px 0; font-size: 12.5px; }
+  .row input[type=range] { width: 118px; accent-color: var(--mint); }
   .row label { cursor: pointer; display: flex; gap: 6px; align-items: center; }
+  .k { color: var(--muted); }
   .legend { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); display: grid;
-    grid-template-columns: 1fr 1fr; gap: 4px 10px; font-size: 12px; color: var(--muted); }
-  .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
-  #game { bottom: 16px; left: 16px; width: 240px; display: none; }
+    grid-template-columns: 1fr 1fr; gap: 3px 10px; font-size: 11.5px; color: var(--muted); }
+  .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; box-shadow: 0 0 6px currentColor; }
+  #game { bottom: 16px; left: 16px; width: 250px; display: none; }
   #game.show { display: block; }
-  #board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin: 8px 0; }
-  #board button { aspect-ratio: 1; border-radius: 8px; border: 1px solid var(--line); background: rgba(255,255,255,0.03);
-    color: var(--text); font: 700 30px/1 system-ui, sans-serif; cursor: default; transition: box-shadow .2s, background .2s; }
-  #board button.x { color: var(--blue); }
-  #board button.o { color: var(--red); }
+  #gameTitle { font: 800 13px var(--game); letter-spacing: 1px; }
+  #score { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 8px 0 4px; }
+  #score div { text-align: center; padding: 4px 2px; border-radius: 8px; background: rgba(255,255,255,0.04); }
+  #score b { display: block; font: 800 16px var(--game); }
+  #score span { font-size: 9.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+  #board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 8px 0; }
+  #board button { aspect-ratio: 1; border-radius: 10px; border: 1px solid var(--line); background: rgba(255,255,255,0.03);
+    color: var(--text); font: 900 30px/1 var(--game); cursor: default; transition: background .2s, box-shadow .2s; padding: 0; }
+  #board button .m { display: inline-block; }
+  #board button.x { color: var(--blue); text-shadow: 0 0 14px var(--blue); }
+  #board button.o { color: var(--red); text-shadow: 0 0 14px var(--red); }
   #board button.last { background: rgba(255,255,255,0.08); }
-  #board button.ignored { box-shadow: inset 0 0 0 2px var(--red); }
+  #board button.pop .m { animation: pop .5s cubic-bezier(.2, 1.7, .4, 1); }
+  #board button.nope { animation: nope .35s; box-shadow: inset 0 0 0 2px var(--red); }
+  #board button.win { animation: winglow .7s ease-in-out infinite alternate; }
   #board button.playable { cursor: pointer; }
-  #board button.playable:hover { background: rgba(56,227,184,0.15); }
-  #status { font-size: 13px; min-height: 38px; }
-  #status .big { font-weight: 600; font-size: 14px; }
-  #game .row button { padding: 5px 10px; border-radius: 7px; border: 1px solid var(--line); background: transparent;
-    color: var(--text); font: inherit; font-size: 12.5px; cursor: pointer; }
-  #tip { position: fixed; z-index: 6; pointer-events: none; display: none; max-width: 280px; padding: 9px 11px;
-    background: rgba(8, 12, 24, 0.94); border: 1px solid var(--line); border-radius: 9px; font-size: 12.5px; }
-  #tip b { color: var(--text); }
-  #tip .k { color: var(--muted); }
-  .lbl { color: var(--muted); font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; white-space: nowrap;
+  #board button.playable:hover { background: rgba(56,227,184,0.18); box-shadow: 0 0 12px rgba(56,227,184,.4); }
+  @keyframes pop { 0% { transform: scale(.1) rotate(-25deg); opacity: 0; } 55% { transform: scale(1.35) rotate(8deg); opacity: 1; }
+    80% { transform: scale(.92) rotate(-3deg); } 100% { transform: scale(1) rotate(0); } }
+  @keyframes nope { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-5px); } 40% { transform: translateX(5px); }
+    60% { transform: translateX(-3px); } 80% { transform: translateX(3px); } }
+  @keyframes winglow { from { box-shadow: 0 0 6px rgba(255,201,77,.4), inset 0 0 0 2px rgba(255,201,77,.6); }
+    to { box-shadow: 0 0 22px rgba(255,201,77,.9), inset 0 0 0 2px var(--gold); background: rgba(255,201,77,.15); } }
+  #status { font-size: 12.5px; min-height: 36px; }
+  #status .big { font: 700 12.5px var(--game); letter-spacing: .5px; }
+  #gameBtns button { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: transparent;
+    color: var(--text); font: 700 10px var(--game); letter-spacing: .5px; cursor: pointer; }
+  #gameBtns button:hover { border-color: var(--mint); }
+  #banner { position: fixed; z-index: 7; left: 50%; top: 42%; transform: translate(-50%, -50%); pointer-events: none;
+    font: 900 clamp(34px, 7vw, 78px)/1 var(--game); letter-spacing: 3px; color: var(--c, #fff); opacity: 0; white-space: nowrap;
+    text-shadow: 0 0 18px var(--c, #fff), 0 0 48px var(--c, #fff), 0 4px 0 rgba(0,0,0,.6); }
+  #banner.show { animation: banner 2.3s cubic-bezier(.2, 1.4, .4, 1) forwards; }
+  @keyframes banner { 0% { opacity: 0; transform: translate(-50%, -50%) scale(.2) rotate(-8deg); }
+    18% { opacity: 1; transform: translate(-50%, -50%) scale(1.18) rotate(2deg); }
+    30% { transform: translate(-50%, -50%) scale(1) rotate(0); } 80% { opacity: 1; transform: translate(-50%, -50%) scale(1.04); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1.25); } }
+  #tip { position: fixed; z-index: 8; pointer-events: none; display: none; max-width: 280px; padding: 9px 11px;
+    background: rgba(6, 10, 22, 0.95); border: 1px solid var(--line); border-radius: 10px; font-size: 12.5px; }
+  .lbl { color: var(--muted); font: 600 10px var(--game); letter-spacing: 1.6px; text-transform: uppercase; white-space: nowrap;
     pointer-events: none; text-shadow: 0 0 6px #000; }
-  .lbl.big { color: var(--text); font-size: 12px; font-weight: 600; }
-  .lbl.small { font-size: 10px; letter-spacing: 0.6px; }
+  .lbl.big { color: #dfe8ff; font-size: 11px; font-weight: 800; }
+  .lbl.small { font-size: 9px; letter-spacing: .8px; }
   #hint { position: fixed; bottom: 16px; right: 16px; z-index: 5; color: var(--muted); font-size: 12px; }
   #hint a { color: var(--mint); text-decoration: none; }
-  body.shot #controls, body.shot #hint { display: none; }
+  #clipTitle { display: none; position: fixed; top: 18px; left: 22px; z-index: 6; font: 900 20px var(--game); letter-spacing: 2px;
+    color: #fff; text-shadow: 0 0 14px rgba(56,227,184,.8); }
+  #clipTitle span { display: block; margin-top: 4px; font: 600 11px var(--game); letter-spacing: 1.5px; color: var(--mint); text-shadow: none; }
+  body.clip #title, body.clip #controls, body.clip #hint { display: none; }
+  body.clip #clipTitle { display: block; }
+  body.clip #game { width: 200px; bottom: 18px; left: 22px; }
+  body.clip #gameBtns, body.clip #status { display: none; }
+  body.clip #board button { font-size: 24px; }
   #err { position: fixed; inset: 0; display: none; place-items: center; text-align: center; padding: 24px; color: var(--muted); }
   @media (max-width: 760px) {
     #title { top: 8px; left: 8px; right: 8px; max-width: none; padding: 10px 12px; }
     #title p { display: none; }
-    #controls { top: auto; bottom: 8px; right: 8px; left: 8px; width: auto; padding: 10px; }
+    #controls { top: auto; bottom: 8px; right: 8px; width: 150px; padding: 8px; }
     #controls .legend, #controls .opt { display: none; }
-    #game { bottom: 120px; left: 8px; width: 170px; padding: 8px 10px; }
+    #controls .seg { flex-direction: column; }
+    #game { bottom: 8px; left: 8px; width: 180px; padding: 8px 10px; }
     #board button { font-size: 22px; }
     #hint { display: none; }
   }
@@ -79,45 +118,50 @@
 </head>
 <body>
 <div id="app"></div>
+<div id="clipTitle">ALIVE TIC-TAC-TOE AI<span>the evolved champion brain, thinking live</span></div>
 
 <div id="title" class="hud">
-  <h1>The champion brain</h1>
-  <p>The best evolved brain from <a href="https://github.com/kyung01/Alive-TicTacToe-AI" style="color:var(--mint)">Alive Tic-Tac-Toe AI</a>.
-     Every neuron and synapse below was chosen by natural selection. Drag to rotate, scroll to zoom, hover a neuron.</p>
+  <h1>THE CHAMPION BRAIN</h1>
+  <p>The best brain evolved in <a href="https://github.com/kyung01/Alive-TicTacToe-AI">Alive Tic-Tac-Toe AI</a>.
+     Every neuron and synapse here was chosen by natural selection. Signals light up as they flow from the eye
+     to the outputs. Drag to rotate, scroll to zoom, hover a neuron.</p>
   <div class="stats" id="stats"></div>
 </div>
 
 <div id="controls" class="hud">
   <div class="seg" id="modes">
-    <button data-mode="structure" class="on">Structure</button>
-    <button data-mode="self">Watch it play</button>
+    <button data-mode="watch" class="on">Watch</button>
     <button data-mode="human">Play it</button>
+    <button data-mode="structure">Wiring</button>
   </div>
-  <div class="row opt"><span>Synapses with |weight| &ge; <b id="wv">0.00</b></span><input id="minw" type="range" min="0" max="1.5" step="0.05" value="0"></div>
-  <div class="row opt" id="speedRow" style="display:none"><span>Speed <b id="sv">8</b> ticks/s</span><input id="speed" type="range" min="1" max="30" step="1" value="8"></div>
+  <div class="row" id="oppRow"><span class="k">Opponent</span>
+    <div class="seg small" id="opps" style="margin:0;width:170px"><button data-opp="random" class="on">Random</button><button data-opp="self">Itself</button></div></div>
+  <div class="row opt" id="speedRow"><span>Speed <b id="sv">8</b> ticks/s</span><input id="speed" type="range" min="1" max="30" step="1" value="8"></div>
   <div class="row opt"><label><input type="checkbox" id="dead" checked> switched-off neurons</label>
-       <label><input type="checkbox" id="spin" checked> auto-rotate</label></div>
+       <label><input type="checkbox" id="spin" checked> rotate</label></div>
   <div class="legend">
-    <span><span class="dot" style="background:#aab4c3"></span>eye: empty</span>
-    <span><span class="dot" style="background:var(--blue)"></span>eye: X</span>
-    <span><span class="dot" style="background:var(--red)"></span>eye: O</span>
-    <span><span class="dot" style="background:#c39bff"></span>eye: my seat</span>
-    <span><span class="dot" style="background:var(--mint)"></span>hidden neuron</span>
-    <span><span class="dot" style="background:var(--gold)"></span>output (a cell)</span>
-    <span><span class="dot" style="background:var(--blue)"></span>excitatory synapse</span>
-    <span><span class="dot" style="background:var(--red)"></span>inhibitory synapse</span>
+    <span><span class="dot" style="color:#aab4c3;background:#aab4c3"></span>eye: empty</span>
+    <span><span class="dot" style="color:var(--blue);background:var(--blue)"></span>eye: X</span>
+    <span><span class="dot" style="color:var(--red);background:var(--red)"></span>eye: O</span>
+    <span><span class="dot" style="color:#c39bff;background:#c39bff"></span>eye: my seat</span>
+    <span><span class="dot" style="color:var(--mint);background:var(--mint)"></span>hidden neuron</span>
+    <span><span class="dot" style="color:var(--gold);background:var(--gold)"></span>output (a cell)</span>
+    <span><span class="dot" style="color:var(--blue);background:var(--blue)"></span>excitatory signal</span>
+    <span><span class="dot" style="color:var(--red);background:var(--red)"></span>inhibitory signal</span>
   </div>
 </div>
 
 <div id="game" class="hud">
-  <div class="row"><span id="gameTitle" style="font-weight:600">Brain vs brain</span><span id="tickNo" class="k" style="color:var(--muted)"></span></div>
+  <div class="row" style="margin:0"><span id="gameTitle">BRAIN VS RANDOM</span><span id="tickNo" class="k"></span></div>
+  <div id="score"></div>
   <div id="board"></div>
   <div id="status"></div>
   <div class="row" id="gameBtns"></div>
 </div>
 
+<div id="banner"></div>
 <div id="tip"></div>
-<div id="hint">Light flows from the eye (left) through the hidden neurons to the outputs (right) &middot;
+<div id="hint">Signals flow from the eye (left) through the hidden neurons to the outputs (right) &middot;
   <a href="https://github.com/kyung01/Alive-TicTacToe-AI">source</a></div>
 <div id="err"></div>
 
@@ -125,11 +169,17 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
-const SHOT = params.has('shot');           // ?shot: a still for the README preview image (no controls, no rotation)
-if (SHOT) document.body.classList.add('shot');
+const CLIP = params.has('clip');            // ?clip: the README recording (no panels, frames driven by the recorder)
+const SHOT = params.has('shot');            // ?shot: a still for a preview image
+if (CLIP) document.body.classList.add('clip');
+if (SHOT) document.body.classList.add('clip');
 
 let D;
 try {
@@ -140,11 +190,20 @@ try {
   throw e;
 }
 
+// ---------------------------------------------------------------- randomness (seedable, for a repeatable recording)
+let seed = 0;
+const rand = () => {
+  if (!seed) return Math.random();
+  seed ^= seed << 13; seed >>>= 0; seed ^= seed >>> 17; seed ^= seed << 5; seed >>>= 0;
+  return seed / 4294967296;
+};
+const setSeed = (s) => { seed = (s >>> 0) || 1; };
+
 // ---------------------------------------------------------------- the brain's data
 const N = D.n, NIN = D.n_in, OUT = D.out_lo, THR = D.threshold, MAXT = D.max_ticks;
 const live = D.live.map(Boolean);
 const P = D.pos.map((p) => new THREE.Vector3(p[0], p[1], p[2]));
-const inEdges = Array.from({ length: N }, () => []);      // for the simulation: j <- [i, w]
+const inEdges = Array.from({ length: N }, () => []);
 const outCount = new Array(N).fill(0), inCount = new Array(N).fill(0), selfW = new Array(N).fill(0);
 for (const [i, j, w] of D.edges) {
   inEdges[j].push([i, w]);
@@ -152,22 +211,22 @@ for (const [i, j, w] of D.edges) {
 }
 const lineEdges = D.edges.filter(([i, j]) => i !== j);
 const E = lineEdges.length;
-
 $('stats').innerHTML =
   `<span>generation <b>${D.generation}</b></span>` +
-  `<span><b>${D.hidden_live}</b> of ${D.hidden_max} hidden neurons kept</span>` +
+  `<span><b>${D.hidden_live}</b>/${D.hidden_max} hidden neurons kept</span>` +
   `<span><b>${D.synapses.toLocaleString()}</b> synapses (${Math.round(100 * D.synapses / D.synapses_full)}% of fully connected)</span>`;
 
 const role = (j) => j < 27 ? ['empty', 'x', 'o'][Math.floor(j / 9)] : j < NIN ? 'seat' : j < OUT ? 'hid' : 'out';
 const C = {
   empty: new THREE.Color('#aab4c3'), x: new THREE.Color('#4f9dff'), o: new THREE.Color('#ff5a4f'),
   seat: new THREE.Color('#c39bff'), hid: new THREE.Color('#38e3b8'), out: new THREE.Color('#ffc94d'),
-  pos: new THREE.Color('#4f9dff'), neg: new THREE.Color('#ff5a4f'), dead: new THREE.Color('#8a95b5'), white: new THREE.Color('#ffffff'),
+  pos: new THREE.Color('#4f9dff'), neg: new THREE.Color('#ff5a4f'), dead: new THREE.Color('#7f8bb0'),
+  white: new THREE.Color('#ffffff'), gold: new THREE.Color('#ffc94d'), mint: new THREE.Color('#38e3b8'),
 };
 const SIZE = { empty: 0.12, x: 0.12, o: 0.12, seat: 0.15, hid: 0.24, out: 0.33 };
 
 // ---------------------------------------------------------------- scene
-const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: SHOT });
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: CLIP || SHOT });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.setSize(innerWidth, innerHeight);
 $('app').appendChild(renderer.domElement);
@@ -177,18 +236,22 @@ Object.assign(labels.domElement.style, { position: 'fixed', inset: '0', pointerE
 $('app').appendChild(labels.domElement);
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color('#070b16');
+scene.background = new THREE.Color('#050814');
 const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 200);
-camera.position.set(-4.5, 3.5, 21);
+camera.position.set(2.5, 5, 18);                // a little to the right and above: both facing walls show
+if (innerWidth < 760) camera.position.set(3.5, 6, 28);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; controls.dampingFactor = 0.08;
-controls.autoRotate = !SHOT; controls.autoRotateSpeed = 0.5;
+controls.autoRotate = !SHOT; controls.autoRotateSpeed = 0.6;
 controls.minDistance = 6; controls.maxDistance = 45;
-if (innerWidth < 760) camera.position.set(-6, 4, 30);
-scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-const sun = new THREE.DirectionalLight(0xffffff, 1.3); sun.position.set(5, 8, 10); scene.add(sun);
 
-// glow sprites (neuron halos, signal pulses, switched-off neurons): one additive point shader
+// bloom: bright things (firing neurons, live signals, sparks) glow into the space around them
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 1.15, 0.55, 0.16);
+if (!params.has('nobloom')) composer.addPass(bloom);
+composer.addPass(new OutputPass());
+
 const glowMat = (opacity) => new THREE.ShaderMaterial({
   uniforms: { scale: { value: renderer.getPixelRatio() * innerHeight / 2 }, opacity: { value: opacity } },
   vertexShader: `attribute float size; attribute vec3 color; varying vec3 vColor; uniform float scale;
@@ -209,64 +272,99 @@ function glowPoints(n, opacity) {
   return pts;
 }
 
-// live neurons: shaded spheres + a halo each
+// neurons
 const liveIdx = [...Array(N).keys()].filter((j) => live[j]);
 const deadIdx = [...Array(N).keys()].filter((j) => !live[j]);
-const neurons = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 24, 16),
-  new THREE.MeshStandardMaterial({ roughness: 0.35, metalness: 0.0 }), liveIdx.length);
+const neurons = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 24, 16), new THREE.MeshBasicMaterial(), liveIdx.length);
 neurons.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
 scene.add(neurons);
 const halos = glowPoints(liveIdx.length, 1.0);
 scene.add(halos);
 liveIdx.forEach((j, k) => halos.geometry.attributes.position.setXYZ(k, P[j].x, P[j].y, P[j].z));
 
-// switched-off neurons: faint ghosts on an outer shell
+// switched-off neurons: faint stars on an outer shell
 const ghosts = glowPoints(deadIdx.length, 0.9);
 deadIdx.forEach((j, k) => {
   ghosts.geometry.attributes.position.setXYZ(k, P[j].x, P[j].y, P[j].z);
-  ghosts.geometry.attributes.color.setXYZ(k, C.dead.r, C.dead.g, C.dead.b);
-  ghosts.geometry.attributes.size.setX(k, 0.75);
+  ghosts.geometry.attributes.color.setXYZ(k, C.dead.r * 0.6, C.dead.g * 0.6, C.dead.b * 0.6);
+  ghosts.geometry.attributes.size.setX(k, 0.7);
 });
 scene.add(ghosts);
 
-// synapses: one line each, dim at the sender and bright at the receiver
+// synapses: almost invisible until a signal runs through them
 const lineGeo = new THREE.BufferGeometry();
 const linePos = new Float32Array(E * 6), lineCol = new Float32Array(E * 6);
 lineEdges.forEach(([i, j], k) => { linePos.set([P[i].x, P[i].y, P[i].z, P[j].x, P[j].y, P[j].z], k * 6); });
 lineGeo.setAttribute('position', new THREE.BufferAttribute(linePos, 3));
 lineGeo.setAttribute('color', new THREE.BufferAttribute(lineCol, 3));
-const lines = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({
-  vertexColors: true, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false }));
-scene.add(lines);
+scene.add(new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({
+  vertexColors: true, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false })));
 
-// signal pulses travelling along the synapses (they show the direction of each connection)
-const pulses = glowPoints(E, 1.0);
+// signal glows travelling along the active synapses (two per synapse, half a line apart)
+const pulses = glowPoints(E * 2, 1.0);
 const phase = Float32Array.from({ length: E }, () => Math.random());
 scene.add(pulses);
+
+// effects: sparks and shockwave rings
+const FXN = 900;
+const sparks = glowPoints(FXN, 1.0); scene.add(sparks);
+const sp = { vel: new Float32Array(FXN * 3), life: new Float32Array(FXN), max: new Float32Array(FXN).fill(1),
+  col: new Float32Array(FXN * 3), s0: new Float32Array(FXN) };
+let spHead = 0;
+function burst(p, col, n, speed, size = 0.55, life = 0.9) {
+  const a = sparks.geometry.attributes;
+  for (let q = 0; q < n; q++) {
+    const i = spHead++ % FXN;
+    const v = new THREE.Vector3(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1).normalize()
+      .multiplyScalar(speed * (0.35 + Math.random() * 0.65));
+    a.position.setXYZ(i, p.x, p.y, p.z);
+    sp.vel.set([v.x, v.y, v.z], i * 3);
+    sp.life[i] = sp.max[i] = life * (0.6 + Math.random() * 0.4);
+    const c = col.clone().lerp(C.white, Math.random() * 0.45);
+    sp.col.set([c.r, c.g, c.b], i * 3);
+    sp.s0[i] = size * (0.6 + Math.random() * 0.6);
+  }
+}
+const rings = [];
+for (let r = 0; r < 14; r++) {
+  const m = new THREE.Mesh(new THREE.RingGeometry(0.86, 1, 64),
+    new THREE.MeshBasicMaterial({ transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
+  m.visible = false; m.userData = { t: 1, life: 1, r1: 1 }; scene.add(m); rings.push(m);
+}
+let ringHead = 0;
+function ring(p, col, r1 = 2, life = 0.7) {
+  const m = rings[ringHead++ % rings.length];
+  m.position.copy(p); m.material.color.copy(col); m.userData = { t: 0, life, r1 }; m.visible = true;
+}
+let shakeAmt = 0;
+const shake = (a) => { shakeAmt = Math.max(shakeAmt, a); };
+function banner(text, color) {
+  const b = $('banner'); b.textContent = text; b.style.setProperty('--c', color);
+  b.classList.remove('show'); void b.offsetWidth; b.classList.add('show');
+}
 
 // labels
 function label(text, x, y, z, cls = '') {
   const el = document.createElement('div'); el.className = 'lbl ' + cls; el.textContent = text;
   const o = new CSS2DObject(el); o.position.set(x, y, z); scene.add(o); return o;
 }
-label('the eye', -7, 4.3, 0, 'big');
-label('X', -8.3, 2.6, 0, 'small'); label('empty', -8.5, 0, 0, 'small'); label('O', -8.3, -2.6, 0, 'small');
-label('I am X · I am O', -7, -5.0, 0, 'small');
-const hidIdx = [...Array(N).keys()].filter((j) => live[j] && j >= NIN && j < OUT);
+const hidIdx = liveIdx.filter((j) => j >= NIN && j < OUT);
 const hidTop = Math.max(...hidIdx.map((j) => P[j].y));
 const hidCx = hidIdx.reduce((a, j) => a + P[j].x, 0) / hidIdx.length;
-const shellR = Math.max(...[...Array(N).keys()].filter((j) => !live[j]).map((j) => P[j].length()), hidTop + 1);
+const shellR = Math.max(...deadIdx.map((j) => P[j].length()), hidTop + 1);
+label('the eye', -7, 4.6, 0, 'big');
+label('X', -7, 3.5, 0, 'small'); label('empty', -7, 0.9, 0, 'small'); label('O', -7, -1.7, 0, 'small');
+label('I am X · I am O', -7, -5.0, 0, 'small');
 label(`hidden · ${D.hidden_live} kept by evolution`, hidCx, hidTop + 1.3, 0, 'big');
 const ghostLabel = label(`${D.hidden_max - D.hidden_live} switched off by evolution`, 0, -shellR - 0.6, 0, 'small');
-label('outputs · one per cell', 7, 1.9, 0, 'big');
+label('outputs · one per cell', 7, 1.75, 0, 'big');
 
 // ---------------------------------------------------------------- simulation (exactly the training rules)
-function gauss() { let u = 0, v = 0; while (u === 0) u = Math.random(); v = Math.random();
+function gauss() { let u = 0; while (u === 0) u = rand(); const v = rand();
   return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
 class Mind {
   constructor() { this.x = new Float32Array(N); this.over = new Uint8Array(9); }
-  reset() { this.x.fill(0); this.over.fill(0); }
-  tick(board, me) {          // x = tanh(leak*x + W x + b + noise), dead neurons stay 0, the eye is overwritten
+  tick(board, me) {          // x = tanh(leak*x + W x + b + noise); switched-off neurons stay 0; the eye is overwritten
     const x = this.x, nx = new Float32Array(N);
     for (let j = NIN; j < N; j++) {
       if (!live[j]) continue;
@@ -290,130 +388,192 @@ class Mind {
   }
 }
 const LINES = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-const winner = (b) => { for (const [a, c, d] of LINES) if (b[a] && b[a] === b[c] && b[a] === b[d]) return b[a]; return 0; };
-const earlyDraw = (b, nxt) => { if (b.filter(Boolean).length !== 8) return false; const t = b.slice(); t[t.indexOf(0)] = nxt; return winner(t) === 0; };
+const winLine = (b) => LINES.find(([a, c, d]) => b[a] && b[a] === b[c] && b[a] === b[d]) || null;
+const earlyDraw = (b, nxt) => { if (b.filter(Boolean).length !== 8) return false; const t = b.slice(); t[t.indexOf(0)] = nxt; return !winLine(t); };
 
-let mode = 'structure';
-let G = null;                // the running game
-const flash = new Float32Array(N);       // output spikes, fading
-const illegalFlash = new Float32Array(N);
-const disp = new Float32Array(N);        // smoothed activations for display
+// ---------------------------------------------------------------- the game
+let mode = CLIP || SHOT ? 'watch' : (params.get('mode') || 'watch');
+let opp = params.get('opp') || 'random';
+let G = null, SIM = false, humanSide = 1, viewSelf = 1;
+const flash = new Float32Array(N), illegalFlash = new Float32Array(N), disp = new Float32Array(N);
+const score = {};
+const name = (s) => s === 1 ? 'X' : 'O';
+const kind = () => mode === 'human' ? 'human' : opp;
 
 function newGame() {
-  const human = mode === 'human' ? (G?.humanNext ?? 1) : 0;
-  G = { board: Array(9).fill(0), turn: 1, clock: 0, tick: 0, result: null, last: -1, ignored: -1,
-        minds: { 1: new Mind(), 2: new Mind() }, human, view: human ? 3 - human : (G?.view ?? 1), endAt: 0,
-        humanNext: human ? 3 - human : 1 };
+  const g = { board: Array(9).fill(0), turn: 1, clock: 0, tick: 0, result: null, last: -1, line: null,
+              minds: { 1: new Mind(), 2: new Mind() }, wait: null, endAt: 0 };
+  if (mode === 'human') { g.human = humanSide; g.brains = [3 - humanSide]; g.view = 3 - humanSide; }
+  else if (opp === 'random') { const b = rand() < 0.5 ? 1 : 2; g.brains = [b]; g.view = b; g.randomSide = 3 - b; }
+  else { g.brains = [1, 2]; g.view = viewSelf; }
+  G = g;
   disp.fill(0);
-  drawBoard();
+  if (!SIM) { shown.fill(-1); renderBoard(); }
 }
 function place(side, cell) {
   G.board[cell] = side; G.last = cell;
-  const w = winner(G.board);
-  if (w) G.result = { kind: 'win', winner: w };
+  const line = winLine(G.board);
+  if (line) { G.result = { kind: 'win', winner: side }; G.line = line; }
   else if (G.board.every(Boolean) || earlyDraw(G.board, 3 - side)) G.result = { kind: 'draw' };
-  else { G.turn = 3 - side; G.clock = 0; }
+  else { G.turn = 3 - side; G.clock = 0; G.wait = null; }
+  if (SIM) return;
+  const col = side === 1 ? C.x : C.o;
+  ring(P[(side === 1 ? 9 : 18) + cell], col, 1.3, 0.6);         // the eye sees the new mark
+  burst(P[(side === 1 ? 9 : 18) + cell], col, 10, 1.6, 0.4, 0.5);
+  popCell = cell;
 }
 function step() {
   if (!G || G.result) return;
   G.tick++;
-  const sides = G.human ? [3 - G.human] : [1, 2];
-  for (const s of sides) G.minds[s].tick(G.board, s);
-  for (const s of sides) {
+  for (const s of G.brains) G.minds[s].tick(G.board, s);
+  let moved = false;
+  for (const s of G.brains) {
     const cell = G.minds[s].spike();
     if (cell < 0) continue;
-    if (s === G.view) flash[OUT + cell] = 1;
+    if (!SIM && s === G.view) flash[OUT + cell] = 1;
     if (s !== G.turn || G.board[cell] !== 0) {           // the board ignores it; the game goes on
-      G.ignored = cell; G.ignoredAt = performance.now();
-      if (s === G.view) illegalFlash[OUT + cell] = 1;
+      if (!SIM && s === G.view) { illegalFlash[OUT + cell] = 1; burst(P[OUT + cell], C.neg, 8, 1.4, 0.35, 0.45); }
+      if (!SIM && G.board[cell] !== 0) nopeCell = cell;
       continue;
     }
-    place(s, cell);
+    if (!SIM && s === G.view) {
+      burst(P[OUT + cell], s === 1 ? C.x : C.o, 46, 5.5, 0.6, 1.0);
+      ring(P[OUT + cell], C.gold, 2.6, 0.7);
+      shake(0.12);
+    }
+    place(s, cell); moved = true;
     break;
   }
-  if (!G.result && !(G.human && G.turn === G.human)) {
+  if (!moved && !G.result && G.randomSide && G.turn === G.randomSide) {      // the random player: a legal move after a pause
+    if (G.wait === null) G.wait = 2 + Math.floor(rand() * 9);
+    if (--G.wait <= 0) {
+      const empty = G.board.map((v, c) => v ? -1 : c).filter((c) => c >= 0);
+      place(G.randomSide, empty[Math.floor(rand() * empty.length)]);
+    }
+  }
+  if (!G.result && G.brains.includes(G.turn)) {
     G.clock++;
     if (G.clock > MAXT) G.result = { kind: 'timeout', loser: G.turn };
   }
-  if (G.result) G.endAt = performance.now();
-  drawBoard();
+  if (G.result && !SIM) finish();
+}
+function finish() {
+  G.endAt = clock;
+  const r = G.result, k = kind();
+  const who = (s) => k === 'human' ? (s === G.human ? 'YOU' : 'BRAIN') : k === 'random' ? (s === G.randomSide ? 'RANDOM' : 'BRAIN') : name(s);
+  let key;
+  if (r.kind === 'win') {
+    key = who(r.winner) + ' wins';
+    const good = who(r.winner) === 'BRAIN' || k === 'self' || who(r.winner) === 'YOU';
+    banner(`${who(r.winner)} ${who(r.winner) === 'YOU' ? 'WIN' : 'WINS'}!`, r.winner === 1 ? '#4f9dff' : '#ff5a4f');
+    shake(good ? 0.45 : 0.25);
+    for (const c of G.line) { burst(P[OUT + c], C.gold, 40, 7, 0.7, 1.3); ring(P[OUT + c], C.gold, 3.5, 0.9); }
+    for (let c = 0; c < 9; c++) burst(P[OUT + c], r.winner === 1 ? C.x : C.o, 14, 6, 0.5, 1.2);
+  } else if (r.kind === 'draw') {
+    key = 'draws'; banner('DRAW', '#38e3b8');
+    for (let c = 0; c < 9; c++) burst(P[OUT + c], C.mint, 10, 3.5, 0.45, 1.0);
+  } else {
+    key = 'timeouts'; banner(`${who(r.loser)} OUT OF TIME`, '#ffc94d');
+    shake(0.15);
+  }
+  score[k] = score[k] || {};
+  score[k][key] = (score[k][key] || 0) + 1;
+  renderScore(); renderBoard();
 }
 
-// ---------------------------------------------------------------- board panel
-const boardEl = $('board');
+// ---------------------------------------------------------------- panel: board, score, status
+const boardEl = $('board'), cells = [];
+const shown = new Array(9).fill(-1);
+let popCell = -1, nopeCell = -1;
 for (let c = 0; c < 9; c++) {
-  const b = document.createElement('button'); b.dataset.c = c;
+  const b = document.createElement('button'); const m = document.createElement('span'); m.className = 'm'; b.appendChild(m);
   b.addEventListener('click', () => {
     if (!G || !G.human || G.result || G.turn !== G.human || G.board[c]) return;
-    place(G.human, c); if (G.result) G.endAt = performance.now(); drawBoard();
+    place(G.human, c); if (G.result) finish(); renderBoard();
   });
-  boardEl.appendChild(b);
+  boardEl.appendChild(b); cells.push(b);
 }
-const name = (s) => s === 1 ? 'X' : 'O';
-function drawBoard() {
+const restart = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
+function renderBoard() {
   if (!G) return;
-  [...boardEl.children].forEach((b, c) => {
+  cells.forEach((b, c) => {
     const v = G.board[c];
-    b.textContent = v ? name(v) : '';
-    b.className = (v === 1 ? 'x' : v === 2 ? 'o' : '') + (c === G.last ? ' last' : '') +
-      (c === G.ignored && performance.now() - (G.ignoredAt || 0) < 500 ? ' ignored' : '') +
-      (G.human && !G.result && G.turn === G.human && !v ? ' playable' : '');
+    if (v !== shown[c]) {
+      b.firstChild.textContent = v ? name(v) : '';
+      b.classList.toggle('x', v === 1); b.classList.toggle('o', v === 2); b.classList.remove('pop', 'nope');
+      shown[c] = v;
+    }
+    b.classList.toggle('last', c === G.last);
+    b.classList.toggle('win', !!(G.line && G.line.includes(c)));
+    b.classList.toggle('playable', !!(G.human && !G.result && G.turn === G.human && !v));
   });
+  if (popCell >= 0) { restart(cells[popCell], 'pop'); popCell = -1; }
+  if (nopeCell >= 0) { restart(cells[nopeCell], 'nope'); nopeCell = -1; }
   $('tickNo').textContent = `tick ${G.tick}`;
-  let s;
-  if (G.result) {
-    const r = G.result;
-    const who = (x) => G.human ? (x === G.human ? 'You' : 'The brain') : name(x);
-    s = r.kind === 'win' ? `<span class="big">${who(r.winner)} ${G.human && r.winner === G.human ? 'win' : 'wins'}!</span>`
-      : r.kind === 'draw' ? '<span class="big">Draw.</span>'
-      : `<span class="big">${who(r.loser)} ran out of time.</span>`;
-  } else if (G.human) {
-    s = G.turn === G.human ? `<span class="big">Your move (${name(G.human)})</span><br>The brain is watching the board.`
-      : `<span class="big">The brain is thinking…</span><br>${MAXT - G.clock} ticks left on its clock.`;
-  } else {
-    s = `<span class="big">${name(G.turn)} to move</span><br>${MAXT - G.clock} ticks left · showing ${name(G.view)}'s brain`;
-  }
+  let s = '';
+  if (G.result) s = '<span class="big">Next game in a moment…</span>';
+  else if (G.human) s = G.turn === G.human ? `<span class="big">YOUR MOVE (${name(G.human)})</span><br>The brain is watching the board.`
+    : `<span class="big">THE BRAIN IS THINKING</span><br>${MAXT - G.clock} ticks left on its clock.`;
+  else if (G.randomSide) s = G.turn === G.randomSide ? `<span class="big">RANDOM PLAYER'S TURN</span><br>The brain (${name(G.view)}) waits and watches.`
+    : `<span class="big">BRAIN'S TURN (${name(G.view)})</span><br>${MAXT - G.clock} ticks left on its clock.`;
+  else s = `<span class="big">${name(G.turn)} TO MOVE</span><br>${MAXT - G.clock} ticks left · showing ${name(G.view)}'s brain`;
+  if (G.human && G.result) s = '';
   $('status').innerHTML = s;
+}
+function renderScore() {
+  const k = kind(), sc = score[k] || {};
+  const cols = k === 'human' ? [['YOU wins', 'you', '#4f9dff'], ['BRAIN wins', 'brain', '#ff5a4f'], ['draws', 'draws', '#38e3b8'], ['timeouts', 'brain t/o', '#ffc94d']]
+    : k === 'random' ? [['BRAIN wins', 'brain', '#38e3b8'], ['RANDOM wins', 'random', '#ff5a4f'], ['draws', 'draws', '#aab4c3'], ['timeouts', 'time-outs', '#ffc94d']]
+    : [['X wins', 'X wins', '#4f9dff'], ['O wins', 'O wins', '#ff5a4f'], ['draws', 'draws', '#38e3b8'], ['timeouts', 'time-outs', '#ffc94d']];
+  $('score').innerHTML = cols.map(([key, lbl, col]) => `<div><b style="color:${col}">${sc[key] || 0}</b><span>${lbl}</span></div>`).join('');
 }
 function setGameButtons() {
   const el = $('gameBtns'); el.innerHTML = '';
   const btn = (t, f) => { const b = document.createElement('button'); b.textContent = t; b.onclick = f; el.appendChild(b); };
-  if (mode === 'self') btn("Show the other brain", () => { G.view = 3 - G.view; disp.fill(0); drawBoard(); });
-  if (mode === 'human') { btn('New game', () => newGame()); btn('Swap sides', () => { G.humanNext = 3 - G.human; newGame(); }); }
+  if (mode === 'watch' && opp === 'self') btn('Show the other brain', () => { viewSelf = 3 - viewSelf; G.view = viewSelf; disp.fill(0); renderBoard(); });
+  if (mode === 'human') { btn('New game', () => newGame()); btn('Swap sides', () => { humanSide = 3 - humanSide; newGame(); }); }
+}
+function setMode(m) {
+  mode = m;
+  [...$('modes').children].forEach((b) => b.classList.toggle('on', b.dataset.mode === m));
+  $('game').classList.toggle('show', m !== 'structure');
+  $('oppRow').style.display = m === 'watch' ? '' : 'none';
+  $('speedRow').style.display = m === 'structure' ? 'none' : '';
+  $('gameTitle').textContent = m === 'human' ? 'YOU VS THE BRAIN' : opp === 'random' ? 'BRAIN VS RANDOM' : 'BRAIN VS BRAIN';
+  G = null;
+  if (m !== 'structure') { newGame(); setGameButtons(); renderScore(); }
 }
 
 // ---------------------------------------------------------------- drawing
 const tmpM = new THREE.Matrix4(), tmpQ = new THREE.Quaternion(), tmpS = new THREE.Vector3(), tmpC = new THREE.Color();
-let minW = 0, hover = -1;
+let hover = -1;
+const adj = Array.from({ length: N }, () => new Set());
+for (const [i, j] of lineEdges) { adj[i].add(j); adj[j].add(i); }
 
-function neuronLook(j, out) {             // colour + scale for neuron j
+function neuronLook(j, out) {
   const r = role(j);
   let scale = SIZE[r];
-  if (mode === 'structure' || !G) {
-    out.copy(C[r]);
-    if (r === 'empty' || r === 'x' || r === 'o') out.multiplyScalar(0.8);
+  if (!G) {
+    out.copy(C[r]).multiplyScalar(r === 'hid' ? 0.75 : 0.65);
   } else {
     const v = disp[j];
-    if (j < NIN) out.copy(C[r]).multiplyScalar(v > 0.5 ? 1.15 : 0.16);
+    if (j < NIN) out.copy(C[r]).multiplyScalar(v > 0.5 ? 1.0 : 0.12);
     else if (r === 'hid') {
-      if (Math.abs(v) < 0.03) out.copy(C.hid).multiplyScalar(0.22);
-      else out.copy(v > 0 ? C.pos : C.neg).multiplyScalar(0.25 + 0.9 * Math.abs(v));
-      scale *= 1 + 0.45 * Math.abs(v);
+      if (Math.abs(v) < 0.03) out.copy(C.hid).multiplyScalar(0.16);
+      else out.copy(v > 0 ? C.pos : C.neg).multiplyScalar(0.2 + 1.0 * Math.abs(v));
+      scale *= 1 + 0.5 * Math.abs(v);
     } else {
-      out.copy(C.out).multiplyScalar(0.15 + 0.85 * Math.max(v, 0));
-      if (v < 0) out.lerp(C.neg, Math.min(-v, 1) * 0.35);
+      out.copy(C.out).multiplyScalar(0.14 + 0.9 * Math.max(v, 0));
+      if (v < 0) out.lerp(C.neg, Math.min(-v, 1) * 0.3);
       if (illegalFlash[j] > 0) out.lerp(C.neg, illegalFlash[j]);
-      else if (flash[j] > 0) out.lerp(C.white, flash[j]);
-      scale *= 1 + 0.35 * Math.max(v, 0) + 0.5 * Math.max(flash[j], illegalFlash[j]);
+      else if (flash[j] > 0) out.lerp(C.white, flash[j]).multiplyScalar(1 + flash[j]);
+      scale *= 1 + 0.35 * Math.max(v, 0) + 0.7 * Math.max(flash[j], illegalFlash[j]);
     }
   }
-  if (hover >= 0 && j !== hover && !touches(hover, j)) out.multiplyScalar(0.35);
+  if (hover >= 0 && j !== hover && !adj[hover].has(j)) out.multiplyScalar(0.3);
   if (j === hover) scale *= 1.35;
   return scale;
 }
-const adj = Array.from({ length: N }, () => new Set());
-for (const [i, j] of lineEdges) { adj[i].add(j); adj[j].add(i); }
-const touches = (a, b) => adj[a].has(b);
 
 function draw(dt) {
   const hp = halos.geometry.attributes;
@@ -422,41 +582,67 @@ function draw(dt) {
     tmpM.compose(P[j], tmpQ, tmpS.set(s, s, s));
     neurons.setMatrixAt(k, tmpM);
     neurons.setColorAt(k, tmpC);
-    hp.color.setXYZ(k, tmpC.r * 0.55, tmpC.g * 0.55, tmpC.b * 0.55);
-    hp.size.setX(k, s * 6.5);
+    hp.color.setXYZ(k, tmpC.r * 0.5, tmpC.g * 0.5, tmpC.b * 0.5);
+    hp.size.setX(k, s * 6);
   });
   neurons.instanceMatrix.needsUpdate = true; neurons.instanceColor.needsUpdate = true;
   hp.color.needsUpdate = true; hp.size.needsUpdate = true;
 
-  const livePlay = mode !== 'structure' && G;
+  // synapses: a faint web; a synapse lights up only while a signal (sender activity x weight) runs through it
   const pp = pulses.geometry.attributes;
-  const speed = livePlay ? 0.9 : 0.35;
   for (let k = 0; k < E; k++) {
     const [i, j, w] = lineEdges[k];
-    const aw = Math.abs(w);
-    let inten, col;
-    if (aw < minW) { inten = 0; col = C.pos; }
-    else if (livePlay) {
+    let base, a, col;
+    if (G) {
       const sig = disp[i] * w;
-      const a = Math.min(1, Math.abs(sig) / 0.8);
+      a = Math.min(1, Math.max(0, (Math.abs(sig) - 0.06) / 0.7));
       col = sig >= 0 ? C.pos : C.neg;
-      inten = 0.05 * Math.min(1, aw) + 0.9 * a;
+      base = 0.018;
     } else {
-      col = w >= 0 ? C.pos : C.neg;
-      inten = 0.75 * Math.min(1, Math.pow(aw / 1.5, 1.3)) + 0.03;   // weak synapses fade, strong pathways stand out
+      a = 0; col = w >= 0 ? C.pos : C.neg;
+      base = 0.025 + 0.06 * Math.min(1, Math.abs(w) / 1.5);
     }
-    if (hover >= 0) inten *= (i === hover || j === hover) ? 1.8 : 0.1;
-    lineCol[k * 6] = col.r * inten * 0.3; lineCol[k * 6 + 1] = col.g * inten * 0.3; lineCol[k * 6 + 2] = col.b * inten * 0.3;
+    if (hover >= 0) {
+      if (i === hover || j === hover) { base = Math.max(base, 0.35); if (!G) a = Math.max(a, 0.3 * Math.min(1, Math.abs(w))); }
+      else { base *= 0.3; a *= 0.15; }
+    }
+    const inten = base + 0.75 * a * a;
+    lineCol[k * 6] = col.r * inten * 0.35; lineCol[k * 6 + 1] = col.g * inten * 0.35; lineCol[k * 6 + 2] = col.b * inten * 0.35;
     lineCol[k * 6 + 3] = col.r * inten; lineCol[k * 6 + 4] = col.g * inten; lineCol[k * 6 + 5] = col.b * inten;
-    phase[k] = (phase[k] + dt * speed * (0.6 + 0.4 * Math.min(1, aw))) % 1;
-    const t = phase[k];
-    pp.position.setXYZ(k, P[i].x + (P[j].x - P[i].x) * t, P[i].y + (P[j].y - P[i].y) * t, P[i].z + (P[j].z - P[i].z) * t);
-    const b = Math.min(1, inten * 1.6);
-    pp.color.setXYZ(k, col.r * b, col.g * b, col.b * b);
-    pp.size.setX(k, inten > 0.02 ? 0.25 + 0.35 * b : 0);
+    phase[k] = (phase[k] + dt * (0.8 + 0.8 * a)) % 1;
+    for (let h = 0; h < 2; h++) {
+      const t = (phase[k] + h * 0.5) % 1, q = k * 2 + h;
+      pp.position.setXYZ(q, P[i].x + (P[j].x - P[i].x) * t, P[i].y + (P[j].y - P[i].y) * t, P[i].z + (P[j].z - P[i].z) * t);
+      pp.color.setXYZ(q, col.r * a, col.g * a, col.b * a);
+      pp.size.setX(q, a > 0.04 ? 0.35 + 0.9 * a : 0);
+    }
   }
   lineGeo.attributes.color.needsUpdate = true;
   pp.position.needsUpdate = true; pp.color.needsUpdate = true; pp.size.needsUpdate = true;
+
+  // sparks
+  const sa = sparks.geometry.attributes, damp = Math.exp(-2.8 * dt);
+  for (let i = 0; i < FXN; i++) {
+    if (sp.life[i] <= 0) { sa.size.setX(i, 0); continue; }
+    sp.life[i] -= dt;
+    const f = Math.max(0, sp.life[i] / sp.max[i]);
+    sa.position.setXYZ(i, sa.position.getX(i) + sp.vel[i * 3] * dt, sa.position.getY(i) + sp.vel[i * 3 + 1] * dt, sa.position.getZ(i) + sp.vel[i * 3 + 2] * dt);
+    sp.vel[i * 3] *= damp; sp.vel[i * 3 + 1] = sp.vel[i * 3 + 1] * damp - 1.2 * dt; sp.vel[i * 3 + 2] *= damp;
+    sa.color.setXYZ(i, sp.col[i * 3] * f * 1.6, sp.col[i * 3 + 1] * f * 1.6, sp.col[i * 3 + 2] * f * 1.6);
+    sa.size.setX(i, sp.s0[i] * (0.3 + 0.7 * f));
+  }
+  sa.position.needsUpdate = true; sa.color.needsUpdate = true; sa.size.needsUpdate = true;
+
+  // rings
+  for (const m of rings) {
+    if (!m.visible) continue;
+    const u = m.userData; u.t += dt / u.life;
+    if (u.t >= 1) { m.visible = false; continue; }
+    const e = 1 - Math.pow(1 - u.t, 3);
+    m.scale.setScalar(0.2 + u.r1 * e);
+    m.material.opacity = Math.pow(1 - u.t, 1.4);
+    m.quaternion.copy(camera.quaternion);
+  }
 }
 
 // ---------------------------------------------------------------- interaction
@@ -478,7 +664,7 @@ const cellName = (c) => ['top-left', 'top', 'top-right', 'left', 'centre', 'righ
 const f2 = (v) => (v >= 0 ? '+' : '') + v.toFixed(2);
 function describe(j) {
   const r = role(j);
-  const now = mode !== 'structure' && G ? `<br><span class="k">activation now</span> ${f2(G.minds[G.view].x[j])}` : '';
+  const now = G ? `<br><span class="k">activation now</span> ${f2(G.minds[G.view].x[j])}` : '';
   if (j < 27) return `<b>Eye receptor</b> · ${cellName(j % 9)} cell<br><span class="k">lights up when the cell is</span> ${r === 'empty' ? 'empty' : r.toUpperCase()}` +
     `<br><span class="k">sends to</span> ${outCount[j]} neurons${now}`;
   if (j < NIN) return `<b>Seat receptor</b> · "I am ${j === 27 ? 'X' : 'O'}"<br><span class="k">sends to</span> ${outCount[j]} neurons${now}`;
@@ -490,58 +676,75 @@ function describe(j) {
   if (r === 'hid') return `<b>Hidden neuron #${j - NIN}</b>${common}${now}`;
   return `<b>Output</b> · ${cellName(j - OUT)} cell<br><span class="k">a spike above</span> ${THR.toFixed(2)} <span class="k">is a move there</span>${common}${now}`;
 }
-
-$('modes').addEventListener('click', (e) => {
-  const m = e.target.dataset?.mode; if (!m) return;
-  mode = m;
-  [...$('modes').children].forEach((b) => b.classList.toggle('on', b.dataset.mode === m));
-  $('game').classList.toggle('show', m !== 'structure');
-  $('speedRow').style.display = m === 'structure' ? 'none' : '';
-  $('gameTitle').textContent = m === 'human' ? 'You vs the brain' : 'Brain vs brain';
-  G = null;
-  if (m !== 'structure') { newGame(); setGameButtons(); }
+$('modes').addEventListener('click', (e) => { const m = e.target.dataset?.mode; if (m) setMode(m); });
+$('opps').addEventListener('click', (e) => {
+  const o = e.target.dataset?.opp; if (!o) return;
+  opp = o; [...$('opps').children].forEach((b) => b.classList.toggle('on', b.dataset.opp === o)); setMode('watch');
 });
-$('minw').addEventListener('input', (e) => { minW = +e.target.value; $('wv').textContent = minW.toFixed(2); });
 let tps = 8;
 $('speed').addEventListener('input', (e) => { tps = +e.target.value; $('sv').textContent = tps; });
 $('dead').addEventListener('change', (e) => { ghosts.visible = e.target.checked; ghostLabel.visible = e.target.checked; });
 $('spin').addEventListener('change', (e) => { controls.autoRotate = e.target.checked; });
-addEventListener('resize', () => {
+function resize() {
   camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight); labels.setSize(innerWidth, innerHeight);
-  for (const o of [halos, ghosts, pulses]) o.material.uniforms.scale.value = renderer.getPixelRatio() * innerHeight / 2;
-});
+  renderer.setSize(innerWidth, innerHeight); labels.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight);
+  for (const o of [halos, ghosts, pulses, sparks]) o.material.uniforms.scale.value = renderer.getPixelRatio() * innerHeight / 2;
+}
+addEventListener('resize', resize);
 
 // ---------------------------------------------------------------- loop
-let lastT = performance.now(), acc = 0;
-function frame(t) {
-  const dt = Math.min(0.1, (t - lastT) / 1000); lastT = t;
+let clock = 0, acc = 0;
+const shakeOff = new THREE.Vector3();
+function frame(dt) {
+  dt = Math.min(0.1, dt); clock += dt;
   if (G) {
     if (G.result) {
-      if (mode === 'self' && t - G.endAt > 2500) newGame();
+      if (mode === 'watch' && clock - G.endAt > 2.6) newGame();
     } else {
       acc += dt; let n = 0;
       while (acc > 1 / tps && n < 6) { step(); acc -= 1 / tps; n++; }
+      if (n) renderBoard();
     }
-    const x = G.minds[G.view].x, k = Math.min(1, dt * 12);
+    const x = G.minds[G.view].x, k = Math.min(1, dt * 14);
     for (let j = 0; j < N; j++) disp[j] += (x[j] - disp[j]) * k;
-    if (G.ignored >= 0 && performance.now() - (G.ignoredAt || 0) > 500) { G.ignored = -1; drawBoard(); }
   }
-  for (let j = 0; j < N; j++) { flash[j] = Math.max(0, flash[j] - dt * 1.8); illegalFlash[j] = Math.max(0, illegalFlash[j] - dt * 1.8); }
+  for (let j = 0; j < N; j++) { flash[j] = Math.max(0, flash[j] - dt * 2.2); illegalFlash[j] = Math.max(0, illegalFlash[j] - dt * 2.2); }
   draw(dt);
-  controls.update();
-  renderer.render(scene, camera);
+  controls.update(dt);
+  shakeOff.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).multiplyScalar(shakeAmt);
+  camera.position.add(shakeOff);
+  composer.render();
   labels.render(scene, camera);
-  requestAnimationFrame(frame);
+  camera.position.sub(shakeOff);
+  shakeAmt *= Math.exp(-dt * 7);
 }
-requestAnimationFrame(frame);
-window.__brain = { D, step: () => step(), get G() { return G; },
-  stats(n) {               // play n brain-vs-brain games instantly; outcome counts (for checking against battle.py)
-    const keep = [G, mode]; mode = 'self'; const out = {};
-    for (let i = 0; i < n; i++) { G = null; newGame(); while (!G.result) step();
+setMode(mode);
+if (!CLIP) {
+  let last = performance.now();
+  const loop = (t) => { frame((t - last) / 1000); last = t; requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+}
+// recorder hooks (tools/record_clip.mjs) and a console helper
+window.__brain = {
+  D, get G() { return G; },
+  frame: (ms) => frame(ms / 1000),
+  setSpeed: (v) => { tps = v; },
+  trySeed(s, o = 'random') {        // play one game silently with this seed; the recording replays it exactly
+    const keep = [G, mode, opp]; SIM = true; mode = 'watch'; opp = o; setSeed(s); newGame();
+    while (!G.result) step();
+    const out = { result: G.result, ticks: G.tick, brain: G.view, moves: G.board.filter(Boolean).length };
+    SIM = false; [G, mode, opp] = keep; return out;
+  },
+  start(s, o = 'random') { setSeed(s); opp = o; setMode('watch'); },
+  stats(n, o = 'self') {             // n instant games, outcome counts (checked against battle.py)
+    const keep = [G, mode, opp]; SIM = true; mode = 'watch'; opp = o; const out = {};
+    for (let i = 0; i < n; i++) { newGame(); while (!G.result) step();
       const r = G.result, k = r.kind === 'win' ? 'win ' + name(r.winner) : r.kind === 'timeout' ? 'timeout ' + name(r.loser) : 'draw';
       out[k] = (out[k] || 0) + 1; }
-    [G, mode] = keep; return out; } };   // for debugging in the console
+    SIM = false; [G, mode, opp] = keep; return out;
+  },
+};
+window.__ready = true;
 </script>
 </body>
 </html>

@@ -2,13 +2,11 @@
 Export an evolved brain for the 3D viewer (brain3d/index.html) and as an STL model for the README.
 
     python tools/export_brain3d.py                       # newest best_evo_*.npz in the repo root
-    python tools/export_brain3d.py best_evo_01149.npz --readme
+    python tools/export_brain3d.py best_evo_01149.npz
 
 Writes brain3d/brain.json (everything the viewer needs to draw the brain AND run it live in the browser:
-every working synapse, bias, leak, noise, threshold) and brain3d/champion.stl (a monochrome 3D model:
-live neurons as small solids, the strongest synapses as rods). With --readme the STL is also embedded in
-README.md between the <!-- brain-stl:start --> and <!-- brain-stl:end --> markers, where GitHub renders it
-as a model visitors can rotate.
+every working synapse, bias, leak, noise, threshold) and brain3d/champion.stl (a monochrome 3D model for
+3D printers and model viewers: live neurons as balls, the strongest synapses as rods).
 """
 import argparse
 import glob
@@ -28,17 +26,19 @@ def layout(n, live, W, out_lo, seed=1):
     simulation over their live connections, see below) -> the 9 outputs (x = +7). Switched-off hidden
     neurons get a faint outer shell so the pruning is visible."""
     pos = np.zeros((n, 3))
-    # the eye: three 3x3 retinas facing the viewer, X on top, empty in the middle, O at the bottom
+    # The eye and the outputs are layers standing in the y-z plane, facing the hidden neurons between them.
+    # Both read like the board when seen from the hidden side (left column on the left).
+    # The eye: three 3x3 retinas stacked in one wall at x = -7, X on top, empty in the middle, O at the bottom.
     for ch, y0 in ((1, 2.6), (0, 0.0), (2, -2.6)):      # channel 0 = empty, 1 = X, 2 = O
         for c in range(9):
             r, k = divmod(c, 3)
-            pos[ch * 9 + c] = (-7.0 + (k - 1) * 0.55, y0 + (1 - r) * 0.55, 0.0)
-    pos[27] = (-7.3, -4.4, 0.0)                          # I am X
-    pos[28] = (-6.7, -4.4, 0.0)                          # I am O
-    # the hands: 9 outputs as a board
+            pos[ch * 9 + c] = (-7.0, y0 + (1 - r) * 0.55, (1 - k) * 0.55)
+    pos[27] = (-7.0, -4.4, 0.3)                          # I am X
+    pos[28] = (-7.0, -4.4, -0.3)                         # I am O
+    # the hands: 9 outputs as a board in a wall at x = +7
     for c in range(9):
         r, k = divmod(c, 3)
-        pos[out_lo + c] = (7.0 + (k - 1) * 0.9, (1 - r) * 0.9, 0.0)
+        pos[out_lo + c] = (7.0, (1 - r) * 0.9, (k - 1) * 0.9)
     rng = np.random.default_rng(seed)
     hid = [j for j in range(N_IN, out_lo) if live[j]]
     dead = [j for j in range(N_IN, out_lo) if not live[j]]
@@ -95,14 +95,18 @@ def stl(pos, live, out_lo, edges, k_edges):
     def tri(a, b, c):
         facets.append((a, b, c))
 
-    def octa(p, s):
-        p = np.asarray(p)
-        X, Y, Z = np.eye(3) * s
-        v = [p + X, p - X, p + Y, p - Y, p + Z, p - Z]
-        for a in (0, 1):
-            for b in (2, 3):
-                for c in (4, 5):
-                    tri(v[a], v[b], v[c])
+    g = (1 + 5 ** 0.5) / 2                                  # icosahedron: a round-looking ball in 20 faces
+    ico_v = np.array([(-1, g, 0), (1, g, 0), (-1, -g, 0), (1, -g, 0), (0, -1, g), (0, 1, g), (0, -1, -g), (0, 1, -g),
+                      (g, 0, -1), (g, 0, 1), (-g, 0, -1), (-g, 0, 1)], float)
+    ico_v /= np.linalg.norm(ico_v[0])
+    ico_f = [(0, 11, 5), (0, 5, 1), (0, 1, 7), (0, 7, 10), (0, 10, 11), (1, 5, 9), (5, 11, 4), (11, 10, 2), (10, 7, 6),
+             (7, 1, 8), (3, 9, 4), (3, 4, 2), (3, 2, 6), (3, 6, 8), (3, 8, 9), (4, 9, 5), (2, 4, 11), (6, 2, 10),
+             (8, 6, 7), (9, 8, 1)]
+
+    def ball(p, s):
+        v = np.asarray(p) + ico_v * s
+        for a, b, c in ico_f:
+            tri(v[a], v[b], v[c])
 
     def rod(p, q, r):
         p, q = np.asarray(p), np.asarray(q)
@@ -123,11 +127,11 @@ def stl(pos, live, out_lo, edges, k_edges):
     for j in range(len(live)):
         if not live[j]:
             continue
-        s = 0.22 if j < N_IN else (0.5 if j >= out_lo else 0.4)
-        octa(pos[j], s)
+        s = 0.24 if j < N_IN else (0.48 if j >= out_lo else 0.42)
+        ball(pos[j], s)
     for i, j, w in sorted(edges, key=lambda e: -abs(e[2]))[:k_edges]:
         if i != j:
-            rod(pos[i], pos[j], 0.025 + 0.05 * min(abs(w), 2.0) / 2.0)
+            rod(pos[i], pos[j], 0.06)
     # GitHub's STL viewer stands models on Z; the layout's "up" is Y, so turn it upright: (x, y, z) -> (x, -z, y)
     up = lambda v: np.array([v[0], -v[2], v[1]])
     facets = [(up(a), up(b), up(c)) for a, b, c in facets]
@@ -145,8 +149,7 @@ def stl(pos, live, out_lo, edges, k_edges):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("brain", nargs="?", default=None, help="best_evo_*.npz (default: newest in the repo root)")
-    ap.add_argument("--stl-edges", type=int, default=220, help="strongest synapses drawn in the STL model")
-    ap.add_argument("--readme", action="store_true", help="embed the STL model in README.md")
+    ap.add_argument("--stl-edges", type=int, default=60, help="strongest synapses drawn in the STL model")
     a = ap.parse_args()
     path = a.brain or sorted(glob.glob(os.path.join(ROOT, "best_evo_*.npz")), key=os.path.getmtime)[-1]
     d = np.load(path)
@@ -182,16 +185,6 @@ def main():
         f.write(text)
     print(f"{os.path.basename(path)}: generation {gen}, {int(live.sum())} live neurons ({hidden_live} hidden), "
           f"{len(edges)} working synapses -> brain3d/brain.json; STL {nf} facets, {len(text) / 1024:.0f} KB")
-    if a.readme:
-        rp = os.path.join(ROOT, "README.md")
-        s = open(rp, encoding="utf-8").read()
-        lo, hi = "<!-- brain-stl:start -->", "<!-- brain-stl:end -->"
-        if lo not in s or hi not in s:
-            raise SystemExit("README.md has no brain-stl markers")
-        s = s[:s.index(lo) + len(lo)] + "\n\n```stl\n" + text + "```\n\n" + s[s.index(hi):]
-        with open(rp, "w", encoding="utf-8", newline="\n") as f:
-            f.write(s)
-        print("embedded in README.md")
 
 
 if __name__ == "__main__":
