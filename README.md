@@ -20,16 +20,44 @@
 
 ---
 
+## The aim: a thought that lives through time
+
+This project was never about tic-tac-toe. The aim was to build a **pipeline that holds a thought and processes it
+through the flow of time**: a system whose internal state carries meaning from one moment to the next and keeps
+working on it, the way a mind does, instead of a function that is called, answers, and is gone.
+
+Here the thought is an **abstracted version of the game's rules**. Nowhere in the network are they written down:
+no list of legal moves, no "whose turn is it", no win condition, no instruction to wait. Yet the evolved brain acts
+as if it holds all of them. It waits while the opponent thinks, fires once per turn, reaches for empty cells,
+blocks, and completes lines. The rules exist only as activity kept alive inside 64 neurons, tick after tick,
+rebuilt from what the eye sees and what the network remembers.
+
+What this one small, working system shows:
+
+- **Abstraction.** A set of rules can be absorbed into a network's wiring and its moving internal state without
+  ever being spelled out.
+- **One format for knowledge.** Everything this brain knows is stored the same way, as neurons, synapses, leaks
+  and thresholds, in a single 64 KB file ([`best_evo_01303.npz`](best_evo_01303.npz)).
+- **Processing in time.** Information enters as a stream, becomes internal state, and that state drives action,
+  continuously, with no outside clock telling the brain when to think.
+
+**The thesis.** If the rules of a game can be abstracted, stored and processed this way, so can other information.
+Information of any magnitude and complexity can be put into this same format: a system that contains the
+information and processes it into its own internal state, moment after moment. That is a foundation to build a
+mind on, and tic-tac-toe is the first demonstration of the format.
+
+---
+
 ## The idea in one paragraph
 
 A normal AI is a function. You call it with an input, it returns an output, and between calls it does not exist.
 A brain is different: it runs **all the time**. It sees the world change, keeps an internal state, and decides
 *by itself* **when** to act, not only **what** to do. This project tests whether that kind of agent can come out of
 pure evolution. The test is tic-tac-toe. It is small enough to simulate **1.5 million brains per generation on one
-GPU**, and it has a perfect player to measure against. The brains start as random wiring. After about 1,100
+GPU**, and it has a perfect player to measure against. The brains start as random wiring. After about 1,300
 generations of natural selection they sit through the opponent's turn instead of firing into it, they stop
 pressing several buttons at once, and they go from losing almost every game against a perfect minimax player to
-standing up to it. Nobody programmed any of that. And along the way **the network shrank itself**: evolution found more than half
+drawing almost all of them. Nobody programmed any of that. And along the way **the network shrank itself**: evolution found more than half
 of the neurons unnecessary and switched them off, leaving a brain that uses **a tenth of the connections** of a
 fully connected one.
 
@@ -74,7 +102,7 @@ So before it can play well, the brain has to discover by itself that:
 
 ### The champion, in 3D
 
-[The interactive page](https://kyung01.github.io/Alive-TicTacToe-AI/brain3d/) runs the generation-1149 champion live in your browser, with exactly the
+[The interactive page](https://kyung01.github.io/Alive-TicTacToe-AI/brain3d/) runs the newest brain, from the final generation (1303), live in your browser, with exactly the
 training rules: watch it play a random player or itself, play against it yourself, or inspect its wiring.
 
 - **The eye** is a wall of 29 receptors on the left (three 3x3 retinas: X, empty, O, plus the seat), facing the
@@ -205,8 +233,8 @@ flowchart TD
 
 ## Results (run 5, the log included in this repo)
 
-1,149 generations, 3,000 genomes x 512 brains, ~12 hours on one RTX A6000 (≈30 s per generation).
-Numbers are taken straight from [`train_evo.log`](train_evo.log).
+1,303 generations, 3,000 genomes x 512 brains, ~14 hours on one RTX A6000 (≈39 s per generation).
+Numbers are taken straight from [`train_evo.log`](train_evo.log) and from playing the champion.
 
 ### 1. The network shrank itself to fit the task
 
@@ -215,14 +243,14 @@ every neuron free to connect to every other one. Nobody told evolution how big t
 penalised size. Still, selection kept the lineages that **switched off neurons they did not need**, and every
 synapse to and from those neurons went with them. The network decided its own size.
 
-| Generation | 0 | 25 | 50 | 100 | 300 | 600 | 900 | 1149 |
+| Generation | 0 | 25 | 50 | 100 | 300 | 600 | 900 | 1303 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| active hidden neurons in the best brain (of 82) | 57 | 39 | 34 | 25 | 27 | 29 | 27 | **26** |
+| active hidden neurons in the best brain (of 82) | 57 | 39 | 34 | 25 | 27 | 29 | 27 | **26** (the newest brain) |
 
 **This is selection, not chance.** Mutation switches a neuron off exactly as often as it switches one on, so
 random drift alone would settle at about half of them, 41 neurons. The brains went far below that and stayed
-there. Across the *whole* population of 3,000 genomes the average is now **29 hidden neurons**. Smaller brains
-won.
+there. Across the *whole* population of 3,000 genomes the average is now **28.6 hidden neurons**. Smaller
+brains won.
 
 Counting only the synapses that can actually carry a signal (from a live neuron to a live hidden or output neuron;
 the sensors are overwritten by the board every tick):
@@ -231,7 +259,7 @@ the sensors are overwritten by the board every tick):
 |---|---:|---:|
 | Fully connected, all 82 hidden on | 120 | 10,920 (100%) |
 | Best brain, generation 0 | 95 | ≈ 3,100 (29%) |
-| **Best brain, generation 1149** (`best_evo_01149.npz`, exact count) | **64** | **1,135 (10%)** |
+| **The newest brain, generation 1303** (`best_evo_01303.npz`, exact count) | **64** | **1,152 (11%)** |
 
 The evolved brain does its job with about **a third of the computation per tick of the generation-0 brain**,
 and **a tenth of a fully connected one**. On sparse or neuromorphic hardware, where a missing synapse costs
@@ -242,18 +270,27 @@ selection does in biology.
 
 Wasted spikes (firing out of turn, or on a taken cell) per brain per game, across the *whole* population:
 
-| Generation | 0 | 100 | 300 | 600 | 900 | 1100 |
+| Generation | 0 | 100 | 300 | 600 | 900 | 1278 |
 |---|---:|---:|---:|---:|---:|---:|
-| wasted spikes / brain / game | 15.0 | 9.6 | 8.2 | 6.5 | 6.0 | **5.6** |
+| wasted spikes / brain / game | 15.0 | 9.6 | 8.2 | 6.5 | 6.0 | **5.4** |
 
 No rule forbids an out-of-turn spike; the board just ignores it. The brains discovered by selection alone that
 the opponent's turn is for waiting.
 
 ### 3. It learned to stand up to a perfect player
 
-At generation 0 the best brain lost almost every game against the perfect minimax player (which never loses).
-Through evolution alone it learned to stand up to it, even though it had only ever played other brains: the
-perfect player is an exam, never a teacher.
+At generation 0 the best brain lost almost every game against the perfect minimax player (which never loses, so
+a draw is the best anyone can do). The generation-1278 champion **draws 97.7% of 2,000 games** against it, from
+both seats, with the opponent answering after a random 1–30 ticks, and it almost never runs out of time (0.6%).
+It learned this through evolution alone, having only ever played other brains: the perfect player is an exam,
+never a teacher.
+
+**How the champion was chosen.** Training fitness is relative (the share of peer games a genome survived), so the
+champion is picked by playing. [`tools/pick_champion.py`](tools/pick_champion.py) takes the 60 fittest genomes of
+the generation-1278 population, plays each against the perfect player and a random legal mover, re-plays the
+best eight with 2,000 games per opponent, and keeps the one with the highest score (draws vs perfect + wins vs
+random + half the draws vs random). Genome 68 won. The 3D viewer and the clip at the top run the newest brain,
+the fittest genome of the final generation (1303).
 
 ---
 
@@ -273,8 +310,7 @@ python dashboard.py
 # open http://localhost:8766
 ```
 
-It works straight after cloning: the run-5 log and the generation-1149 champion (`best_evo_01149.npz`) are
-included. The battle runs on CPU if you have no GPU.
+It works straight after cloning: the full run-5 log and the saved brains are included. The battle runs on CPU if you have no GPU.
 
 ---
 
@@ -286,7 +322,7 @@ cd Alive-TicTacToe-AI
 pip install -r requirements.txt      # numpy + PyTorch (install the CUDA build for your GPU)
 ```
 
-**Full run 5 (the results above; run on one 48 GB RTX A6000, ~30 s per generation):**
+**Full run 5 (the results above; run on one 48 GB RTX A6000, ~40 s per generation):**
 
 ```bash
 python evo_rule.py --rules 3000 --brains 512 --chunk 300 --life 1 \
@@ -314,6 +350,7 @@ python dashboard.py --log my_run.log
 - `--resume latest` continues from the newest population.
 - Create a file named `STOP` in the folder to save and exit cleanly.
 - `python evo_rule.py --help` lists every option.
+- To pick a champion from a saved population by playing it: `python tools/pick_champion.py evo_pop_XXXXX.npz`.
 - To put a newer champion in the 3D viewer: `python tools/export_brain3d.py best_evo_XXXXX.npz`. To view the
   page locally, run `python -m http.server` in the repo folder and open `http://localhost:8000/brain3d/`; with
   that server running, `node tools/record_clip.mjs` records a new clip.
@@ -332,9 +369,11 @@ python dashboard.py --log my_run.log
 | [`brain3d/`](brain3d) | The interactive 3D brain: a static page (three.js) that draws the champion and runs it live in the browser |
 | [`tools/export_brain3d.py`](tools/export_brain3d.py) | Exports a saved brain to `brain3d/brain.json` and lays it out with the rubber-band rule |
 | [`tools/record_clip.mjs`](tools/record_clip.mjs) | Records the animated clip at the top of this page (Node 22, Chrome, ffmpeg) |
-| [`train_evo.log`](train_evo.log) | Full log of run 5 (generations 0–1149) |
-| [`best_evo_01149.npz`](best_evo_01149.npz) | The best evolved brain at generation 1149 |
-| [`runs/`](runs) | Logs of runs 1–4, the earlier runs that shaped the final design |
+| [`tools/pick_champion.py`](tools/pick_champion.py) | Picks the champion from a saved population by playing the top genomes |
+| [`train_evo.log`](train_evo.log) | Full log of run 5 (generations 0–1303) |
+| [`best_evo_01278.npz`](best_evo_01278.npz) | The champion picked by playing at generation 1278 (genome 68) |
+| [`best_evo_01303.npz`](best_evo_01303.npz) | The newest brain: the fittest genome of the final generation, 1303; the one in the 3D viewer |
+| [`runs/`](runs) | Logs of runs 1–4, the earlier runs that shaped the final design, and the final snapshot of run 5 |
 | [`single.py`](single.py), [`continuous.py`](continuous.py), [`long_life.py`](long_life.py) | Earlier learning-rule experiments described in the lab notebook |
 | [`docs/DESIGN.md`](docs/DESIGN.md) | Full lab notebook: every design decision, every loophole, every fix |
 | [`docs/`](docs) | The theory behind the project ([theory](docs/theory.md), [approach](docs/approach.md), [experiments](docs/experiments.md), [diary](docs/diary.md)) |

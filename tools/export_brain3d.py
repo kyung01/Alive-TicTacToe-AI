@@ -2,7 +2,7 @@
 Export an evolved brain for the 3D viewer (brain3d/index.html) and as an STL model for the README.
 
     python tools/export_brain3d.py                       # newest best_evo_*.npz in the repo root
-    python tools/export_brain3d.py best_evo_01149.npz
+    python tools/export_brain3d.py best_evo_01303.npz
 
 Writes brain3d/brain.json (everything the viewer needs to draw the brain AND run it live in the browser:
 every working synapse, bias, leak, noise, threshold) and brain3d/champion.stl (a monochrome 3D model for

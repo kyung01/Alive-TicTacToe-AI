@@ -65,7 +65,8 @@
   #board button.playable { cursor: pointer; }
   #board button.playable:hover { background: rgba(56,227,184,0.15); }
   #boardKey { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
-  #status { font-size: 12.5px; min-height: 36px; }
+  #status { font-size: 12.5px; }
+  #status div { height: 19px; line-height: 19px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   #status .big { font-weight: 700; font-size: 13.5px; }
   #gameBtns button { padding: 5px 10px; border-radius: 7px; border: 1px solid var(--line); background: transparent;
     color: var(--text); font: 600 12px system-ui, sans-serif; cursor: pointer; }
@@ -141,7 +142,7 @@
   <div id="score"></div>
   <div id="board"></div>
   <div id="boardKey">Bars: how much the brain wants each cell. Full bar = it fires there.</div>
-  <div id="status"></div>
+  <div id="status"><div class="big"></div><div></div><div class="try"></div></div>
   <div class="row" id="gameBtns"></div>
 </div>
 
@@ -359,7 +360,7 @@ function step() {
     const invalid = s !== G.turn || G.board[cell] !== 0;           // out of turn or a taken cell: the board ignores it
     if (s === G.view && !SIM) {
       flash[OUT + cell] = 1;
-      if (invalid) { G.triedAt[cell] = clock; G.lastTry = { cell, why: s !== G.turn ? 'not its turn' : 'cell already taken', at: clock }; }
+      if (invalid) { G.triedAt[cell] = clock; G.lastTry = { cell, why: s !== G.turn ? 'not its turn' : 'cell taken', at: clock }; }
       else G.firedAt[cell] = clock;
     }
     if (invalid) continue;
@@ -422,16 +423,20 @@ function renderBoard() {
       (G.human && !G.result && G.turn === G.human && !v ? ' playable' : '');
   });
   $('tickNo').textContent = `tick ${G.tick}`;
-  let s;
-  if (G.result) s = `<span class="big">${resultText()}</span>` + (mode === 'watch' ? '<br><span class="k">Next game in a moment</span>' : '');
-  else if (G.human) s = G.turn === G.human ? `<span class="big">Your move (${name(G.human)})</span><br>The brain is watching the board.`
-    : `<span class="big">The brain is thinking</span><br>${MAXT - G.clock} ticks left on its clock.`;
-  else if (G.randomSide) s = G.turn === G.randomSide ? `<span class="big">Random player's turn</span><br>The brain (${name(G.view)}) waits.`
-    : `<span class="big">The brain's turn (${name(G.view)})</span><br>${MAXT - G.clock} ticks left on its clock.`;
-  else s = `<span class="big">${name(G.turn)} to move</span><br>${MAXT - G.clock} ticks left · bars show ${name(G.view)}'s brain`;
+  // always exactly three one-line rows, so the panel (anchored to the bottom) never changes height
+  let head, sub;
+  if (G.result) { head = resultText(); sub = mode === 'watch' ? 'Next game in a moment' : ''; }
+  else if (G.human) [head, sub] = G.turn === G.human ? [`Your move (${name(G.human)})`, 'The brain is watching the board']
+    : ['The brain is thinking', `${MAXT - G.clock} ticks left on its clock`];
+  else if (G.randomSide) [head, sub] = G.turn === G.randomSide ? ["Random player's turn", `The brain (${name(G.view)}) waits`]
+    : [`The brain's turn (${name(G.view)})`, `${MAXT - G.clock} ticks left on its clock`];
+  else [head, sub] = [`${name(G.turn)} to move`, `${MAXT - G.clock} ticks left · bars: ${name(G.view)}'s brain`];
   const t = G.lastTry;
-  if (!G.result && t && clock - t.at < 1.1) s += `<br><span class="try">Tried the ${cellName(t.cell)} cell: ignored, ${t.why}</span>`;
-  $('status').innerHTML = s;
+  const tryLine = !G.result && t && clock - t.at < 1.1 ? `Tried ${cellName(t.cell)}: ignored, ${t.why}` : '';
+  const rows = $('status').children;
+  if (rows[0].textContent !== head) rows[0].textContent = head;
+  if (rows[1].textContent !== sub) rows[1].textContent = sub;
+  if (rows[2].textContent !== tryLine) rows[2].textContent = tryLine;
 }
 function renderScore() {
   const k = kind(), sc = score[k] || {};
