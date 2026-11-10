@@ -345,6 +345,18 @@ included `train_evo.log`):
 python dashboard.py --log my_run.log
 ```
 
+**Continue from the trained population.** The whole population at the end of run 5 (generation 1303, all
+3,000 genomes, 336 MB) is too large for the repository, so it is attached to a release. Download
+[`evo_pop_01303.npz`](https://github.com/kyung01/Alive-TicTacToe-AI/releases/download/run5-gen1303/evo_pop_01303.npz)
+from the [run5-gen1303 release](https://github.com/kyung01/Alive-TicTacToe-AI/releases/tag/run5-gen1303)
+into the repo folder, then pick up where run 5 stopped:
+
+```bash
+python evo_rule.py --rules 3000 --brains 512 --chunk 300 --life 1 \
+  --opponent peer --select pair --elite 0.1 --mutation 2.5 \
+  --opp-delay 30 --reward-attempt -0.001 --resume evo_pop_01303.npz
+```
+
 - Each generation saves the whole population (`evo_pop_XXXXX.npz`, large, git-ignored) and the best brain
   (`best_evo_XXXXX.npz`). The last 3 of each are kept. The dashboard's live battle always shows the newest brain.
 - `--resume latest` continues from the newest population.
@@ -373,6 +385,7 @@ python dashboard.py --log my_run.log
 | [`train_evo.log`](train_evo.log) | Full log of run 5 (generations 0–1303) |
 | [`best_evo_01278.npz`](best_evo_01278.npz) | The champion picked by playing at generation 1278 (genome 68) |
 | [`best_evo_01303.npz`](best_evo_01303.npz) | The newest brain: the fittest genome of the final generation, 1303; the one in the 3D viewer |
+| [`evo_pop_01303.npz`](https://github.com/kyung01/Alive-TicTacToe-AI/releases/tag/run5-gen1303) (release download) | The whole trained population of generation 1303 (3,000 genomes, 336 MB), to continue training or pick a champion |
 | [`runs/`](runs) | Logs of runs 1–4, the earlier runs that shaped the final design, and the final snapshot of run 5 |
 | [`single.py`](single.py), [`continuous.py`](continuous.py), [`long_life.py`](long_life.py) | Earlier learning-rule experiments described in the lab notebook |
 | [`docs/DESIGN.md`](docs/DESIGN.md) | Full lab notebook: every design decision, every loophole, every fix |
