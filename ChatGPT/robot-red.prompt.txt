@@ -1,0 +1,10 @@
+Use case: UI avatar icon for a live dashboard that shows an AI brain playing tic-tac-toe against a copy of itself. Two sibling avatars exist, a BLUE one for the X player and a RED one for the O player; this is the red one. Same style and shape language as a flat vector robot head icon.
+Asset type: one robot head icon, front-facing, used as the player avatar above a tic-tac-toe board.
+Primary request: a friendly, simple robot head with a visible glowing brain or circuit pattern inside a transparent dome on top, two round eyes, small antenna, gentle smile. Clean flat vector-style pictogram.
+Scene/backdrop: genuine transparent alpha background, no backdrop, no floor, no shadow.
+Style/medium: crisp flat 2D icon, flat colour areas, clean smooth contours, readable at 64 pixels. No painted lighting, gloss, gradients or glow halos.
+Subject details: rounded square #e34948 warm red head, off-white eyes with dark pupils, soft sky-blue #7fb4ff brain, one short antenna with a small ball tip.
+Color palette: the head colour named above dominates; off-white #f6f5f1 for dome rim, eyes and smile. Flat colour only.
+Composition/framing: one centered head on a square 1024 x 1024 canvas, fully visible with about 10 percent transparent padding on all sides.
+Constraints: no text, no letters, no numbers, no body, no arms, no background shapes, no enclosing circle or badge, no watermark, no checkerboard. Output a transparent PNG.
+Project destination: ChatGPT/robot-red.png in the AI Brain project.

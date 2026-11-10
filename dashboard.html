@@ -640,12 +640,11 @@ function celebrate(botId) {
     setTimeout(() => c.remove(), 1700);
   }
 }
-// state icons: PNGs in assets/ (assets/icon-<name>.png, served at /icon/<name>.png);
+// state icons: PNGs generated in ChatGPT (ChatGPT/icon-<name>.png, served at /icon/<name>.png);
 // an emoji stands in for any icon that does not exist yet
 const ICONS = { thinking: '💭', waiting: '⏳', trophy: '🏆', draw: '🤝', illegal: '⛔', 'out-of-turn': '⏱', frozen: '❄️',
                 'no-winner': '😐', lost: '😵', turn: '▶' };
-// no icon PNGs ship with the repo, so the emoji are used directly; take a name out of this set after adding its PNG
-const missingIcons = new Set(Object.keys(ICONS));
+const missingIcons = new Set(['turn']);
 function icon(name) {
   const em = document.createElement('span'); em.textContent = ICONS[name] || '•';
   if (missingIcons.has(name)) return em;

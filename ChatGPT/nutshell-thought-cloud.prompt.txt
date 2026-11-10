@@ -1,0 +1,8 @@
+Use case: hero illustration for one slide of a YouTube explainer video about why current AI architecture cannot think.
+Asset type: single full-bleed slide illustration, PNG.
+Primary request: a round warm-peach human head on the lower left, eyes closed, calm, with a big off-white fluffy thought cloud above and to the right. Inside the cloud float many different small flat icons overlapping at once: a pink heart, a cyan framed landscape picture, a yellow clock, a mint musical note, a purple question mark, a small memory photo, and a few abstract soft blobs with no clear meaning. The cloud glows gently, the icons overlap and tilt as if drifting.
+Subject details: head #ffb27a, cloud #fff6e9, icons in the accent palette.
+Style/medium: flat vector explainer illustration for a YouTube science video. Deep navy-indigo background with a soft radial glow (dark #0d1140 to #1b1f6b), a few tiny scattered dots like stars. Bold saturated accent colours only: orange #ff8c2e, yellow #ffd23f, pink #ff5e8a, cyan #35d5f0, mint #4ae0a8, purple #8a6cff, warm off-white #fff6e9. Simple rounded geometric shapes, flat colour fills, soft glow halos around important elements, minimal or no outlines, clean smooth contours, cheerful but clear. No photorealism, no 3D render, no painterly texture.
+Composition/framing: landscape 16:9, 1536 x 1024, the subject centred with generous breathing room; leave the top 20 percent of the image calm and uncluttered so a headline can be overlaid later.
+Constraints: no text, no letters, no numbers, no logos, no watermark, no speech-bubble text, no real brand mascots, no birds.
+Project destination: ChatGPT/nutshell-thought-cloud.png in the AI Brain project.

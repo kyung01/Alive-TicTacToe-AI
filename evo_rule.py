@@ -445,22 +445,23 @@ class Life:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--rules", type=int, default=256, help="population of genomes")
-    ap.add_argument("--brains", type=int, default=256, help="brains per genome")
-    ap.add_argument("--chunk", type=int, default=320, help="genomes per GPU pass; the population is evaluated in R/chunk passes per generation")
+    # defaults = the final settings (run 5): `python evo_rule.py` reproduces that run
+    ap.add_argument("--rules", type=int, default=3000, help="population of genomes")
+    ap.add_argument("--brains", type=int, default=512, help="brains per genome")
+    ap.add_argument("--chunk", type=int, default=300, help="genomes per GPU pass; the population is evaluated in R/chunk passes per generation")
     ap.add_argument("--life", type=int, default=1, help="games per life (no plasticity: one is enough to judge a brain)")
     ap.add_argument("--generations", type=int, default=100000)
     ap.add_argument("--max-ticks", type=int, default=30, help="ticks a brain may sit on its own turn before it freezes")
-    ap.add_argument("--opp-delay", type=int, default=8, help="the scripted opponent answers after 1..this many ticks (random)")
+    ap.add_argument("--opp-delay", type=int, default=30, help="the scripted opponent answers after 1..this many ticks (random)")
     ap.add_argument("--game-ticks", type=int, default=400, help="hard cap on ticks per game")
     ap.add_argument("--wclip", type=float, default=5.0)
     ap.add_argument("--reward-legal", type=float, default=0.0, help="score credit per legal move (pair mode: 0, the board and the clock decide)")
     ap.add_argument("--elite", type=float, default=0.10, help="top fraction that survives and breeds")
-    ap.add_argument("--mutation", type=float, default=1.0, help="multiplier on every mutation step (scalar, per-node and weight genes)")
+    ap.add_argument("--mutation", type=float, default=2.5, help="multiplier on every mutation step (scalar, per-node and weight genes)")
     ap.add_argument("--reward-attempt", type=float, default=-0.001, help="score per illegal fire (the world ignores the fire; this is its cost)")
     ap.add_argument("--reward-win", type=float, default=0.0, help="score credit for a win on the board (pair mode: the win already decides the game, so 0)")
     ap.add_argument("--reward-wait", type=float, default=0.0, help="survival mode: credit per tick spent alive while it is the opponent's turn")
-    ap.add_argument("--select", choices=["score", "survival", "pair"], default="score",
+    ap.add_argument("--select", choices=["score", "survival", "pair"], default="pair",
                     help="score: fitness = the world's prices; survival: the reward-only tournament score; "
                          "pair: head-to-head, the higher survival score in each pair wins (1/0, tie 0.5); "
                          "if X never opened, O is re-seated as X and must move or both lose")
@@ -468,7 +469,7 @@ def main():
     ap.add_argument("--noise-seed", type=int, default=None, help="pin the brains' noise stream for an exact replay; default: fresh entropy")
     ap.add_argument("--resume", default=None, help="population file or 'latest'")
     ap.add_argument("--log-every", type=int, default=10)
-    ap.add_argument("--opponent", choices=["random", "perfect", "mixed", "peer", "both"], default="random",
+    ap.add_argument("--opponent", choices=["random", "perfect", "mixed", "peer", "both"], default="peer",
                     help="random: a random legal mover; perfect: the minimax player (never loses, takes the center first); "
                          "mixed: each brain faces perfect or random, 50/50 per game; peer: brains play each other; "
                          "both: games alternate between a peer and the perfect player")

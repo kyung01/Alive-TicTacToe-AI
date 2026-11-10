@@ -1,0 +1,365 @@
+{
+ "total": 600,
+ "scenes": [
+  {
+   "i": 0,
+   "name": "Title",
+   "start": 0,
+   "dur": 7.4,
+   "adur": 6.9,
+   "file": "audio/01.mp3",
+   "bg": "forest",
+   "seamless": true
+  },
+  {
+   "i": 1,
+   "name": "The wrong shape",
+   "start": 7.4,
+   "dur": 7.971,
+   "adur": 7.471,
+   "file": "audio/02.mp3",
+   "bg": "forest-stream",
+   "seamless": true
+  },
+  {
+   "i": 2,
+   "name": "Senses in",
+   "start": 15.371,
+   "dur": 6.926063,
+   "adur": 6.426063,
+   "file": "audio/03.mp3",
+   "bg": "forest-stream",
+   "seamless": true
+  },
+  {
+   "i": 3,
+   "name": "Actions out",
+   "start": 22.297063,
+   "dur": 5.646063,
+   "adur": 5.146063,
+   "file": "audio/04.mp3",
+   "bg": "forest-stream",
+   "seamless": false
+  },
+  {
+   "i": 4,
+   "name": "The hidden middle",
+   "start": 27.943126,
+   "dur": 5.411,
+   "adur": 4.911,
+   "file": "audio/05.mp3",
+   "bg": "forest-canopy",
+   "seamless": true
+  },
+  {
+   "i": 5,
+   "name": "AI copies the outside",
+   "start": 33.354126,
+   "dur": 9.015875,
+   "adur": 8.515875,
+   "file": "audio/06.mp3",
+   "bg": "forest-canopy",
+   "seamless": true
+  },
+  {
+   "i": 6,
+   "name": "The tangle",
+   "start": 42.370001,
+   "dur": 16.147313,
+   "adur": 15.647313,
+   "file": "audio/07.mp3",
+   "bg": "forest-roots",
+   "seamless": true
+  },
+  {
+   "i": 7,
+   "name": "Signals go everywhere",
+   "start": 58.517314,
+   "dur": 10.295875,
+   "adur": 9.795875,
+   "file": "audio/08.mp3",
+   "bg": "forest-roots",
+   "seamless": true
+  },
+  {
+   "i": 8,
+   "name": "The pipeline",
+   "start": 68.813189,
+   "dur": 13.25,
+   "adur": 11.45,
+   "file": "audio/09.mp3",
+   "bg": "forest-roots",
+   "seamless": true
+  },
+  {
+   "i": 9,
+   "name": "Nothing flows back",
+   "start": 82.063189,
+   "dur": 8.46,
+   "adur": 7.96,
+   "file": "audio/10.mp3",
+   "bg": "forest-roots",
+   "seamless": true
+  },
+  {
+   "i": 10,
+   "name": "A calculator",
+   "start": 90.523189,
+   "dur": 5.0975,
+   "adur": 4.5975,
+   "file": "audio/11.mp3",
+   "bg": "forest-grove",
+   "seamless": true
+  },
+  {
+   "i": 11,
+   "name": "Parable: the factory line",
+   "start": 95.620689,
+   "dur": 27.05,
+   "adur": 26.55,
+   "file": "audio/12.mp3",
+   "bg": "forest-grove",
+   "seamless": true
+  },
+  {
+   "i": 12,
+   "name": "A brain never stops",
+   "start": 122.670689,
+   "dur": 17.166063,
+   "adur": 16.666063,
+   "file": "audio/13.mp3",
+   "bg": "forest-grove",
+   "seamless": true
+  },
+  {
+   "i": 13,
+   "name": "A thought can't be measured",
+   "start": 139.836752,
+   "dur": 7.84775,
+   "adur": 6.34775,
+   "file": "audio/14.mp3",
+   "bg": "forest-pond",
+   "seamless": true
+  },
+  {
+   "i": 14,
+   "name": "How a transformer works",
+   "start": 147.68450199999998,
+   "dur": 13.510045,
+   "adur": 13.010045,
+   "file": "audio/15.mp3",
+   "bg": "forest-ruins",
+   "seamless": true
+  },
+  {
+   "i": 15,
+   "name": "What it can't do",
+   "start": 161.19454699999997,
+   "dur": 11.98,
+   "adur": 11.48,
+   "file": "audio/16.mp3",
+   "bg": "forest-ruins",
+   "seamless": false
+  },
+  {
+   "i": 16,
+   "name": "Text is not a chain of thought",
+   "start": 173.17454699999996,
+   "dur": 9.85,
+   "adur": 9.35,
+   "file": "audio/17.mp3",
+   "bg": "forest-ruins",
+   "seamless": true
+  },
+  {
+   "i": 17,
+   "name": "What a brain looks like",
+   "start": 183.02454699999996,
+   "dur": 17.505688,
+   "adur": 17.005688,
+   "file": "audio/18.mp3",
+   "bg": "forest-hollow",
+   "seamless": false
+  },
+  {
+   "i": 18,
+   "name": "A mind never restarts",
+   "start": 200.53023499999995,
+   "dur": 15.102438,
+   "adur": 14.602438,
+   "file": "audio/19.mp3",
+   "bg": "forest-hollow",
+   "seamless": true
+  },
+  {
+   "i": 19,
+   "name": "Problem two",
+   "start": 215.63267299999995,
+   "dur": 5.56775,
+   "adur": 5.06775,
+   "file": "audio/20.mp3",
+   "bg": "forest-berry",
+   "seamless": true
+  },
+  {
+   "i": 20,
+   "name": "A thought is not text",
+   "start": 221.20042299999994,
+   "dur": 18.211,
+   "adur": 17.711,
+   "file": "audio/21.mp3",
+   "bg": "forest-berry",
+   "seamless": false
+  },
+  {
+   "i": 21,
+   "name": "Parable: the strawberry",
+   "start": 239.41142299999996,
+   "dur": 19.412625,
+   "adur": 18.912625,
+   "file": "audio/22.mp3",
+   "bg": "forest-berry",
+   "seamless": true
+  },
+  {
+   "i": 22,
+   "name": "A thought can't be described",
+   "start": 258.82404799999995,
+   "dur": 7.735875,
+   "adur": 7.235875,
+   "file": "audio/23.mp3",
+   "bg": "forest-fog",
+   "seamless": true
+  },
+  {
+   "i": 23,
+   "name": "This is not thinking",
+   "start": 266.55992299999997,
+   "dur": 22.20775,
+   "adur": 21.70775,
+   "file": "audio/24.mp3",
+   "bg": "forest-fog",
+   "seamless": true
+  },
+  {
+   "i": 24,
+   "name": "Parable: the elephant",
+   "start": 288.76767299999995,
+   "dur": 12.620813,
+   "adur": 12.120813,
+   "file": "audio/25.mp3",
+   "bg": "forest-path",
+   "seamless": true
+  },
+  {
+   "i": 25,
+   "name": "The trunk",
+   "start": 301.38848599999994,
+   "dur": 5.907313,
+   "adur": 5.407313,
+   "file": "audio/26.mp3",
+   "bg": "forest-path",
+   "seamless": false
+  },
+  {
+   "i": 26,
+   "name": "The leg",
+   "start": 307.29579899999993,
+   "dur": 6.769375,
+   "adur": 6.269375,
+   "file": "audio/27.mp3",
+   "bg": "forest-path",
+   "seamless": false
+  },
+  {
+   "i": 27,
+   "name": "The tail",
+   "start": 314.06517399999996,
+   "dur": 6.769375,
+   "adur": 6.269375,
+   "file": "audio/28.mp3",
+   "bg": "forest-path",
+   "seamless": false
+  },
+  {
+   "i": 28,
+   "name": "Nobody has seen the whole",
+   "start": 320.834549,
+   "dur": 15.651,
+   "adur": 15.151,
+   "file": "audio/29.mp3",
+   "bg": "forest-path",
+   "seamless": false
+  },
+  {
+   "i": 29,
+   "name": "The middle is a filter",
+   "start": 336.485549,
+   "dur": 12.542438,
+   "adur": 12.042438,
+   "file": "audio/30.mp3",
+   "bg": "forest-dawnedge",
+   "seamless": true
+  },
+  {
+   "i": 30,
+   "name": "Breed what you cannot draw",
+   "start": 349.027987,
+   "dur": 31.29,
+   "adur": 30.79,
+   "file": "audio/31.mp3",
+   "bg": "forest-dawnedge",
+   "seamless": true
+  },
+  {
+   "i": 31,
+   "name": "A network that never stops",
+   "start": 380.317987,
+   "dur": 15.729375,
+   "adur": 15.229375,
+   "file": "audio/32.mp3",
+   "bg": "forest-dawnedge",
+   "seamless": true
+  },
+  {
+   "i": 32,
+   "name": "A network that remembers",
+   "start": 396.047362,
+   "dur": 13.979125,
+   "adur": 13.479125,
+   "file": "audio/33.mp3",
+   "bg": "forest-dawnedge",
+   "seamless": true
+  },
+  {
+   "i": 33,
+   "name": "Outro",
+   "start": 410.02648700000003,
+   "dur": 30.95,
+   "adur": 27.45,
+   "file": "audio/34.mp3",
+   "bg": "forest-meadow",
+   "seamless": true
+  },
+  {
+   "i": 34,
+   "name": "The end",
+   "start": 440.976487,
+   "dur": 159.02351299999998,
+   "adur": 17.5,
+   "file": "audio/35.mp3",
+   "bg": "forest-sunset",
+   "seamless": true
+  }
+ ],
+ "music": {
+  "files": [
+   "audio/music.mp3",
+   "audio/music2.mp3",
+   "audio/music3.mp3"
+  ],
+  "vol": 0.08,
+  "problemTwo": 215.63267299999995,
+  "endStart": 440.976487
+ }
+}

@@ -212,8 +212,8 @@ class Handler(BaseHTTPRequestHandler):
             except Exception as e:  # keep the dashboard alive if the brain file is mid-write
                 self.send(503, "application/json", json.dumps({"error": str(e)}))
         elif u.path.startswith("/icon/") and u.path.endswith(".png") and "/" not in u.path[6:]:
-            # optional state icons: assets/icon-<name>.png; 404 (the page shows an emoji) when the PNG does not exist
-            path = os.path.join("assets", "icon-" + u.path[6:])
+            # state icons generated in ChatGPT from ChatGPT/icon-<name>.prompt.txt; 404 until the PNG exists
+            path = os.path.join("ChatGPT", "icon-" + u.path[6:])
             if not os.path.isfile(path):
                 self.send(404, "text/plain", "no icon yet")
                 return
@@ -226,9 +226,9 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(data)
         elif u.path == "/robot_perfect.png":
-            # the perfect player's avatar ; the grey robot stands in until it exists
-            path = next((os.path.join("assets", w) for w in ("robot-perfect.png", "robot-brain-icon.png")
-                         if os.path.isfile(os.path.join("assets", w))), None)
+            # the perfect player's avatar (ChatGPT/robot-perfect.prompt.txt); the grey robot stands in until it exists
+            path = next((os.path.join("ChatGPT", w) for w in ("robot-perfect.png", "robot-brain-icon.png")
+                         if os.path.isfile(os.path.join("ChatGPT", w))), None)
             if path is None:
                 self.send(404, "text/plain", "no icon yet")
                 return
@@ -243,8 +243,8 @@ class Handler(BaseHTTPRequestHandler):
         elif u.path in ("/robot.png", "/robot_x.png", "/robot_o.png"):
             # X = blue robot, O = red robot; fall back to the earlier icons until they exist
             want = ["robot-blue.png", "robot-brain-icon.png"] if u.path != "/robot_o.png"                 else ["robot-red.png", "robot-brain-icon-o.png", "robot-brain-icon.png"]
-            path = next((os.path.join("assets", w) for w in want if os.path.isfile(os.path.join("assets", w))),
-                        os.path.join("assets", "robot-brain-icon.png"))
+            path = next((os.path.join("ChatGPT", w) for w in want if os.path.isfile(os.path.join("ChatGPT", w))),
+                        os.path.join("ChatGPT", "robot-brain-icon.png"))
             if not os.path.isfile(path):
                 self.send(404, "text/plain", "no icon yet")
                 return
@@ -265,8 +265,8 @@ class Handler(BaseHTTPRequestHandler):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--port", type=int, default=8766)
-    ap.add_argument("--log", default="train_evo.log")
+    ap.add_argument("--port", type=int, default=8765)
+    ap.add_argument("--log", default="train_single.log")
     a = ap.parse_args()
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     Handler.log_default = a.log

@@ -1,0 +1,8 @@
+Use case: one piece of a multi-image parable scene in an animated explainer video: blind men touching different parts of an elephant, each sure of what it is.
+Asset type: single flat vector illustration, transparent PNG.
+Primary request: a big friendly cartoon elephant standing in full side view facing left, soft grey #8f93b8 body with lighter #b9bcd8 belly and ear inside, a long curling trunk reaching forward, two big round ears, four sturdy legs, a tiny tail, a small calm eye with a gentle smile.
+Style/medium: crisp flat vector illustration for an animated explainer video in the style of Kurzgesagt. Simple rounded geometric shapes, flat colour fills with at most one lighter tone for a highlight, smooth contours, no outlines, no gradients, no painted lighting, no drop shadow, no glow halo. Cheerful, friendly, readable at a glance.
+Scene/backdrop: genuine transparent alpha background. No backdrop, no floor, no frame, no circle or badge behind the subject.
+Constraints: no text, no letters, no numbers, no logos, no watermark, no checkerboard, no ladybugs. Output a transparent PNG.
+Composition/framing: landscape 3:2, 1536 x 1024 canvas, the whole elephant fully visible and large, about 8 percent transparent padding on every side.
+Project destination: ChatGPT/parable-elephant.png in the AI Brain project.

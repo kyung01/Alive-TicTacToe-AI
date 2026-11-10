@@ -1,0 +1,7 @@
+Use case: parable illustration for an explainer video: a parrot repeating words it does not understand stands for a model whose thinking is only text.
+Asset type: single illustration, PNG.
+Primary request: a colourful cartoon parrot (teal body, orange and yellow wing, pink cheek) perched on a simple wooden perch with its beak open, three empty rounded speech bubbles of different sizes coming out of its beak, dark teal background.
+Style/medium: flat vector explainer illustration, simple rounded shapes, flat colour fills with at most one lighter tone per colour, no outlines, no gradients, no photorealism. Palette: deep greens and teal for backgrounds, with warm accents in orange #ff8c2e, yellow #ffd23f, pink #ff5e8a, cyan #35d5f0, cream #fff6e9. Cheerful, clear, readable at a glance.
+Composition/framing: landscape 3:2, 1536 x 1024, one clear subject, generous breathing room, nothing important in the outer 8 percent.
+Constraints: no text, no letters, no numbers, no logos, no watermark, no ladybugs.
+Project destination: ChatGPT/parable-parrot.png in the AI Brain project.

@@ -1,0 +1,8 @@
+Use case: icon for an animated explainer video: a cartoon robot head that has just powered off, dead, the moment after it finished speaking. It is swapped in for the live version of the same robot, so shape and framing must be a plain front-facing robot head icon.
+Asset type: one robot head icon, front-facing, transparent PNG.
+Primary request: a friendly, simple flat vector robot head, switched off. Rounded square head in a dull drained grey-blue #6f7f9c with a small rounded ear block on each side; a transparent glass dome on top with an off-white #f6f5f1 rim, and inside the dome a dark grey #4a4f63 cartoon brain with no glow; both eyes are off-white X marks; the mouth is a short flat off-white line; one short antenna on top of the dome, bent over sideways with its ball tip drooping; a small puff of grey #9aa0b4 smoke rising from the top of the dome.
+Scene/backdrop: genuine transparent alpha background, no backdrop, no floor, no shadow.
+Style/medium: crisp flat 2D icon, flat colour areas, clean smooth contours, readable at 64 pixels. No painted lighting, gloss, gradients or glow halos. Kurzgesagt-like flat vector pictogram.
+Composition/framing: one centered head on a square 1024 x 1024 canvas, fully visible with about 10 percent transparent padding on all sides, the head filling the middle 80 percent.
+Constraints: no text, no letters, no numbers, no body, no arms, no background shapes, no enclosing circle or badge, no watermark, no checkerboard, no reference files needed. Output a transparent PNG.
+Project destination: ChatGPT/robot-dead.png in the AI Brain project.

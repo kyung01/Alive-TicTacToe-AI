@@ -1,0 +1,7 @@
+Use case: parable illustration for an explainer video: a lively village market stands for a brain where every neuron talks to every other.
+Asset type: single illustration, PNG.
+Primary request: a cosy village market square at dusk with six to eight simple round cartoon villagers (round bodies, dot eyes, no detailed faces) standing in small groups turned toward each other, colourful stalls with awnings in orange, yellow and pink, empty rounded speech-bubble shapes above several villagers with thin curved lines connecting the groups, warm lanterns.
+Style/medium: flat vector explainer illustration, simple rounded shapes, flat colour fills with at most one lighter tone per colour, no outlines, no gradients, no photorealism. Palette: deep greens and teal for backgrounds, with warm accents in orange #ff8c2e, yellow #ffd23f, pink #ff5e8a, cyan #35d5f0, cream #fff6e9. Cheerful, clear, readable at a glance.
+Composition/framing: landscape 3:2, 1536 x 1024, one clear subject, generous breathing room, nothing important in the outer 8 percent.
+Constraints: no text, no letters, no numbers, no logos, no watermark, no ladybugs.
+Project destination: ChatGPT/parable-market.png in the AI Brain project.

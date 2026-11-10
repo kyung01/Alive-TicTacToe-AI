@@ -1,0 +1,7 @@
+Use case: parable illustration for an explainer video: many different paths to one market stand for many different ways of thinking that all arrive at an answer.
+Asset type: single illustration, PNG.
+Primary request: a top-down map of a small village: a round market square with stalls in the centre, and ten distinct winding paths in different warm colours arriving at it from every direction, coming out of a forest, along a river, over a hill, between houses; tiny round villagers walking on the paths.
+Style/medium: flat vector explainer illustration, simple rounded shapes, flat colour fills with at most one lighter tone per colour, no outlines, no gradients, no photorealism. Palette: deep greens and teal for backgrounds, with warm accents in orange #ff8c2e, yellow #ffd23f, pink #ff5e8a, cyan #35d5f0, cream #fff6e9. Cheerful, clear, readable at a glance.
+Composition/framing: landscape 3:2, 1536 x 1024, one clear subject, generous breathing room, nothing important in the outer 8 percent.
+Constraints: no text, no letters, no numbers, no logos, no watermark, no ladybugs.
+Project destination: ChatGPT/parable-paths.png in the AI Brain project.

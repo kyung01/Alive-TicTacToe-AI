@@ -1,0 +1,8 @@
+Use case: foreground overlay for the LEFT edge of a 16:9 video frame; it will sway gently in front of the scene, so it must be a transparent cut-out.
+Asset type: transparent PNG overlay.
+Primary request: a cluster of three or four big rounded forest leaves and one fern frond growing in from the left edge and the bottom-left corner, in dark and mid greens with soft two-tone shading, reaching no further than 35 percent across the canvas and leaving the rest fully transparent.
+Scene/backdrop: genuine transparent alpha background everywhere except the leaves.
+Composition/framing: landscape 16:9, 1536 x 1024; leaves anchored to the left edge and bottom-left corner only.
+Style/medium: flat vector, simple rounded shapes, no outlines, no gradients.
+Constraints: no text, no characters, no insects, no watermark, no checkerboard. Output a transparent PNG.
+Project destination: ChatGPT/fg-leaves-left.png in the AI Brain project.

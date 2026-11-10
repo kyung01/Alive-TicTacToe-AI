@@ -1,0 +1,7 @@
+Use case: parable illustration for an explainer video: tasting a strawberry you cannot describe stands for a thought that cannot be put into words.
+Asset type: single illustration, PNG.
+Primary request: a simple round cream-coloured cartoon character with closed happy eyes biting a big red strawberry, and around its head a joyful burst of abstract flat shapes in pink, orange, yellow and cyan: soft blobs, stars, drops and curls, like flavour exploding, with no text.
+Style/medium: flat vector explainer illustration, simple rounded shapes, flat colour fills with at most one lighter tone per colour, no outlines, no gradients, no photorealism. Palette: deep greens and teal for backgrounds, with warm accents in orange #ff8c2e, yellow #ffd23f, pink #ff5e8a, cyan #35d5f0, cream #fff6e9. Cheerful, clear, readable at a glance.
+Composition/framing: landscape 3:2, 1536 x 1024, one clear subject, generous breathing room, nothing important in the outer 8 percent.
+Constraints: no text, no letters, no numbers, no logos, no watermark, no ladybugs.
+Project destination: ChatGPT/parable-strawberry.png in the AI Brain project.

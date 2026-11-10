@@ -1,0 +1,8 @@
+Use case: one piece of a parable scene in an animated explainer video: today's AI is like a factory conveyor line, a brain is like a village where everyone talks to everyone.
+Asset type: single flat vector illustration, transparent PNG.
+Primary request: a small round cartoon villager, full body, standing and facing the viewer, cute and simple: big round warm yellow #ffd23f head with two dot eyes and a happy open smile, short bean-shaped body, stubby arms and tiny dark navy #0d1140 feet; a wide straw hat in pale yellow #ffe9a8, a mint green #4ae0a8 tunic, one hand raised in a friendly wave.
+Style/medium: crisp flat vector illustration for an animated explainer video in the style of Kurzgesagt. Simple rounded geometric shapes, flat colour fills with at most one lighter tone for a highlight, smooth contours, no outlines, no gradients, no painted lighting, no drop shadow, no glow halo. Cheerful, friendly, readable at 96 pixels.
+Scene/backdrop: genuine transparent alpha background. No backdrop, no floor, no frame, no circle or badge behind the subject.
+Composition/framing: one centred subject on a square 1024 x 1024 canvas, fully visible, about 8 percent transparent padding on every side.
+Constraints: no text, no letters, no numbers, no logos, no watermark, no checkerboard, no ladybugs. Exactly one person. Output a transparent PNG.
+Project destination: ChatGPT/icon-villager-a.png in the AI Brain project.

@@ -1,0 +1,7 @@
+Use case: parable illustration for an explainer video: a river that keeps flowing with nobody watching stands for a brain that never stops.
+Asset type: single illustration, PNG.
+Primary request: a wide forest river at dusk flowing from the back of the picture toward the viewer, smooth curved cyan and teal flow lines on the water, round stones, no people and no animals, dark trees on both banks, a few fireflies.
+Style/medium: flat vector explainer illustration, simple rounded shapes, flat colour fills with at most one lighter tone per colour, no outlines, no gradients, no photorealism. Palette: deep greens and teal for backgrounds, with warm accents in orange #ff8c2e, yellow #ffd23f, pink #ff5e8a, cyan #35d5f0, cream #fff6e9. Cheerful, clear, readable at a glance.
+Composition/framing: landscape 3:2, 1536 x 1024, one clear subject, generous breathing room, nothing important in the outer 8 percent.
+Constraints: no text, no letters, no numbers, no logos, no watermark, no ladybugs.
+Project destination: ChatGPT/parable-river.png in the AI Brain project.

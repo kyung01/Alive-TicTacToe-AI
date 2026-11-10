@@ -1,0 +1,8 @@
+Use case: the rich picture inside someone's head in an animated explainer video about how a thought is far richer than the words used to describe it.
+Asset type: single flat vector illustration, round vignette, transparent PNG.
+Primary request: a cosy grandmother's kitchen memory at sunset: a purple #8a6cff wall with a round window showing an orange #ff8c2e sunset, a wooden table with three jars of pink #ff5e8a strawberry jam and a bowl of strawberries, a steaming pot on a small stove, hanging herbs and a copper pan on the wall, a mint #4ae0a8 teapot, and a small orange cat asleep on a cushion.
+Style/medium: crisp flat vector illustration for an animated explainer video in the style of Kurzgesagt. Simple rounded geometric shapes, flat colour fills with at most one lighter tone for a highlight, smooth contours, no outlines, no painted lighting, no drop shadow. Rich, saturated, many colours, full of small lovely details, readable at 300 pixels.
+Scene/backdrop: the whole scene sits inside one clean circle that fills the canvas (a round vignette with a crisp edge); everything outside the circle is genuine transparent alpha.
+Composition/framing: square 1024 x 1024 canvas, the circle centred with about 4 percent transparent padding.
+Constraints: no text, no letters, no numbers, no logos, no watermark, no checkerboard, no people, no ladybugs. Output a transparent PNG.
+Project destination: ChatGPT/thought-scene-b.png in the AI Brain project.

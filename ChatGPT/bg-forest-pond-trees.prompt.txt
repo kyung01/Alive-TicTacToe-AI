@@ -1,0 +1,8 @@
+Use case: the near layer of a three-layer parallax background for an animated explainer video set in a forest; it is laid over a far sky painting and drifts at its own speed, so everything that is not a plant, trunk, stone or ground must be transparent.
+Asset type: single wide illustration layer, transparent PNG.
+Primary request: the near edge of a forest pond: a few flat lily pads on the water at the bottom, reeds and grasses at the left and right edges, two simple trunks at the far sides; the sky, the water in the middle and the upper middle fully transparent.
+Style/medium: flat vector explainer illustration, simple rounded shapes, flat colour fills with soft two-tone shading, no outlines, no photorealism, no painterly texture, cosy and friendly, slightly dark so overlaid light text is readable. Same world and drawing style as an evening forest with big rounded leaves, simple tree trunks, soft grass, round mushrooms and tiny glowing yellow fireflies.
+Scene/backdrop: genuine transparent alpha background everywhere the described objects are not: no sky, no fill colour, no gradient, no vignette, no fog fill. The transparent area must be at least half of the canvas.
+Composition/framing: landscape 16:9, 1536 x 1024. This is the NEAR parallax layer of a scene: the objects sit at the edges and along the bottom and frame an open transparent middle.
+Constraints: no text, no letters, no logos, no watermark, no characters, no animals, no insects, no checkerboard. Output a transparent PNG.
+Project destination: ChatGPT/bg-forest-pond-trees.png in the AI Brain project.

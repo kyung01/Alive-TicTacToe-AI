@@ -3,3 +3,18 @@ __pycache__/
 evo_pop_*.npz
 STOP
 *.tmp
+
+# Large checkpoints / renders (too big for GitHub; kept on local disk only)
+evo_pop_*.npz
+bp_checkpoint_*.npz
+*.mp4
+*.wav
+!sounds/*.wav
+!presentation/video/sfx/*.wav
+
+# Local tooling / scratch
+.claude/
+*.log
+!train_evo.log
+!runs/*/train_evo.log
+dashboard_server.txt

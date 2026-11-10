@@ -1,0 +1,8 @@
+Use case: one piece of a multi-image parable scene in an animated explainer video: blind men touching different parts of an elephant, each sure of what it is.
+Asset type: single flat vector illustration, transparent PNG.
+Primary request: a thick round cartoon tree trunk standing upright, warm brown #a0653a bark with a few lighter #c98d5c rounded bark marks, a small round green #4ae0a8 canopy on top; stands for what a leg feels like.
+Style/medium: crisp flat vector illustration for an animated explainer video in the style of Kurzgesagt. Simple rounded geometric shapes, flat colour fills with at most one lighter tone for a highlight, smooth contours, no outlines, no gradients, no painted lighting, no drop shadow, no glow halo. Cheerful, friendly, readable at a glance.
+Scene/backdrop: genuine transparent alpha background. No backdrop, no floor, no frame, no circle or badge behind the subject.
+Constraints: no text, no letters, no numbers, no logos, no watermark, no checkerboard, no ladybugs. Output a transparent PNG.
+Composition/framing: one centred subject on a square 1024 x 1024 canvas, fully visible, about 10 percent transparent padding on every side.
+Project destination: ChatGPT/icon-tree.png in the AI Brain project.

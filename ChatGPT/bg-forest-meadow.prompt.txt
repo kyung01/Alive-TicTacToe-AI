@@ -1,0 +1,7 @@
+Use case: full-frame slide background (location 4 of 4) for an animated explainer video set in a forest; the closing slide, so a little brighter and more hopeful.
+Asset type: single wide background illustration, PNG.
+Primary request: the edge of the forest opening onto a small meadow at first light: dark trees and leaves framing the left and right, soft rolling grass in the lower third, a warm pale yellow-green glow rising in the centre background like dawn, a few drifting dandelion seeds and fireflies.
+Style/medium: flat vector explainer illustration, simple rounded shapes, flat colour fills with soft two-tone shading, no outlines, no photorealism, no painterly texture, cosy and friendly, slightly dark so overlaid light text is readable. Same world and drawing style as an evening forest clearing with big rounded leaves, simple tree trunks, soft grass, round mushrooms and tiny glowing yellow fireflies.
+Composition/framing: landscape 16:9, 1536 x 1024. The centre 70 percent is quiet and low-detail with gentle darkness so white text reads on it; detail lives at the edges and the bottom. No characters, no animals, no insects.
+Constraints: no text, no letters, no logos, no watermark, no characters.
+Project destination: ChatGPT/bg-forest-meadow.png in the AI Brain project.

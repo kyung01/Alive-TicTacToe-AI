@@ -1,0 +1,8 @@
+Use case: icon for one slide of an animated explainer video about why current AI architecture cannot think.
+Asset type: single flat vector icon, transparent PNG.
+Primary request: a pink #ff5e8a heart with a small pale grey-violet #c9c6f2 rain cloud above it and three short cyan #35d5f0 rain lines falling on the heart; mood or feeling icon.
+Style/medium: crisp flat vector icon for an animated explainer video. Simple rounded geometric shapes, flat colour fills with at most one lighter tone for a highlight, smooth contours, no outlines, no gradients, no painted lighting, no drop shadow, no glow halo. Cheerful, friendly, readable at 96 pixels.
+Scene/backdrop: genuine transparent alpha background. No backdrop, no floor, no frame, no circle or badge behind the subject.
+Composition/framing: one centred subject on a square 1024 x 1024 canvas, fully visible, about 10 percent transparent padding on every side.
+Constraints: no text, no letters, no numbers, no logos, no watermark, no checkerboard. Output a transparent PNG.
+Project destination: ChatGPT/icon-heart-cloud.png in the AI Brain project.

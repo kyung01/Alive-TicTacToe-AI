@@ -1,0 +1,8 @@
+Use case: hero illustration for one slide of a YouTube explainer video about why current AI architecture cannot think.
+Asset type: single full-bleed slide illustration, PNG.
+Primary request: a simple flat-vector blue robot head on the left with a large off-white speech bubble to its right that contains only rows of blank grey text bars (no letters). A thick orange arrow leaves the end of the bubble, curves down and around, and feeds back into the side of the robot head where an ear would be, forming a closed loop of the robot reading its own words.
+Subject details: robot #2a78d6 rounded-square head with round eyes and antenna, bubble #fff6e9, bars grey, arrow orange #ff8c2e.
+Style/medium: flat vector explainer illustration for a YouTube science video. Deep navy-indigo background with a soft radial glow (dark #0d1140 to #1b1f6b), a few tiny scattered dots like stars. Bold saturated accent colours only: orange #ff8c2e, yellow #ffd23f, pink #ff5e8a, cyan #35d5f0, mint #4ae0a8, purple #8a6cff, warm off-white #fff6e9. Simple rounded geometric shapes, flat colour fills, soft glow halos around important elements, minimal or no outlines, clean smooth contours, cheerful but clear. No photorealism, no 3D render, no painterly texture.
+Composition/framing: landscape 16:9, 1536 x 1024, the subject centred with generous breathing room; leave the top 20 percent of the image calm and uncluttered so a headline can be overlaid later.
+Constraints: no text, no letters, no numbers, no logos, no watermark, no speech-bubble text, no real brand mascots, no birds.
+Project destination: ChatGPT/nutshell-text-monologue.png in the AI Brain project.

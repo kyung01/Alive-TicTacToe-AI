@@ -1,0 +1,7 @@
+Use case: full-frame background for every slide of an animated explainer video presented by two cartoon ladybugs; headline text and icons are overlaid later, so the middle must stay calm.
+Asset type: single wide background illustration, PNG.
+Primary request: an evening forest clearing seen from ground level, flat vector style. Deep green and teal palette (dark background #0f3326 to #1b5a44 tones), big soft rounded leaves and ferns framing the left and right edges and the top corners, a few tall simple tree trunks fading into the distance, soft grass and two or three round mushrooms along the bottom edge, a scattering of tiny glowing yellow #ffd23f fireflies, a faint lighter teal glow in the upper middle like moonlight through the canopy.
+Composition/framing: landscape 16:9, 1536 x 1024. The centre 70 percent of the image is quiet and low-detail with gentle darkness so white text reads on it; detail lives at the edges and the bottom. No characters, no animals, no insects.
+Style/medium: flat vector explainer illustration, simple rounded shapes, flat colour fills with soft two-tone shading, no outlines, no photorealism, no painterly texture, cosy and friendly, slightly dark so overlaid light text is readable.
+Constraints: no text, no letters, no logos, no watermark, no characters.
+Project destination: ChatGPT/bg-forest.png in the AI Brain project.

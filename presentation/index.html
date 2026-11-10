@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What if we stopped designing AI?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0d12; --bg2: #11141c; --panel: #161a24; --line: #262c3a;
+    --text: #f2f3f7; --text-2: #aab1c2; --text-3: #6b7385;
+    --accent: #4f8cff; --accent-2: #ff7a45; --good: #2dd4a0; --bad: #ff5c6c; --warn: #ffc24b; --violet: #9a8cff;
+    --sensor: #4f8cff; --hidden: #9a8cff; --output: #ff7a45;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #000; color: var(--text);
+    font-family: Inter, system-ui, sans-serif; overflow: hidden; }
+  #stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px;
+    transform-origin: 0 0; background: var(--bg); overflow: hidden; }
+  .slide { position: absolute; inset: 0; padding: 110px 140px; opacity: 0; visibility: hidden;
+    transition: opacity .5s ease; display: flex; flex-direction: column; }
+  .slide.active { opacity: 1; visibility: visible; }
+  .slide::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(1200px 700px at 80% -10%, rgba(79,140,255,.12), transparent 60%),
+                radial-gradient(900px 600px at -10% 110%, rgba(255,122,69,.10), transparent 60%); }
+  .slide > * { position: relative; }
+  .kicker { font-size: 26px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+  h1 { font-size: 104px; line-height: 1.02; font-weight: 800; margin: 0; letter-spacing: -.02em; }
+  h2 { font-size: 68px; line-height: 1.08; font-weight: 800; margin: 0 0 36px; letter-spacing: -.02em; }
+  p, li { font-size: 34px; line-height: 1.4; color: var(--text-2); margin: 0; }
+  .lead { font-size: 40px; color: var(--text); }
+  .muted { color: var(--text-3); }
+  .mono { font-family: "JetBrains Mono", monospace; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; flex: 1; align-items: center; }
+  .cols.wide-right { grid-template-columns: 0.9fr 1.1fr; }
+  .fill { flex: 1; display: flex; align-items: center; justify-content: center; }
+  ul { padding-left: 40px; display: grid; gap: 22px; }
+  li::marker { color: var(--accent); }
+  .frag { opacity: 0; transform: translateY(14px); transition: opacity .45s ease, transform .45s ease; }
+  .frag.on { opacity: 1; transform: none; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 36px 40px; }
+  .big { font-size: 120px; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+  .tag { display: inline-block; font-size: 24px; font-weight: 600; padding: 8px 18px; border-radius: 999px; background: rgba(79,140,255,.15); color: var(--accent); }
+  .tag.orange { background: rgba(255,122,69,.15); color: var(--accent-2); }
+  .tag.red { background: rgba(255,92,108,.15); color: var(--bad); }
+  .tag.green { background: rgba(45,212,160,.15); color: var(--good); }
+  .footer { position: absolute; left: 140px; right: 140px; bottom: 48px; display: flex; justify-content: space-between;
+    font-size: 22px; color: var(--text-3); }
+  #progress { position: absolute; left: 0; bottom: 0; height: 6px; background: var(--accent); width: 0; transition: width .4s ease; z-index: 5; }
+  #counter { position: absolute; right: 36px; top: 30px; font-size: 20px; color: var(--text-3); z-index: 5; font-family: "JetBrains Mono", monospace; }
+  svg text { font-family: Inter, system-ui, sans-serif; }
+  .legend { display: flex; gap: 34px; font-size: 26px; color: var(--text-2); margin-top: 18px; }
+  .legend span::before { content: ""; display: inline-block; width: 18px; height: 18px; border-radius: 50%; margin-right: 10px; vertical-align: -2px; background: var(--c); }
+  table { border-collapse: collapse; font-size: 32px; width: 100%; }
+  th, td { padding: 18px 24px; text-align: right; border-bottom: 1px solid var(--line); }
+  th { color: var(--text-3); font-weight: 500; font-size: 26px; text-transform: uppercase; letter-spacing: .08em; }
+  td:first-child, th:first-child { text-align: left; color: var(--text); }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+  .step { background: var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 34px 32px; min-height: 330px; }
+  .step .n { font-size: 24px; font-weight: 600; color: var(--accent); letter-spacing: .1em; }
+  .step h3 { font-size: 36px; margin: 10px 0 16px; }
+  .step p { font-size: 27px; }
+  .board { display: grid; grid-template-columns: repeat(3, 110px); gap: 10px; }
+  .cell { width: 110px; height: 110px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center; font-size: 64px; font-weight: 800; }
+  .cell.x { color: var(--accent); } .cell.o { color: var(--accent-2); }
+  .cell.fire { box-shadow: 0 0 0 4px var(--output), 0 0 40px var(--output); }
+  #help { position: absolute; left: 36px; top: 30px; font-size: 18px; color: var(--text-3); z-index: 5; opacity: .7; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="help">← → navigate · F fullscreen · H hide this</div>
+  <div id="counter"></div>
+  <div id="progress"></div>
+
+  <!-- 1 TITLE -->
+  <section class="slide">
+    <div class="fill" style="flex-direction: column; align-items: flex-start; gap: 40px;">
+      <div class="kicker">An experiment</div>
+      <h1>What if we stopped<br><span style="color: var(--accent)">designing</span> AI?</h1>
+      <p class="lead" style="max-width: 1200px;">A brain with no layers, no training algorithm and no rules, shaped only by survival. Tested on tic-tac-toe.</p>
+    </div>
+    <div class="footer"><span>AI Brain project</span><span>2026</span></div>
+  </section>
+
+  <!-- 2 HOW MODERN AI WORKS -->
+  <section class="slide">
+    <div class="kicker">Where we are</div>
+    <h2>Every modern AI is a drawing someone made</h2>
+    <div class="cols wide-right">
+      <ul>
+        <li class="frag">Tokens go in here</li>
+        <li class="frag">Attention happens there</li>
+        <li class="frag">A feed-forward block follows</li>
+        <li class="frag">Stack it 100 times, read the answer off the end</li>
+        <li class="frag muted">Train it by nudging every weight a tiny bit toward a goal a human picked</li>
+      </ul>
+      <div id="transformer"></div>
+    </div>
+  </section>
+
+  <!-- 3 THE THEORY -->
+  <section class="slide">
+    <div class="kicker">The theory</div>
+    <h2>A system shaped by a human<br>carries the limits of that human</h2>
+    <div class="cols">
+      <div class="card">
+        <p class="lead" style="margin-bottom: 24px;">Human fingerprints on today's AI</p>
+        <ul>
+          <li class="frag"><b style="color:var(--text)">The data</b> is human text. Our biases, our ceiling.</li>
+          <li class="frag"><b style="color:var(--text)">The goal</b> is a proxy we chose. Optimize it hard and you get flattery and confident errors.</li>
+          <li class="frag"><b style="color:var(--text)">The shape</b> is fixed. Nothing changes after training.</li>
+        </ul>
+      </div>
+      <div class="frag" style="text-align:center">
+        <div class="big" style="color: var(--accent-2)">0</div>
+        <p class="lead" style="margin-top: 16px;">connections in a transformer<br>that were not decided by a person</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 WHAT A BRAIN DOES -->
+  <section class="slide">
+    <div class="kicker">The alternative</div>
+    <h2>A brain was never designed. It was selected.</h2>
+    <div class="steps" style="grid-template-columns: repeat(3, 1fr); flex: 1; align-content: center;">
+      <div class="step frag"><div class="n">01</div><h3>No prescribed wiring</h3><p>Nobody decided which neuron talks to which. Connections that helped survival stayed. The rest did not.</p></div>
+      <div class="step frag"><div class="n">02</div><h3>It never stops</h3><p>No forward pass. A brain runs from birth to death. Inputs arrive while it is already thinking. Actions happen when activity crosses a threshold.</p></div>
+      <div class="step frag"><div class="n">03</div><h3>Mistakes are fatal</h3><p>Evolution does not nudge a weight. The animal that errs does not reproduce. Survivors define the next generation.</p></div>
+    </div>
+    <p class="frag muted" style="margin-top: 36px;">Modern AI violates all three.</p>
+  </section>
+
+  <!-- 5 THE BRAIN -->
+  <section class="slide">
+    <div class="kicker">The experiment</div>
+    <h2>109 nodes. Every node connected to every node.</h2>
+    <div class="cols wide-right" style="gap: 40px;">
+      <div>
+        <div class="legend" style="flex-direction: column; gap: 22px; font-size: 30px;">
+          <span style="--c: var(--sensor)"><b style="color:var(--text)">18 sensors</b> · the board, 9 cells × mine / theirs</span>
+          <span style="--c: var(--hidden)"><b style="color:var(--text)">82 hidden</b> · free, no layers, no roles</span>
+          <span style="--c: var(--output)"><b style="color:var(--text)">9 outputs</b> · one per cell</span>
+        </div>
+        <p style="margin-top: 44px;">11,881 weights. Not one of them was placed by hand.</p>
+        <p class="muted mono" style="font-size: 26px; margin-top: 30px;">node = tanh( Σ all nodes × weights + bias )<br>every tick, forever</p>
+      </div>
+      <div id="brain"></div>
+    </div>
+  </section>
+
+  <!-- 6 HOW A MOVE HAPPENS -->
+  <section class="slide">
+    <div class="kicker">How a move happens</div>
+    <h2>It fires when it is ready. Not when we ask.</h2>
+    <div class="cols">
+      <ul>
+        <li class="frag">The opponent moves. The brain keeps ticking.</li>
+        <li class="frag">Each tick, nine output nodes rise and fall.</li>
+        <li class="frag">The first one past the threshold is the move.</li>
+        <li class="frag">If that cell is <b style="color:var(--bad)">occupied</b>, the brain dies.</li>
+        <li class="frag">If nothing fires in 100 ticks, it <b style="color:var(--bad)">froze</b>. It dies.</li>
+      </ul>
+      <div id="fire"></div>
+    </div>
+  </section>
+
+  <!-- 7 SELECTION -->
+  <section class="slide">
+    <div class="kicker">Learning</div>
+    <h2>No teacher. No gradient. Just survival.</h2>
+    <div class="steps" style="flex: 1; align-content: center;">
+      <div class="step frag"><div class="n">01 · BIRTH</div><h3>50,000 random brains</h3><p>Every weight is noise. None of them know what a board is.</p></div>
+      <div class="step frag"><div class="n">02 · LIFE</div><h3>150 games each</h3><p>Against a random opponent. Half as X, half as O.</p></div>
+      <div class="step frag"><div class="n">03 · DEATH</div><h3>First mistake kills</h3><p>Fitness is how many legal moves it made before dying, plus the games it won.</p></div>
+      <div class="step frag"><div class="n">04 · BREED</div><h3>Top 20% reproduce</h3><p>Children mix two parents' weights and get a little mutation. Repeat.</p></div>
+    </div>
+  </section>
+
+  <!-- 8 THE GPU -->
+  <section class="slide">
+    <div class="kicker">Scale</div>
+    <h2>Every brain, every game, every tick at once</h2>
+    <div class="cols">
+      <div>
+        <ul>
+          <li class="frag">50,000 brains × 150 games = 7.5 million games per generation</li>
+          <li class="frag">All of them tick in lockstep as one matrix multiply</li>
+          <li class="frag">35 seconds per generation on an RTX A6000</li>
+          <li class="frag">A 200-brain CPU run took the same time for 0.05% of the search</li>
+        </ul>
+      </div>
+      <div class="frag" style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px;">
+        <div class="card"><div class="muted" style="font-size: 24px; text-transform: uppercase; letter-spacing: .1em;">Brains alive</div><div class="big" style="font-size: 92px;">50k</div></div>
+        <div class="card"><div class="muted" style="font-size: 24px; text-transform: uppercase; letter-spacing: .1em;">Games / gen</div><div class="big" style="font-size: 92px;">7.5M</div></div>
+        <div class="card"><div class="muted" style="font-size: 24px; text-transform: uppercase; letter-spacing: .1em;">VRAM</div><div class="big" style="font-size: 92px;">29<span style="font-size: 44px; color: var(--text-3)"> GB</span></div></div>
+        <div class="card"><div class="muted" style="font-size: 24px; text-transform: uppercase; letter-spacing: .1em;">Per generation</div><div class="big" style="font-size: 92px;">35<span style="font-size: 44px; color: var(--text-3)"> s</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 RESULTS -->
+  <section class="slide">
+    <div class="kicker">Results so far</div>
+    <h2>The brain can play. It cannot yet obey.</h2>
+    <div class="cols wide-right">
+      <div>
+        <p class="frag" style="margin-bottom: 30px;"><span class="tag green">diagnostic</span><br><br>When we handle legality for it, the same brain wins <b style="color:var(--text)">78%</b> against a random player after 500 generations, and takes longer to decide as it gets better. The architecture works.</p>
+        <p class="frag"><span class="tag red">faithful</span><br><br>Left to learn legality from survival alone, every run so far is flat. Best lifespan: <b style="color:var(--text)">6 games</b>. Most brains die on their first move.</p>
+      </div>
+      <div id="results"></div>
+    </div>
+  </section>
+
+  <!-- 10 WHY -->
+  <section class="slide">
+    <div class="kicker">Why legality is hard</div>
+    <h2>Eighteen weights against a wall of noise</h2>
+    <div class="cols">
+      <ul>
+        <li class="frag">Each output listens to 82 hidden nodes with random weights. That is a roar of about ±1.4 before the squash.</li>
+        <li class="frag">To stay quiet on an occupied cell, two sensor wires per cell must become strongly negative. Nine cells, eighteen wires, out of 11,881.</li>
+        <li class="frag">Crossover between unrelated parents tears a half-solution apart.</li>
+        <li class="frag muted">Nature had the same problem. Nature had a billion years.</li>
+      </ul>
+      <div id="noise"></div>
+    </div>
+  </section>
+
+  <!-- 11 NEXT -->
+  <section class="slide">
+    <div class="kicker">What's next</div>
+    <h2>Change the starting conditions, never the rules</h2>
+    <div class="steps" style="flex: 1; align-content: center;">
+      <div class="step frag"><div class="n">A</div><h3>Let it run</h3><p>400 generations of 50,000 brains is the largest search yet. It is running now.</p></div>
+      <div class="step frag"><div class="n">B</div><h3>A real lifespan</h3><p>Play games in sequence so the brain carries state from one game to the next.</p></div>
+      <div class="step frag"><div class="n">C</div><h3>Gentler breeding</h3><p>Clone and mutate, or cross only near relatives, so learned structure survives.</p></div>
+      <div class="step frag"><div class="n">D</div><h3>Quieter birth</h3><p>Start with smaller or sparser random weights. Still no design. Just less noise.</p></div>
+    </div>
+    <p class="frag muted" style="margin-top: 36px;">None of these tell the brain what a legal move is.</p>
+  </section>
+
+  <!-- 12 OUTRO -->
+  <section class="slide">
+    <div class="fill" style="flex-direction: column; align-items: flex-start; gap: 40px;">
+      <div class="kicker">The question</div>
+      <h1>Can structure<br><span style="color: var(--accent-2)">emerge</span><br>instead of being drawn?</h1>
+      <p class="lead muted">Tic-tac-toe is the first test. Follow along for the results.</p>
+    </div>
+    <div class="footer"><span>AI Brain project</span><span>github / docs in repo</span></div>
+  </section>
+</div>
+
+<script>
+// ---------- stage scaling (16:9 fit) ----------
+const stage = document.getElementById('stage');
+function fit() {
+  const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+  stage.style.transform = `translate(-50%, -50%) scale(${s})`;
+  stage.style.transformOrigin = '50% 50%';
+}
+addEventListener('resize', fit); fit();
+
+// ---------- navigation ----------
+const slides = [...document.querySelectorAll('.slide')];
+let i = Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1)) || 1) - 1));
+const hooks = {};   // per-slide start/stop animations
+function show(n) {
+  slides.forEach((s, k) => s.classList.toggle('active', k === n));
+  document.getElementById('progress').style.width = ((n + 1) / slides.length * 100) + '%';
+  document.getElementById('counter').textContent = `${n + 1} / ${slides.length}`;
+  location.hash = n + 1;
+  Object.values(hooks).forEach(h => h.stop && h.stop());
+  hooks[n] && hooks[n].start && hooks[n].start();
+}
+function frags(n) { return [...slides[n].querySelectorAll('.frag')]; }
+function next() {
+  const f = frags(i).find(x => !x.classList.contains('on'));
+  if (f) { f.classList.add('on'); return; }
+  if (i < slides.length - 1) { i++; show(i); }
+}
+function prev() {
+  const on = frags(i).filter(x => x.classList.contains('on'));
+  if (on.length) { on[on.length - 1].classList.remove('on'); return; }
+  if (i > 0) { i--; show(i); }
+}
+addEventListener('keydown', e => {
+  if (['ArrowRight', ' ', 'PageDown', 'Enter'].includes(e.key)) { e.preventDefault(); next(); }
+  else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); prev(); }
+  else if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+  else if (e.key === 'h' || e.key === 'H') { const h = document.getElementById('help'); h.style.display = h.style.display === 'none' ? '' : 'none'; }
+  else if (e.key === 'a' || e.key === 'A') { frags(i).forEach(x => x.classList.add('on')); }
+  else if (e.key === 'Home') { i = 0; show(i); } else if (e.key === 'End') { i = slides.length - 1; show(i); }
+});
+addEventListener('click', e => { if (e.clientX > innerWidth * 0.25) next(); else prev(); });
+
+// ---------- helpers ----------
+const NS = 'http://www.w3.org/2000/svg';
+const el = (t, a = {}, parent) => { const n = document.createElementNS(NS, t); for (const k in a) n.setAttribute(k, a[k]); parent && parent.appendChild(n); return n; };
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+// ---------- slide 2: transformer sketch ----------
+(function () {
+  const svg = el('svg', { viewBox: '0 0 760 760', width: 760, height: 760 }, document.getElementById('transformer'));
+  const layers = ['Embedding', 'Attention', 'Feed-forward', 'Attention', 'Feed-forward', '…  ×100', 'Output'];
+  layers.forEach((name, k) => {
+    const y = 680 - k * 100;
+    const g = el('g', { class: 'frag-anim' }, svg);
+    el('rect', { x: 180, y: y - 32, width: 400, height: 64, rx: 14, fill: css('--panel'), stroke: k === 5 ? 'none' : css('--line'), 'stroke-width': 2 }, g);
+    const t = el('text', { x: 380, y: y + 9, 'text-anchor': 'middle', 'font-size': 26, fill: css('--text-2'), 'font-weight': 500 }, g); t.textContent = name;
+    if (k < layers.length - 1) el('path', { d: `M380 ${y - 34} v-30`, stroke: css('--accent'), 'stroke-width': 3, fill: 'none', 'marker-end': 'url(#arr)' }, g);
+  });
+  const d = el('defs', {}, svg);
+  const m = el('marker', { id: 'arr', viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 6, markerHeight: 6, orient: 'auto' }, d);
+  el('path', { d: 'M0 0 L10 5 L0 10 z', fill: css('--accent') }, m);
+  const hand = el('text', { x: 620, y: 120, 'font-size': 24, fill: css('--text-3'), 'font-style': 'italic' }, svg); hand.textContent = '← drawn by a person';
+})();
+
+// ---------- slide 5: the fully connected brain, pulsing ----------
+(function () {
+  const W = 980, H = 760;
+  const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H }, document.getElementById('brain'));
+  const nodes = [];
+  // sensors: 2 columns of 9 on the left
+  for (let c = 0; c < 2; c++) for (let r = 0; r < 9; r++) nodes.push({ x: 70 + c * 54, y: 90 + r * 72, t: 'sensor' });
+  // hidden: scattered in the middle (deterministic pseudo-random)
+  let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  for (let k = 0; k < 40; k++) nodes.push({ x: 230 + rnd() * 520, y: 60 + rnd() * 640, t: 'hidden' });
+  // outputs: 3x3 on the right
+  for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) nodes.push({ x: 820 + c * 60, y: 300 + r * 60, t: 'output' });
+  const col = { sensor: css('--sensor'), hidden: css('--hidden'), output: css('--output') };
+  const lines = [];
+  const gl = el('g', {}, svg);
+  for (let a = 0; a < nodes.length; a++) for (let b = a + 1; b < nodes.length; b++) {
+    if (nodes[a].t === 'sensor' && nodes[b].t === 'sensor') continue;
+    if (nodes[a].t === 'output' && nodes[b].t === 'output') continue;
+    if (rnd() > 0.28) continue;        // draw a sample of edges, or it is a solid block
+    lines.push(el('line', { x1: nodes[a].x, y1: nodes[a].y, x2: nodes[b].x, y2: nodes[b].y, stroke: css('--text-3'), 'stroke-opacity': 0.12, 'stroke-width': 1 }, gl));
+  }
+  const dots = nodes.map(n => el('circle', { cx: n.x, cy: n.y, r: n.t === 'hidden' ? 9 : 11, fill: col[n.t], opacity: 0.55 }, svg));
+  const cap = el('text', { x: 910, y: 540, 'text-anchor': 'middle', 'font-size': 22, fill: css('--text-3') }, svg); cap.textContent = 'outputs → cells';
+  const cap2 = el('text', { x: 97, y: 760, 'text-anchor': 'middle', 'font-size': 22, fill: css('--text-3') }, svg); cap2.textContent = 'board';
+  let raf, t = 0;
+  function tick() {
+    t += 0.05;
+    dots.forEach((d, k) => d.setAttribute('opacity', 0.35 + 0.55 * (0.5 + 0.5 * Math.sin(t * (0.7 + (k % 7) * 0.13) + k))));
+    if (Math.random() < 0.6) { const l = lines[Math.floor(Math.random() * lines.length)]; l.setAttribute('stroke', css('--accent')); l.setAttribute('stroke-opacity', 0.9); l.setAttribute('stroke-width', 2.5);
+      setTimeout(() => { l.setAttribute('stroke', css('--text-3')); l.setAttribute('stroke-opacity', 0.12); l.setAttribute('stroke-width', 1); }, 350); }
+    raf = requestAnimationFrame(tick);
+  }
+  hooks[4] = { start: () => { cancelAnimationFrame(raf); tick(); }, stop: () => cancelAnimationFrame(raf) };
+})();
+
+// ---------- slide 6: outputs rising to threshold, then firing ----------
+(function () {
+  const root = document.getElementById('fire');
+  root.innerHTML = `
+    <div style="display:flex; gap: 60px; align-items: center;">
+      <div class="board" id="fb"></div>
+      <svg id="fs" viewBox="0 0 420 420" width="420" height="420"></svg>
+    </div>
+    <p class="muted" style="font-size: 26px; margin-top: 26px;">tick <span id="ft" class="mono" style="color:var(--text)">0</span> · threshold 0.8 · the first bar over the line is the move</p>`;
+  const fb = document.getElementById('fb');
+  const start = ['x', '', 'o', '', 'x', '', '', '', 'o'];
+  const cells = start.map(s => { const d = document.createElement('div'); d.className = 'cell ' + s; d.textContent = s.toUpperCase(); fb.appendChild(d); return d; });
+  const svg = document.getElementById('fs');
+  const bars = [], W = 420, H = 420, bw = 34, gap = 10;
+  el('line', { x1: 0, x2: W, y1: H * 0.2, y2: H * 0.2, stroke: css('--output'), 'stroke-dasharray': '8 8', 'stroke-width': 2 }, svg);
+  const th = el('text', { x: W - 4, y: H * 0.2 - 10, 'text-anchor': 'end', 'font-size': 20, fill: css('--output') }, svg); th.textContent = 'threshold';
+  for (let k = 0; k < 9; k++) bars.push(el('rect', { x: 12 + k * (bw + gap), y: H, width: bw, height: 0, rx: 6, fill: css('--hidden') }, svg));
+  let raf, t = 0, fired = -1, phase = 0;
+  const target = 6; // cell the brain will choose
+  const speeds = [0.6, 0.9, 0.5, 0.8, 0.4, 0.7, 1.3, 0.75, 0.55];
+  function frame() {
+    t += 0.03;
+    document.getElementById('ft').textContent = Math.floor(t * 10);
+    bars.forEach((b, k) => {
+      let v = 0.15 + 0.35 * Math.abs(Math.sin(t * speeds[k] + k)) + (k === target ? Math.min(0.55, t * 0.06) : 0);
+      if (fired >= 0) v = k === fired ? 0.95 : v * 0.3;
+      const h = v * H; b.setAttribute('y', H - h); b.setAttribute('height', h);
+      b.setAttribute('fill', k === fired ? css('--output') : css('--hidden'));
+      if (fired < 0 && v > 0.8) { fired = k; cells[k].classList.add('fire'); cells[k].textContent = 'O'; cells[k].classList.add('o');
+        setTimeout(() => { fired = -1; t = 0; cells[k].classList.remove('fire', 'o'); cells[k].textContent = ''; }, 2200); }
+    });
+    raf = requestAnimationFrame(frame);
+  }
+  hooks[5] = { start: () => { cancelAnimationFrame(raf); t = 0; fired = -1; frame(); }, stop: () => cancelAnimationFrame(raf) };
+})();
+
+// ---------- slide 9: results chart ----------
+(function () {
+  const W = 980, H = 640;
+  const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H }, document.getElementById('results'));
+  const rows = [
+    { label: 'Legality handled for it', sub: '500 gens · vs random', win: 78, draw: 6, loss: 16, illegal: 0 },
+    { label: 'Penalty for mistakes', sub: '200 gens · vs random', win: 38, draw: 0, loss: 6, illegal: 57 },
+    { label: 'Death on mistake', sub: 'every run so far · vs random', win: 25, draw: 0, loss: 7, illegal: 68 },
+  ];
+  const cols = { win: css('--good'), draw: css('--accent'), loss: css('--warn'), illegal: css('--bad') };
+  const x0 = 60, bw = 860, rh = 150;
+  rows.forEach((r, k) => {
+    const y = 80 + k * (rh + 30);
+    const t = el('text', { x: x0, y: y - 22, 'font-size': 28, fill: css('--text'), 'font-weight': 600 }, svg); t.textContent = r.label;
+    const s = el('text', { x: x0 + bw, y: y - 22, 'font-size': 22, fill: css('--text-3'), 'text-anchor': 'end' }, svg); s.textContent = r.sub;
+    let x = x0;
+    for (const key of ['win', 'draw', 'loss', 'illegal']) {
+      const w = bw * r[key] / 100; if (!w) continue;
+      el('rect', { x, y, width: Math.max(0, w - 3), height: 70, rx: 8, fill: cols[key] }, svg);
+      if (w > 70) { const l = el('text', { x: x + w / 2, y: y + 45, 'text-anchor': 'middle', 'font-size': 26, fill: '#0b0d12', 'font-weight': 600 }, svg); l.textContent = r[key] + '%'; }
+      x += w;
+    }
+  });
+  const lg = document.createElement('div'); lg.className = 'legend';
+  lg.innerHTML = `<span style="--c:${cols.win}">win</span><span style="--c:${cols.draw}">draw</span><span style="--c:${cols.loss}">loss</span><span style="--c:${cols.illegal}">illegal move</span>`;
+  document.getElementById('results').appendChild(lg);
+})();
+
+// ---------- slide 10: noise vs the 18 wires ----------
+(function () {
+  const W = 760, H = 640;
+  const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H }, document.getElementById('noise'));
+  const out = { x: 640, y: 320 };
+  let seed = 3; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  const noisy = [];
+  for (let k = 0; k < 82; k++) { const y = 40 + rnd() * 560, x = 300 + rnd() * 180;
+    noisy.push(el('line', { x1: x, y1: y, x2: out.x, y2: out.y, stroke: css('--hidden'), 'stroke-opacity': 0.35, 'stroke-width': 1.5 }, svg));
+    el('circle', { cx: x, cy: y, r: 6, fill: css('--hidden'), opacity: 0.7 }, svg); }
+  const good = [el('line', { x1: 60, y1: 250, x2: out.x, y2: out.y, stroke: css('--sensor'), 'stroke-width': 5 }, svg),
+                el('line', { x1: 60, y1: 390, x2: out.x, y2: out.y, stroke: css('--sensor'), 'stroke-width': 5 }, svg)];
+  el('circle', { cx: 60, cy: 250, r: 12, fill: css('--sensor') }, svg); el('circle', { cx: 60, cy: 390, r: 12, fill: css('--sensor') }, svg);
+  const t1 = el('text', { x: 60, y: 225, 'font-size': 22, fill: css('--text-2'), 'text-anchor': 'middle' }, svg); t1.textContent = 'mine';
+  const t2 = el('text', { x: 60, y: 430, 'font-size': 22, fill: css('--text-2'), 'text-anchor': 'middle' }, svg); t2.textContent = 'theirs';
+  el('circle', { cx: out.x, cy: out.y, r: 26, fill: css('--output') }, svg);
+  const t3 = el('text', { x: out.x, y: out.y + 60, 'font-size': 22, fill: css('--text-2'), 'text-anchor': 'middle' }, svg); t3.textContent = 'output: cell 5';
+  const t4 = el('text', { x: 390, y: 625, 'font-size': 22, fill: css('--text-3'), 'text-anchor': 'middle' }, svg); t4.textContent = '82 random voices';
+  const t5 = el('text', { x: 150, y: 330, 'font-size': 22, fill: css('--sensor'), 'text-anchor': 'middle' }, svg); t5.textContent = 'must say NO, loudly';
+  let raf, t = 0;
+  function f() { t += 0.08; noisy.forEach((l, k) => l.setAttribute('stroke-opacity', 0.1 + 0.5 * Math.abs(Math.sin(t * (0.5 + k % 5 * 0.2) + k)))); raf = requestAnimationFrame(f); }
+  hooks[9] = { start: () => { cancelAnimationFrame(raf); f(); }, stop: () => cancelAnimationFrame(raf) };
+})();
+
+show(i);
+</script>
+</body>
+</html>

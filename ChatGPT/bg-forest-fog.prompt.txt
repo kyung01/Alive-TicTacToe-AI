@@ -1,0 +1,7 @@
+Use case: full-frame slide background (one of twelve forest locations) for an animated explainer video set in a forest; the camera moves to a new place as the story changes topic.
+Asset type: single wide background illustration, PNG.
+Primary request: a misty pine forest at night: rows of simple tall conifer silhouettes fading into pale blue-grey fog, layers getting lighter with distance, a dark soft floor, a faint moon glow, very calm and quiet.
+Style/medium: flat vector explainer illustration, simple rounded shapes, flat colour fills with soft two-tone shading, no outlines, no photorealism, no painterly texture, cosy and friendly, slightly dark so overlaid light text is readable. Same world and drawing style as an evening forest clearing with big rounded leaves, simple tree trunks, soft grass, round mushrooms and tiny glowing yellow fireflies.
+Composition/framing: landscape 16:9, 1536 x 1024. The centre 70 percent is quiet and low-detail with gentle darkness so white text reads on it; detail lives at the edges and the bottom. This is the FAR layer of a parallax set, so keep everything distant: no large foreground leaves or plants at the very front edge.
+Constraints: no text, no letters, no logos, no watermark, no characters, no animals, no insects.
+Project destination: ChatGPT/bg-forest-fog.png in the AI Brain project.

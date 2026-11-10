@@ -1,0 +1,9 @@
+Use case: recurring character sprite for an animated explainer video (one of a set of poses of the same character).
+Asset type: single flat vector character sprite, transparent PNG.
+Character (must look identical in every pose): a cute cartoon ladybug mascot, slightly smaller and rounder than a presenter, standing upright on two short stubby legs. The body is one round shape that is head and shell at once: a warm red #e34948 shell with five black round spots, a cream #fff6e9 face area with two very large round eyes (black pupils, white highlights) and rosy pink cheeks. No glasses. Two short antennae with small ball tips, two short stubby arms. Innocent, playful, a sidekick.
+Pose: eyes very wide, mouth a small open circle, antennae standing straight up, arms slightly out, startled.
+Style/medium: crisp flat vector character art for an animated explainer video. Simple rounded shapes, flat colour fills with at most one lighter tone per colour, smooth contours, no outlines, no gradients, no painted lighting, no drop shadow, no glow.
+Scene/backdrop: genuine transparent alpha background. No backdrop, no floor, no frame, no circle behind the character.
+Composition/framing: one centred full-body character on a square 1024 x 1024 canvas, fully visible, about 10 percent transparent padding on every side, facing the viewer unless the pose says otherwise.
+Constraints: no text, no letters, no numbers, no speech bubbles, no props unless the pose names one, no watermark, no checkerboard. Output a transparent PNG.
+Project destination: ChatGPT/char-red-surprised.png in the AI Brain project.

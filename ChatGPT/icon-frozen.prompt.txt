@@ -1,0 +1,10 @@
+Use case: a status badge shown on the robot that sat on its own turn too long and froze, on a live dashboard where an AI brain plays tic-tac-toe against a copy of itself.
+Asset type: one small status icon, drawn as a flat vector pictogram.
+Primary request: a six-pointed ice-blue #7fc4ee snowflake with small ice crystals, clean geometric arms.
+Accent colour: ice blue #7fc4ee.
+Scene/backdrop: genuine transparent alpha background, no backdrop, no floor, no shadow.
+Style/medium: crisp flat 2D icon, flat colour areas, clean smooth contours, readable at 32 pixels. No painted lighting, gloss, gradients or glow halos. Same style family as the robot head avatars robot-blue.png and robot-red.png in this folder.
+Color palette: off-white #f6f5f1, dark slate #2b2b2b outlines only where needed, plus the accent colour named above. Flat colour only.
+Composition/framing: one centered symbol on a square 1024 x 1024 canvas, fully visible with about 10 percent transparent padding on all sides.
+Constraints: no text, no letters, no numbers, no background shapes, no enclosing circle or badge unless named above, no watermark, no checkerboard. Output a transparent PNG.
+Project destination: ChatGPT/icon-frozen.png in the AI Brain project.

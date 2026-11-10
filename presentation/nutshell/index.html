@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why AI Can't Think</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1140; --bg2: #1b1f6b; --ink: #fff6e9; --ink-2: #c9c6f2;
+    --orange: #ff8c2e; --yellow: #ffd23f; --pink: #ff5e8a; --cyan: #35d5f0;
+    --mint: #4ae0a8; --purple: #8a6cff; --red: #ff4d5e; --navy: #262a7a; --navy-2: #3a3fa0;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #05071f; color: var(--ink);
+    font-family: Nunito, "Segoe UI", system-ui, sans-serif; overflow: hidden; }
+  #stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0;
+    background: radial-gradient(1400px 900px at 50% 40%, var(--bg2), var(--bg) 70%); overflow: hidden; }
+  #stars { position: absolute; inset: 0; pointer-events: none; }
+  .slide { position: absolute; inset: 0; padding: 90px 120px; opacity: 0; visibility: hidden;
+    transition: opacity .55s ease; display: flex; flex-direction: column; }
+  .slide.active { opacity: 1; visibility: visible; }
+  .slide > * { position: relative; }
+  .kicker { display: inline-block; font-size: 28px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase;
+    padding: 10px 26px; border-radius: 999px; background: var(--orange); color: #2a1200; margin-bottom: 26px; align-self: flex-start; }
+  .kicker.pink { background: var(--pink); color: #3a0012; }
+  .kicker.cyan { background: var(--cyan); color: #002a33; }
+  .kicker.mint { background: var(--mint); color: #003a26; }
+  h1 { font-size: 112px; line-height: 1; font-weight: 900; margin: 0; letter-spacing: -.02em; }
+  h2 { font-size: 76px; line-height: 1.05; font-weight: 900; margin: 0 0 22px; letter-spacing: -.02em; max-width: 1500px; }
+  .sub { font-size: 40px; font-weight: 700; color: var(--ink-2); margin: 0; max-width: 1400px; line-height: 1.3; }
+  .hi { color: var(--yellow); }
+  .hi-o { color: var(--orange); }
+  .hi-p { color: var(--pink); }
+  .hi-c { color: var(--cyan); }
+  .hi-m { color: var(--mint); }
+  .art { flex: 1; display: flex; align-items: center; justify-content: center; margin-top: 10px; }
+  .art svg { width: 100%; height: 100%; max-height: 640px; overflow: visible; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; flex: 1; align-items: center; }
+  .frag { opacity: 0; transform: translateY(18px) scale(.98); transition: opacity .45s ease, transform .45s ease; }
+  .frag.on { opacity: 1; transform: none; }
+  .caption { position: absolute; left: 120px; right: 120px; bottom: 60px; display: flex; justify-content: space-between;
+    font-size: 30px; font-weight: 800; color: var(--ink-2); }
+  .pill { display: inline-flex; align-items: center; gap: 14px; font-size: 32px; font-weight: 800; padding: 14px 28px;
+    border-radius: 999px; background: rgba(255,255,255,.08); border: 3px solid rgba(255,255,255,.14); }
+  .pill i { width: 22px; height: 22px; border-radius: 50%; display: inline-block; background: var(--c); }
+  .pills { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 26px; }
+  svg text { font-family: Nunito, system-ui, sans-serif; font-weight: 900; }
+  #progress { position: absolute; left: 0; bottom: 0; height: 8px; background: var(--yellow); width: 0; transition: width .4s ease; z-index: 5; }
+  #counter { position: absolute; right: 40px; top: 32px; font-size: 22px; font-weight: 800; color: var(--ink-2); z-index: 5; opacity: .7; }
+  #help { position: absolute; left: 40px; top: 32px; font-size: 20px; color: var(--ink-2); z-index: 5; opacity: .6; }
+
+  /* painted (generated) illustrations; V toggles back to vector */
+  .art { position: relative; }
+  .art .hero { display: none; width: 100%; max-height: 640px; object-fit: contain;
+    -webkit-mask-image: radial-gradient(ellipse 58% 62% at 50% 50%, #000 50%, transparent 100%);
+    mask-image: radial-gradient(ellipse 58% 62% at 50% 50%, #000 50%, transparent 100%); }
+  body.painted .art .hero { display: block; }
+  body.painted .art:has(.hero) > svg { display: none; }
+  /* animations */
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
+  @keyframes glow { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+  @keyframes dash { to { stroke-dashoffset: -600; } }
+  @keyframes pulseOn { 0%, 35% { opacity: 1; } 45%, 100% { opacity: .15; } }
+  .bob { animation: bob 3.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .glow { animation: glow 2.4s ease-in-out infinite; }
+  .flow { stroke-dasharray: 18 26; animation: dash 6s linear infinite; }
+  .flow.slow { animation-duration: 12s; }
+  .eye { animation: blink 5s infinite; transform-box: fill-box; transform-origin: center; }
+</style>
+</head>
+<body class="painted">
+<div id="stage">
+  <svg id="stars" viewBox="0 0 1920 1080" preserveAspectRatio="none"></svg>
+  <div id="help">← → navigate · F fullscreen · V vector/painted · H hide</div>
+  <div id="counter"></div>
+  <div id="progress"></div>
+
+  <!-- 1 TITLE -->
+  <section class="slide">
+    <div class="cols">
+      <div>
+        <span class="kicker">AI Brain · Part 1</span>
+        <h1>AI can't<br><span class="hi">think.</span></h1>
+        <p class="sub" style="margin-top: 30px;">Two structural reasons why today's models are the wrong shape for a mind, and what we're building instead.</p>
+      </div>
+      <div class="art"><img class="hero" onerror="this.remove()" src="img/nutshell-title.png" alt="">
+        <svg viewBox="0 0 900 640">
+          <defs>
+            <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="#ff5e8a" stop-opacity=".55"/><stop offset="1" stop-color="#ff5e8a" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="450" cy="330" r="300" fill="url(#halo)" class="glow"/>
+          <!-- brain blob -->
+          <g class="bob">
+            <g fill="#ff5e8a" stroke="#ffb3c6" stroke-width="10" stroke-linejoin="round">
+              <circle cx="330" cy="300" r="110"/><circle cx="450" cy="250" r="120"/><circle cx="570" cy="300" r="110"/>
+              <circle cx="380" cy="400" r="95"/><circle cx="520" cy="400" r="95"/><circle cx="450" cy="360" r="110"/>
+            </g>
+            <path d="M450 150 C 440 260, 460 340, 450 490" stroke="#ffd7e1" stroke-width="12" fill="none" stroke-linecap="round"/>
+            <path d="M300 300 q 60 30 100 -20 M600 300 q -60 30 -100 -20 M350 420 q 60 -30 110 10 M550 420 q -60 -30 -110 10" stroke="#ffd7e1" stroke-width="12" fill="none" stroke-linecap="round"/>
+            <!-- sparks -->
+            <g fill="#ffd23f">
+              <circle cx="340" cy="240" r="12" class="glow"/><circle cx="560" cy="250" r="12" class="glow" style="animation-delay:.8s"/>
+              <circle cx="470" cy="430" r="12" class="glow" style="animation-delay:1.6s"/>
+            </g>
+          </g>
+          <!-- robots -->
+          <image href="robot-blue.png" x="40" y="380" width="200" height="200" class="bob" style="animation-delay:.6s"/>
+          <image href="robot-red.png" x="660" y="380" width="200" height="200" class="bob" style="animation-delay:1.4s"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 HUMAN -->
+  <section class="slide">
+    <span class="kicker cyan">The picture we all know</span>
+    <h2>Inputs. Outputs. And a <span class="hi-p">hidden middle.</span></h2>
+    <p class="sub">We sense the world, we act on the world, and in between sits the part nobody can see: the brain.</p>
+    <div class="art"><img class="hero" onerror="this.remove()" src="img/nutshell-human-io.png" alt="">
+      <svg viewBox="0 0 1680 560">
+        <!-- inputs -->
+        <g class="frag">
+          <circle cx="200" cy="200" r="90" fill="#35d5f0"/>
+          <ellipse cx="200" cy="200" rx="52" ry="30" fill="#fff6e9"/><circle cx="200" cy="200" r="22" fill="#0d1140"/>
+          <circle cx="200" cy="400" r="90" fill="#35d5f0"/>
+          <path d="M170 370 a 30 30 0 1 1 60 0 q 0 30 -20 45 q -15 15 -5 35" stroke="#fff6e9" stroke-width="16" fill="none" stroke-linecap="round"/>
+          <text x="200" y="540" font-size="34" fill="#35d5f0" text-anchor="middle">SENSES</text>
+        </g>
+        <path d="M320 200 Q 420 200 520 280 M320 400 Q 420 400 520 320" stroke="#35d5f0" stroke-width="12" fill="none" stroke-linecap="round" class="flow frag"/>
+        <!-- head -->
+        <g class="frag">
+          <circle cx="840" cy="300" r="250" fill="#ffb27a"/>
+          <circle cx="840" cy="300" r="190" fill="#262a7a" stroke="#8a6cff" stroke-width="10" stroke-dasharray="22 18"/>
+          <text x="840" y="330" font-size="150" fill="#8a6cff" text-anchor="middle">?</text>
+          <text x="840" y="580" font-size="34" fill="#8a6cff" text-anchor="middle">THE BRAIN (hidden)</text>
+        </g>
+        <path d="M1160 280 Q 1260 200 1360 200 M1160 320 Q 1260 400 1360 400" stroke="#ff8c2e" stroke-width="12" fill="none" stroke-linecap="round" class="flow frag"/>
+        <!-- outputs -->
+        <g class="frag">
+          <circle cx="1480" cy="200" r="90" fill="#ff8c2e"/>
+          <path d="M1435 190 q 45 50 90 0" stroke="#fff6e9" stroke-width="16" fill="none" stroke-linecap="round"/>
+          <circle cx="1480" cy="400" r="90" fill="#ff8c2e"/>
+          <path d="M1450 440 v-70 m20 70 v-85 m20 85 v-75 m20 75 v-55 M1440 420 q -25 -10 -20 -40" stroke="#fff6e9" stroke-width="16" fill="none" stroke-linecap="round"/>
+          <text x="1480" y="540" font-size="34" fill="#ff8c2e" text-anchor="middle">ACTIONS</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 3 AI COPIES THE OUTSIDE -->
+  <section class="slide">
+    <span class="kicker cyan">The picture we all know</span>
+    <h2>AI copies the outside. <span class="hi-p">The middle is wrong.</span></h2>
+    <p class="sub">Text in, text out, a box in between. The shape looks right. What's inside the box does not.</p>
+    <div class="art"><img class="hero" onerror="this.remove()" src="img/nutshell-ai-box.png" alt="">
+      <svg viewBox="0 0 1680 560">
+        <g class="frag">
+          <rect x="80" y="220" width="300" height="160" rx="40" fill="#35d5f0"/>
+          <path d="M150 380 l -20 60 l 70 -60 z" fill="#35d5f0"/>
+          <g stroke="#0d1140" stroke-width="16" stroke-linecap="round"><path d="M130 270 h 200 M130 300 h 140 M130 330 h 180"/></g>
+          <text x="230" y="540" font-size="34" fill="#35d5f0" text-anchor="middle">PROMPT</text>
+        </g>
+        <path d="M400 300 H 560" stroke="#35d5f0" stroke-width="12" stroke-linecap="round" class="flow frag"/>
+        <g class="frag">
+          <rect x="590" y="90" width="500" height="420" rx="60" fill="#8a8983"/>
+          <rect x="630" y="130" width="420" height="340" rx="40" fill="#262a7a"/>
+          <text x="840" y="330" font-size="150" fill="#ff4d5e" text-anchor="middle">?</text>
+          <text x="840" y="580" font-size="34" fill="#ff4d5e" text-anchor="middle">THE MODEL</text>
+        </g>
+        <path d="M1120 300 H 1280" stroke="#ff8c2e" stroke-width="12" stroke-linecap="round" class="flow frag"/>
+        <g class="frag">
+          <rect x="1300" y="220" width="300" height="160" rx="40" fill="#ff8c2e"/>
+          <path d="M1530 380 l 20 60 l -70 -60 z" fill="#ff8c2e"/>
+          <g stroke="#2a1200" stroke-width="16" stroke-linecap="round"><path d="M1350 270 h 200 M1350 300 h 160 M1350 330 h 120"/></g>
+          <text x="1450" y="540" font-size="34" fill="#ff8c2e" text-anchor="middle">ANSWER</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 4 PROBLEM 1: BRAIN WIRING -->
+  <section class="slide">
+    <span class="kicker">Problem 1 · Structure</span>
+    <h2>In a brain, signals go <span class="hi-p">everywhere.</span></h2>
+    <p class="sub">Forward, backward, sideways, in loops. Nobody assigned a direction. Activity circulates and feeds back on itself.</p>
+    <div class="art"><img class="hero" onerror="this.remove()" src="img/nutshell-brain-web.png" alt=""><svg id="web" viewBox="0 0 1680 560"></svg></div>
+  </section>
+
+  <!-- 5 PROBLEM 1: AI WIRING -->
+  <section class="slide">
+    <span class="kicker">Problem 1 · Structure</span>
+    <h2>In an AI, signals go <span class="hi-o">one way.</span></h2>
+    <p class="sub">Layer one talks to layer two, two to three, and out. Nothing flows back. Nothing circulates. That's a calculator, not a brain.</p>
+    <div class="art"><img class="hero" onerror="this.remove()" src="img/nutshell-ai-pipeline.png" alt=""><svg id="pipe" viewBox="0 0 1680 560"></svg></div>
+  </section>
+
+  <!-- 6 NEVER STOPS -->
+  <section class="slide">
+    <span class="kicker">Problem 1 · Structure</span>
+    <h2>A brain never stops. <span class="hi-o">An AI runs once.</span></h2>
+    <p class="sub">You are thinking from birth to death. A model is idle until called, computes once, and halts. Between calls it doesn't exist.</p>
+    <div class="art"><img class="hero" onerror="this.remove()" src="img/nutshell-never-stops.png" alt="">
+      <svg viewBox="0 0 1680 560">
+        <!-- brain timeline -->
+        <g class="frag">
+          <text x="0" y="90" font-size="34" fill="#ff5e8a">BRAIN</text>
+          <circle cx="180" cy="150" r="46" fill="#ffd23f"/><circle cx="180" cy="135" r="12" fill="#2a1200"/><path d="M165 165 q 15 12 30 0" stroke="#2a1200" stroke-width="7" fill="none" stroke-linecap="round"/>
+          <text x="180" y="240" font-size="26" fill="#c9c6f2" text-anchor="middle">birth</text>
+          <path id="life" d="M240 150 C 320 60, 380 240, 460 150 S 600 60, 680 150 S 820 240, 900 150 S 1040 60, 1120 150 S 1260 240, 1340 150 S 1480 60, 1520 150" stroke="#ff5e8a" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <circle r="16" fill="#ffd23f"><animateMotion dur="7s" repeatCount="indefinite"><mpath href="#life"/></animateMotion></circle>
+          <rect x="1540" y="100" width="90" height="100" rx="24" fill="#8a8983"/><rect x="1555" y="180" width="60" height="22" fill="#5a5953"/>
+          <text x="1585" y="240" font-size="26" fill="#c9c6f2" text-anchor="middle">death</text>
+          <text x="880" y="270" font-size="30" fill="#ff5e8a" text-anchor="middle">always on</text>
+        </g>
+        <!-- AI timeline -->
+        <g class="frag">
+          <text x="0" y="380" font-size="34" fill="#ff8c2e">AI</text>
+          <path d="M140 440 H 1620" stroke="#3a3fa0" stroke-width="10" stroke-linecap="round"/>
+          <g fill="#ff8c2e">
+            <rect x="300" y="395" width="40" height="90" rx="12" style="animation: pulseOn 4s infinite"/>
+            <rect x="720" y="395" width="40" height="90" rx="12" style="animation: pulseOn 4s infinite; animation-delay: 1.3s"/>
+            <rect x="1180" y="395" width="40" height="90" rx="12" style="animation: pulseOn 4s infinite; animation-delay: 2.6s"/>
+          </g>
+          <g font-size="26" fill="#c9c6f2" text-anchor="middle">
+            <text x="320" y="530">prompt</text><text x="740" y="530">prompt</text><text x="1200" y="530">prompt</text>
+            <text x="520" y="530" fill="#6b6fb8">off</text><text x="960" y="530" fill="#6b6fb8">off</text><text x="1420" y="530" fill="#6b6fb8">off</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 7 WHY P1 BLOCKS AGI -->
+  <section class="slide">
+    <span class="kicker">Problem 1 · Structure</span>
+    <h2>You can't get a mind out of a <span class="hi-o">pipe.</span></h2>
+    <div class="cols" style="align-items: start; margin-top: 30px;">
+      <div style="display: grid; gap: 34px;">
+        <div class="pill frag" style="--c: var(--red)"><i></i>Can't send a signal back → can't reconsider</div>
+        <div class="pill frag" style="--c: var(--red)"><i></i>Halts between inputs → no train of thought</div>
+        <div class="pill frag" style="--c: var(--red)"><i></i>Scale it up → still a very large function</div>
+        <p class="sub frag" style="margin-top: 20px;">The loop people bolt on from outside lives in the harness, <span class="hi">not in the mind.</span></p>
+      </div>
+      <div class="art" style="max-height: 520px;">
+        <svg viewBox="0 0 800 520">
+          <defs><radialGradient id="h2" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ff8c2e" stop-opacity=".45"/><stop offset="1" stop-color="#ff8c2e" stop-opacity="0"/></radialGradient></defs>
+          <circle cx="400" cy="260" r="260" fill="url(#h2)" class="glow"/>
+          <!-- pipe -->
+          <rect x="80" y="200" width="640" height="120" rx="60" fill="#8a8983"/>
+          <rect x="110" y="225" width="580" height="70" rx="35" fill="#262a7a"/>
+          <path d="M130 260 H 670" stroke="#ff8c2e" stroke-width="14" stroke-linecap="round" class="flow"/>
+          <!-- arrow trying to go back, blocked -->
+          <g class="bob">
+            <path d="M560 140 Q 400 40 240 140" stroke="#ff4d5e" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="20 16"/>
+            <circle cx="240" cy="140" r="40" fill="#ff4d5e"/>
+            <path d="M220 120 l 40 40 M260 120 l -40 40" stroke="#fff6e9" stroke-width="10" stroke-linecap="round"/>
+          </g>
+          <image href="robot-blue.png" x="320" y="340" width="160" height="160"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 PROBLEM 2: THOUGHT IS NOT TEXT -->
+  <section class="slide">
+    <span class="kicker pink">Problem 2 · Thought</span>
+    <h2>A thought is <span class="hi-p">not text.</span></h2>
+    <p class="sub">Right now you can feel several things, picture several things, and reach back to several moments, all at once. None of it is words.</p>
+    <div class="art"><img class="hero" onerror="this.remove()" src="img/nutshell-thought-cloud.png" alt="">
+      <svg viewBox="0 0 1680 560">
+        <!-- head -->
+        <circle cx="300" cy="360" r="180" fill="#ffb27a"/>
+        <circle cx="250" cy="330" r="16" fill="#2a1200" class="eye"/><circle cx="340" cy="330" r="16" fill="#2a1200" class="eye"/>
+        <path d="M265 410 q 35 25 70 0" stroke="#2a1200" stroke-width="9" fill="none" stroke-linecap="round"/>
+        <!-- thought bubble -->
+        <circle cx="470" cy="230" r="22" fill="#fff6e9"/><circle cx="530" cy="170" r="34" fill="#fff6e9"/>
+        <g class="frag">
+          <path d="M700 60 c -120 -20 -160 120 -80 160 c -80 60 20 180 120 130 c 20 90 180 90 200 0 c 100 50 220 -40 160 -140 c 80 -60 20 -200 -100 -160 c -40 -80 -180 -80 -200 0 c -40 -40 -100 -30 -100 10 z" fill="#fff6e9"/>
+        </g>
+        <!-- icons inside -->
+        <g class="frag">
+          <path d="M760 200 c -30 -40 -90 0 -60 40 l 60 60 l 60 -60 c 30 -40 -30 -80 -60 -40 z" fill="#ff5e8a"/>
+          <text x="760" y="330" font-size="24" fill="#0d1140" text-anchor="middle">feeling</text>
+        </g>
+        <g class="frag">
+          <rect x="860" y="150" width="130" height="100" rx="14" fill="#35d5f0"/>
+          <path d="M875 235 l 35 -45 l 25 25 l 20 -20 l 25 40 z" fill="#0d1140"/><circle cx="960" cy="175" r="12" fill="#ffd23f"/>
+          <text x="925" y="290" font-size="24" fill="#0d1140" text-anchor="middle">image</text>
+        </g>
+        <g class="frag">
+          <circle cx="1070" cy="200" r="55" fill="#ffd23f"/><path d="M1070 200 v -35 M1070 200 h 25" stroke="#0d1140" stroke-width="10" stroke-linecap="round"/>
+          <text x="1070" y="290" font-size="24" fill="#0d1140" text-anchor="middle">memory</text>
+        </g>
+        <g class="frag">
+          <text x="900" y="400" font-size="90" fill="#8a6cff" text-anchor="middle">?</text>
+          <path d="M1010 330 q 20 -40 60 -10 q 40 30 0 60 q -30 25 -60 0" stroke="#4ae0a8" stroke-width="12" fill="none" stroke-linecap="round"/>
+          <text x="960" y="470" font-size="24" fill="#0d1140" text-anchor="middle">things without names</text>
+        </g>
+        <g class="frag">
+          <text x="1450" y="300" font-size="40" fill="#ff5e8a" text-anchor="middle">all at once,</text>
+          <text x="1450" y="360" font-size="40" fill="#ff5e8a" text-anchor="middle">always changing,</text>
+          <text x="1450" y="420" font-size="40" fill="#ff5e8a" text-anchor="middle">impossible to write down</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 9 FOR AI THOUGHT IS TEXT -->
+  <section class="slide">
+    <span class="kicker pink">Problem 2 · Thought</span>
+    <h2>For an AI, thought <span class="hi-o">is</span> text.</h2>
+    <p class="sub">When it "reasons", it writes words to itself and reads them back. Its inner monologue is a transcript. If a thought can't be spelled, it can't have it.</p>
+    <div class="art"><img class="hero" onerror="this.remove()" src="img/nutshell-text-monologue.png" alt="">
+      <svg viewBox="0 0 1680 560">
+        <image href="robot-blue.png" x="120" y="180" width="300" height="300" class="bob"/>
+        <!-- speech bubble -->
+        <g class="frag">
+          <rect x="520" y="90" width="820" height="300" rx="50" fill="#fff6e9"/>
+          <path d="M560 380 l -60 70 l 120 -60 z" fill="#fff6e9"/>
+          <g font-size="36" fill="#0d1140">
+            <text x="570" y="170">"Let me think step by step..."</text>
+            <text x="570" y="240">"First, I should consider..."</text>
+            <text x="570" y="310">"Therefore the answer is..."</text>
+          </g>
+        </g>
+        <!-- loop back into robot -->
+        <path id="loop" d="M1340 240 C 1560 240, 1560 520, 1300 520 L 470 520 C 380 520, 330 500, 300 480" stroke="#ff8c2e" stroke-width="12" fill="none" stroke-linecap="round" class="flow slow frag"/>
+        <g class="frag">
+          <rect x="1380" y="140" width="260" height="60" rx="30" fill="#ff8c2e"/>
+          <text x="1510" y="182" font-size="28" fill="#2a1200" text-anchor="middle">reads it back</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 10 THE MIDDLE IS A FILTER -->
+  <section class="slide">
+    <span class="kicker pink">Problem 2 · Thought</span>
+    <h2>The middle is a <span class="hi-o">filter</span>, not a mind.</h2>
+    <p class="sub">Text enters, passes through fixed layers, leaves as text. Nothing is held. Nothing is retained except the words already produced.</p>
+    <div class="cols">
+      <div class="art" style="max-height: 560px;"><img class="hero" onerror="this.remove()" src="img/nutshell-funnel.png" alt="">
+        <svg viewBox="0 0 700 560">
+          <!-- text falling in -->
+          <g fill="#35d5f0" class="frag">
+            <rect x="150" y="20" width="400" height="18" rx="9"/><rect x="200" y="56" width="300" height="18" rx="9"/><rect x="120" y="92" width="460" height="18" rx="9"/>
+          </g>
+          <!-- funnel -->
+          <path d="M60 150 H 640 L 400 400 V 520 H 300 V 400 Z" fill="#8a8983"/>
+          <path d="M100 180 H 600 L 385 395 V 500 H 315 V 395 Z" fill="#262a7a"/>
+          <g stroke="#3a3fa0" stroke-width="8"><path d="M150 240 H 550 M200 300 H 500 M250 355 H 450"/></g>
+          <!-- drops -->
+          <g fill="#ff8c2e">
+            <circle cx="350" cy="200" r="10"><animate attributeName="cy" from="140" to="560" dur="2s" repeatCount="indefinite"/></circle>
+            <circle cx="320" cy="200" r="8"><animate attributeName="cy" from="140" to="560" dur="2.6s" begin=".7s" repeatCount="indefinite"/></circle>
+            <circle cx="380" cy="200" r="8"><animate attributeName="cy" from="140" to="560" dur="2.3s" begin="1.4s" repeatCount="indefinite"/></circle>
+          </g>
+          <g fill="#ff8c2e" class="frag"><rect x="230" y="530" width="240" height="18" rx="9"/></g>
+        </svg>
+      </div>
+      <div style="display: grid; gap: 32px;">
+        <div class="pill frag" style="--c: var(--red)"><i></i>No place for a hunch</div>
+        <div class="pill frag" style="--c: var(--red)"><i></i>No place for a mood</div>
+        <div class="pill frag" style="--c: var(--red)"><i></i>No place for two options unnamed</div>
+        <p class="sub frag" style="margin-top: 10px;">It doesn't think. It <span class="hi">processes.</span> It's just very good at producing what thought would look like written down.</p>
+        <p class="sub frag">A system that can only hold what it can say can form a complex <span class="hi-o">sentence</span>. Not a complex <span class="hi-p">thought</span>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 WHAT WE BUILT -->
+  <section class="slide">
+    <span class="kicker mint">What we're building</span>
+    <h2>Every node to every node. <span class="hi-m">Always ticking.</span></h2>
+    <div class="cols" style="grid-template-columns: 1.1fr .9fr;">
+      <div class="art" style="max-height: 620px;"><img class="hero" onerror="this.remove()" src="img/nutshell-our-brain.png" alt=""><svg id="blob" viewBox="0 0 900 620"></svg></div>
+      <div style="display: grid; gap: 30px;">
+        <div class="pill frag" style="--c: var(--cyan)"><i></i>Sensors see the board</div>
+        <div class="pill frag" style="--c: var(--purple)"><i></i>Hidden nodes: never read as text</div>
+        <div class="pill frag" style="--c: var(--orange)"><i></i>A move fires when a node crosses a threshold</div>
+        <p class="sub frag">No layers. No direction. The brain is running before the board changes and keeps running after it moves.</p>
+        <p class="sub frag">What those hidden nodes are doing between moves is the closest thing here to a <span class="hi-p">thought.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 OUTRO -->
+  <section class="slide">
+    <div class="cols">
+      <div>
+        <span class="kicker mint">Next</span>
+        <h1 style="font-size: 96px;">Can it learn <span class="hi">tic-tac-toe</span> without being told the rules?</h1>
+        <p class="sub" style="margin-top: 30px;">Nobody tells it what a legal move is or what winning means. It sees the board, it fires, and it either survives or it doesn't.</p>
+      </div>
+      <div class="art">
+        <svg viewBox="0 0 900 640">
+          <image href="robot-blue.png" x="60" y="60" width="220" height="220" class="bob"/>
+          <image href="robot-red.png" x="620" y="60" width="220" height="220" class="bob" style="animation-delay: 1s"/>
+          <g transform="translate(270 180)">
+            <rect x="0" y="0" width="360" height="360" rx="40" fill="#262a7a"/>
+            <g stroke="#3a3fa0" stroke-width="12" stroke-linecap="round"><path d="M120 20 V 340 M240 20 V 340 M20 120 H 340 M20 240 H 340"/></g>
+            <g stroke="#35d5f0" stroke-width="18" stroke-linecap="round" fill="none">
+              <path d="M40 40 l 60 60 M100 40 l -60 60"/><path d="M160 160 l 60 60 M220 160 l -60 60"/><path d="M280 280 l 60 60 M340 280 l -60 60" class="frag"/>
+            </g>
+            <g stroke="#ff4d5e" stroke-width="18" fill="none"><circle cx="300" cy="70" r="32"/><circle cx="60" cy="300" r="32"/></g>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="caption"><span>AI Brain · github / docs in the description</span><span>Part 2: how it's grown, not trained</span></div>
+  </section>
+</div>
+
+<script>
+  // ---------- stars ----------
+  (function () {
+    const s = document.getElementById('stars');
+    const cols = ['#fff6e9', '#ffd23f', '#35d5f0', '#ff5e8a'];
+    let h = '';
+    for (let i = 0; i < 140; i++) {
+      const x = Math.random() * 1920, y = Math.random() * 1080, r = Math.random() * 3 + 1;
+      const c = cols[Math.floor(Math.random() * cols.length)];
+      h += `<circle cx="${x}" cy="${y}" r="${r}" fill="${c}" opacity="${(Math.random() * .6 + .2).toFixed(2)}"/>`;
+    }
+    s.innerHTML = h;
+  })();
+
+  // ---------- slide 4: brain web ----------
+  (function () {
+    const svg = document.getElementById('web');
+    const N = 22, nodes = [];
+    for (let i = 0; i < N; i++) {
+      const a = (i / N) * Math.PI * 2 + (i % 2 ? .18 : 0);
+      const rx = 560 + (i % 3) * 90, ry = 190 + (i % 2) * 60;
+      nodes.push({ x: 840 + Math.cos(a) * rx, y: 280 + Math.sin(a) * ry });
+    }
+    for (let i = 0; i < 6; i++) nodes.push({ x: 640 + i * 80 + (i % 2) * 30, y: 230 + (i % 3) * 60 });
+    let paths = '', pulses = '', circles = '';
+    let k = 0;
+    nodes.forEach((a, i) => nodes.forEach((b, j) => {
+      if (i >= j) return;
+      const d = Math.hypot(a.x - b.x, a.y - b.y);
+      if (d > 330 || ((i * 7 + j * 13) % 5) > 2) return;
+      const mx = (a.x + b.x) / 2 + (b.y - a.y) * .25, my = (a.y + b.y) / 2 - (b.x - a.x) * .25;
+      const id = 'w' + (k++);
+      const dir = (i + j) % 2 ? `M${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}` : `M${b.x} ${b.y} Q ${mx} ${my} ${a.x} ${a.y}`;
+      paths += `<path id="${id}" d="${dir}" stroke="#ff8fb0" stroke-width="5" fill="none" opacity=".55"/>`;
+      if (k % 2 === 0) pulses += `<circle r="9" fill="#ffd23f"><animateMotion dur="${(2 + (k % 5) * .6).toFixed(1)}s" begin="${((k % 7) * .4).toFixed(1)}s" repeatCount="indefinite"><mpath href="#${id}"/></animateMotion></circle>`;
+    }));
+    // self loops
+    [3, 11, 19].forEach(i => {
+      const n = nodes[i];
+      paths += `<path id="loop${i}" d="M${n.x} ${n.y - 20} a 34 34 0 1 1 -1 0" stroke="#ffd23f" stroke-width="6" fill="none" stroke-dasharray="10 10"/>`;
+      pulses += `<circle r="9" fill="#ffd23f"><animateMotion dur="1.6s" repeatCount="indefinite"><mpath href="#loop${i}"/></animateMotion></circle>`;
+    });
+    nodes.forEach(n => circles += `<circle cx="${n.x}" cy="${n.y}" r="22" fill="#ff5e8a" stroke="#ffd7e1" stroke-width="6"/>`);
+    svg.innerHTML = paths + circles + pulses;
+  })();
+
+  // ---------- slide 5: pipeline ----------
+  (function () {
+    const svg = document.getElementById('pipe');
+    const layers = [3, 5, 5, 5, 3], xs = [200, 520, 840, 1160, 1480];
+    const pos = layers.map((n, L) => Array.from({ length: n }, (_, i) => ({ x: xs[L], y: 280 + (i - (n - 1) / 2) * 90 })));
+    let paths = '', pulses = '', circles = '', k = 0;
+    for (let L = 0; L < layers.length - 1; L++) pos[L].forEach(a => pos[L + 1].forEach(b => {
+      const id = 'p' + (k++);
+      paths += `<path id="${id}" d="M${a.x} ${a.y} L ${b.x} ${b.y}" stroke="#ffb27a" stroke-width="4" opacity=".5"/>`;
+      if (k % 3 === 0) pulses += `<circle r="8" fill="#ffd23f"><animateMotion dur="1.2s" begin="${(L * 1.2 + (k % 4) * .1).toFixed(1)}s" repeatCount="indefinite"><mpath href="#${id}"/></animateMotion></circle>`;
+    }));
+    pos.flat().forEach(n => circles += `<circle cx="${n.x}" cy="${n.y}" r="24" fill="#ff8c2e" stroke="#ffd7b0" stroke-width="6"/>`);
+    const arrow = `<path d="M160 540 H 1500" stroke="#ff8c2e" stroke-width="14" stroke-linecap="round" class="flow"/><path d="M1480 510 l 60 30 l -60 30" stroke="#ff8c2e" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="200" y="40" font-size="30" fill="#c9c6f2">IN</text><text x="1480" y="40" font-size="30" fill="#c9c6f2" text-anchor="middle">OUT</text>`;
+    svg.innerHTML = paths + circles + pulses + arrow;
+  })();
+
+  // ---------- slide 11: fully connected blob ----------
+  (function () {
+    const svg = document.getElementById('blob');
+    const cx = 450, cy = 310, R = 250, N = 36, nodes = [];
+    for (let i = 0; i < N; i++) {
+      const a = (i / N) * Math.PI * 2 - Math.PI / 2;
+      const type = (i < 4 || i >= N - 4) ? 'sensor' : (i >= N / 2 - 3 && i < N / 2 + 3) ? 'output' : 'hidden';
+      nodes.push({ x: cx + Math.cos(a) * R, y: cy + Math.sin(a) * R, type });
+    }
+    const col = { sensor: '#35d5f0', hidden: '#8a6cff', output: '#ff8c2e' };
+    let lines = '', circles = '', pulses = '';
+    nodes.forEach((a, i) => nodes.forEach((b, j) => { if (i < j) lines += `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="#8a6cff" stroke-width="1.2" opacity=".28"/>`; }));
+    nodes.forEach((n, i) => {
+      circles += `<circle cx="${n.x}" cy="${n.y}" r="${n.type === 'hidden' ? 16 : 20}" fill="${col[n.type]}" stroke="#fff6e9" stroke-width="4"/>`;
+      if (n.type === 'hidden' && i % 3 === 0) circles += `<circle cx="${n.x}" cy="${n.y}" r="26" fill="none" stroke="${col[n.type]}" stroke-width="4" class="glow" style="animation-delay:${(i * .17).toFixed(2)}s"/>`;
+    });
+    // inner "thought" cloud of hidden nodes
+    for (let i = 0; i < 14; i++) {
+      const a = Math.random() * Math.PI * 2, r = Math.random() * 120 + 20;
+      const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
+      circles += `<circle cx="${x}" cy="${y}" r="${(8 + Math.random() * 10).toFixed(0)}" fill="#8a6cff" opacity=".9" class="glow" style="animation-delay:${(Math.random() * 2).toFixed(2)}s"/>`;
+    }
+    const labels = `<text x="${cx}" y="22" font-size="26" fill="#35d5f0" text-anchor="middle">SENSORS</text>
+      <text x="${cx}" y="${cy + 175}" font-size="26" fill="#c9c6f2" text-anchor="middle">the thought lives here</text>
+      <text x="${cx}" y="${cy + R + 70}" font-size="26" fill="#ff8c2e" text-anchor="middle">OUTPUTS → a move</text>`;
+    // tick indicator
+    const tick = `<g transform="translate(820 60)"><circle r="34" fill="none" stroke="#4ae0a8" stroke-width="8"/><path d="M0 0 V -26" stroke="#4ae0a8" stroke-width="8" stroke-linecap="round" style="animation: spin 1s linear infinite; transform-box: view-box; transform-origin: 820px 60px"/><text y="70" font-size="24" fill="#4ae0a8" text-anchor="middle">tick</text></g>`;
+    svg.innerHTML = lines + circles + labels + tick;
+  })();
+
+  // ---------- navigation ----------
+  const slides = [...document.querySelectorAll('.slide')];
+  const stage = document.getElementById('stage');
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  let cur = 0;
+  function fit() {
+    const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    stage.style.transform = `translate(-50%, -50%) scale(${s})`;
+    stage.style.transformOrigin = '50% 50%';
+  }
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, j) => s.classList.toggle('active', j === cur));
+    counter.textContent = `${cur + 1} / ${slides.length}`;
+    progress.style.width = ((cur + 1) / slides.length * 100) + '%';
+    location.hash = cur + 1;
+  }
+  function frags() { return [...slides[cur].querySelectorAll('.frag')].filter(x => x.getClientRects().length > 0); }
+  function next() {
+    const f = frags().find(x => !x.classList.contains('on'));
+    if (f) f.classList.add('on'); else show(cur + 1);
+  }
+  function prev() {
+    const on = frags().filter(x => x.classList.contains('on'));
+    if (on.length) on[on.length - 1].classList.remove('on'); else { show(cur - 1); frags().forEach(x => x.classList.add('on')); }
+  }
+  addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') show(0); else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key.toLowerCase() === 'a') frags().forEach(x => x.classList.add('on'));
+    else if (e.key.toLowerCase() === 'f') document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+    else if (e.key.toLowerCase() === 'h') document.getElementById('help').style.display = 'none';
+    else if (e.key.toLowerCase() === 'v') document.body.classList.toggle('painted');
+  });
+  addEventListener('click', e => (e.clientX > innerWidth / 2 ? next() : prev()));
+  addEventListener('resize', fit);
+  fit();
+  show((parseInt(location.hash.slice(1), 10) || 1) - 1);
+</script>
+</body>
+</html>

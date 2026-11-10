@@ -1,0 +1,11 @@
+Use case: closing-scene sprite for an animated explainer video: the two recurring mascots sitting together watching a sunset.
+Asset type: single flat vector character sprite, transparent PNG.
+Characters (must match the series exactly): two cute cartoon ladybug mascots. The body of each is one round shape that is head and shell at once, with two short antennae with small ball tips and short stubby arms and legs.
+- Left: the blue ladybug: a bright blue #2a78d6 shell with five dark navy #0d1140 round spots; wears thick-rimmed round black nerdy glasses (only the arms of the glasses visible from behind, hooked over the sides).
+- Right: the red ladybug, a little smaller and rounder: a warm red #e34948 shell with five black round spots.
+Pose: seen from BEHIND, the two sit side by side on a small rounded grassy hilltop mound, very close, gazing at a sunset in the distance. The red ladybug rests her head on the blue ladybug's shoulder; the blue one leans his head gently against hers, one stubby arm around her back. Their antennae touch and curl a little. Calm, tender, cosy and lovely. A tiny pink heart floats above their heads.
+Style/medium: crisp flat vector character art for an animated explainer video. Simple rounded shapes, flat colour fills with at most one lighter tone per colour, a soft warm rim light of orange along their top edges as if lit by a sunset in front of them, smooth contours, no outlines, no gradients, no drop shadow, no glow halo.
+Scene/backdrop: genuine transparent alpha background everywhere except the two characters and the small grassy mound they sit on (the mound is a soft dark green rounded shape with a few grass blades and two tiny flowers). No sky, no sun, no frame.
+Composition/framing: square 1024 x 1024, the pair centred and fully visible with about 10 percent transparent padding, the mound along the bottom.
+Constraints: no text, no letters, no logos, no watermark, no checkerboard. Output a transparent PNG.
+Project destination: ChatGPT/char-couple-sunset.png in the AI Brain project.

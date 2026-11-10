@@ -1,0 +1,10 @@
+Use case: UI avatar icon for a live dashboard where an evolving AI brain plays tic-tac-toe. Two friendly sibling avatars already exist, a BLUE and a RED robot head (robot-blue.png, robot-red.png in this folder); this is their opposite: the PERFECT PLAYER, a minimax lookup table that never loses and has no brain. It should read as cold, clinical and unfeeling next to them, in the same style family.
+Asset type: one robot head icon, front-facing, used as the player avatar above a tic-tac-toe board.
+Primary request: a hard-edged, angular robot head in brushed steel grey with a single horizontal visor slit instead of eyes, glowing a cold ice blue; no mouth, no smile, no dome, no visible brain (there is none), a small flat antenna stub. Symmetric, still, machine-like. Clean flat vector-style pictogram.
+Scene/backdrop: genuine transparent alpha background, no backdrop, no floor, no shadow.
+Style/medium: crisp flat 2D icon, flat colour areas, clean smooth contours, readable at 64 pixels. No painted lighting, gloss, gradients or glow halos. Same shape language and line weight as robot-blue.png and robot-red.png.
+Subject details: angular steel-grey #8a8983 head with slightly darker #5f5e5a panel lines, visor slit in ice blue #7fc4ee, off-white #f6f5f1 only for tiny highlights. Flat colour only.
+Color palette: steel grey dominates; ice blue for the visor only. No warm colours anywhere.
+Composition/framing: one centered head on a square 1024 x 1024 canvas, fully visible with about 10 percent transparent padding on all sides.
+Constraints: no text, no letters, no numbers, no body, no arms, no background shapes, no enclosing circle or badge, no watermark, no checkerboard. Output a transparent PNG.
+Project destination: ChatGPT/robot-perfect.png in the AI Brain project.

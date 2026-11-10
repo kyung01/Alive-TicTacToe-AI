@@ -1,0 +1,7 @@
+Use case: the far layer of a three-layer parallax background for an animated explainer video set in a forest; a transparent trees layer and leaf overlays move in front of it at other speeds.
+Asset type: single wide background painting, opaque PNG.
+Primary request: a forest bank at dusk, distance only: a sky with warm pink-orange light low at the horizon fading to dark green above, a hazy far line of trunks and bushes, no near plants.
+Style/medium: flat vector explainer illustration, simple rounded shapes, flat colour fills with soft two-tone shading, no outlines, no photorealism, no painterly texture, cosy and friendly, slightly dark so overlaid light text is readable. Same world and drawing style as an evening forest with big rounded leaves, simple tree trunks, soft grass, round mushrooms and tiny glowing yellow fireflies.
+Composition/framing: landscape 16:9, 1536 x 1024. This is the FAR parallax layer: only sky, light and the far distance. Nothing closer than the far tree line, no near trunks, no plants at the edges, no ground detail. The centre is quiet and low-detail so white text reads on it.
+Constraints: no text, no letters, no logos, no watermark, no characters, no animals, no insects.
+Project destination: ChatGPT/bg-forest-berry-far.png in the AI Brain project.

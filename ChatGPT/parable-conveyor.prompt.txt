@@ -1,0 +1,7 @@
+Use case: parable illustration for an explainer video: a one-way factory line stands for a one-directional neural network.
+Asset type: single illustration, PNG.
+Primary request: a factory conveyor belt running left to right with a row of identical grey boxes on it, two or three simple grey machines with orange arms stamping the boxes as they pass, big orange arrows on the floor all pointing the same way, a dim teal factory interior.
+Style/medium: flat vector explainer illustration, simple rounded shapes, flat colour fills with at most one lighter tone per colour, no outlines, no gradients, no photorealism. Palette: deep greens and teal for backgrounds, with warm accents in orange #ff8c2e, yellow #ffd23f, pink #ff5e8a, cyan #35d5f0, cream #fff6e9. Cheerful, clear, readable at a glance.
+Composition/framing: landscape 3:2, 1536 x 1024, one clear subject, generous breathing room, nothing important in the outer 8 percent.
+Constraints: no text, no letters, no numbers, no logos, no watermark, no ladybugs.
+Project destination: ChatGPT/parable-conveyor.png in the AI Brain project.
