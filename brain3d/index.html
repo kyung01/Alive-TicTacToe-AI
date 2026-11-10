@@ -248,7 +248,7 @@ controls.minDistance = 6; controls.maxDistance = 45;
 // bloom: bright things (firing neurons, live signals, sparks) glow into the space around them
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
-const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 1.15, 0.55, 0.16);
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.75, 0.35, 0.42);
 if (!params.has('nobloom')) composer.addPass(bloom);
 composer.addPass(new OutputPass());
 
@@ -557,17 +557,17 @@ function neuronLook(j, out) {
     out.copy(C[r]).multiplyScalar(r === 'hid' ? 0.75 : 0.65);
   } else {
     const v = disp[j];
-    if (j < NIN) out.copy(C[r]).multiplyScalar(v > 0.5 ? 1.0 : 0.12);
+    if (j < NIN) out.copy(C[r]).multiplyScalar(v > 0.5 ? 0.85 : 0.12);
     else if (r === 'hid') {
       if (Math.abs(v) < 0.03) out.copy(C.hid).multiplyScalar(0.16);
-      else out.copy(v > 0 ? C.pos : C.neg).multiplyScalar(0.2 + 1.0 * Math.abs(v));
-      scale *= 1 + 0.5 * Math.abs(v);
+      else out.copy(v > 0 ? C.pos : C.neg).multiplyScalar(0.18 + 0.62 * Math.abs(v));
+      scale *= 1 + 0.3 * Math.abs(v);
     } else {
-      out.copy(C.out).multiplyScalar(0.14 + 0.9 * Math.max(v, 0));
+      out.copy(C.out).multiplyScalar(0.16 + 0.6 * Math.max(v, 0));
       if (v < 0) out.lerp(C.neg, Math.min(-v, 1) * 0.3);
       if (illegalFlash[j] > 0) out.lerp(C.neg, illegalFlash[j]);
-      else if (flash[j] > 0) out.lerp(C.white, flash[j]).multiplyScalar(1 + flash[j]);
-      scale *= 1 + 0.35 * Math.max(v, 0) + 0.7 * Math.max(flash[j], illegalFlash[j]);
+      else if (flash[j] > 0) out.lerp(C.white, flash[j] * 0.8).multiplyScalar(1 + 0.4 * flash[j]);
+      scale *= 1 + 0.2 * Math.max(v, 0) + 0.5 * Math.max(flash[j], illegalFlash[j]);
     }
   }
   if (hover >= 0 && j !== hover && !adj[hover].has(j)) out.multiplyScalar(0.3);
@@ -582,8 +582,8 @@ function draw(dt) {
     tmpM.compose(P[j], tmpQ, tmpS.set(s, s, s));
     neurons.setMatrixAt(k, tmpM);
     neurons.setColorAt(k, tmpC);
-    hp.color.setXYZ(k, tmpC.r * 0.5, tmpC.g * 0.5, tmpC.b * 0.5);
-    hp.size.setX(k, s * 6);
+    hp.color.setXYZ(k, tmpC.r * 0.3, tmpC.g * 0.3, tmpC.b * 0.3);
+    hp.size.setX(k, s * 4);
   });
   neurons.instanceMatrix.needsUpdate = true; neurons.instanceColor.needsUpdate = true;
   hp.color.needsUpdate = true; hp.size.needsUpdate = true;
@@ -718,6 +718,15 @@ function frame(dt) {
   camera.position.sub(shakeOff);
   shakeAmt *= Math.exp(-dt * 7);
 }
+// recording: CSS animations (banner, popping marks) follow the recorder's clock instead of the wall clock
+const animStart = new WeakMap();
+function syncAnimations() {
+  for (const a of document.getAnimations()) {
+    if (!animStart.has(a)) animStart.set(a, clock);
+    a.pause(); a.currentTime = (clock - animStart.get(a)) * 1000;
+  }
+}
+if (CLIP) controls.autoRotateSpeed = 1.1;
 setMode(mode);
 if (!CLIP) {
   let last = performance.now();
@@ -727,7 +736,7 @@ if (!CLIP) {
 // recorder hooks (tools/record_clip.mjs) and a console helper
 window.__brain = {
   D, get G() { return G; },
-  frame: (ms) => frame(ms / 1000),
+  frame: (ms) => { frame(ms / 1000); if (CLIP) syncAnimations(); },
   setSpeed: (v) => { tps = v; },
   trySeed(s, o = 'random') {        // play one game silently with this seed; the recording replays it exactly
     const keep = [G, mode, opp]; SIM = true; mode = 'watch'; opp = o; setSeed(s); newGame();
