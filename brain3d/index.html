@@ -38,11 +38,15 @@
   .bar { display: inline-block; width: 14px; height: 3px; border-radius: 2px; margin-right: 6px; vertical-align: 3px; }
   #game { bottom: 16px; left: 16px; width: 248px; display: none; }
   #game.show { display: block; }
-  #gameTitle { font-weight: 700; }
+  /* every line in the game panel has a fixed height and never wraps, so changing text can't move the board */
+  #game .row:first-child { flex-wrap: nowrap; height: 20px; }
+  #gameTitle { font-weight: 700; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #tickNo { flex: none; font-variant-numeric: tabular-nums; }
   #score { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 8px 0 4px; }
-  #score div { text-align: center; padding: 4px 2px; border-radius: 7px; background: rgba(255,255,255,0.04); }
-  #score b { display: block; font-size: 15px; }
-  #score span { font-size: 10px; color: var(--muted); }
+  #score div { text-align: center; padding: 4px 2px; border-radius: 7px; background: rgba(255,255,255,0.04); min-width: 0; }
+  #score b { display: block; height: 18px; line-height: 18px; font-size: 15px; font-variant-numeric: tabular-nums; }
+  #score span { display: block; height: 13px; line-height: 13px; font-size: 10px; color: var(--muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   #board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin: 8px 0 4px; }
   #board button { position: relative; aspect-ratio: 1; border-radius: 8px; border: 1px solid var(--line); background: rgba(255,255,255,0.03);
     color: var(--text); font: 700 30px/1 system-ui, sans-serif; cursor: default; padding: 0; overflow: hidden;
@@ -65,7 +69,8 @@
   #board button.playable { cursor: pointer; }
   #board button.playable:hover { background: rgba(56,227,184,0.15); }
   #boardKey { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
-  #status { font-size: 12.5px; }
+  #status { font-size: 12.5px; font-variant-numeric: tabular-nums; }
+  #gameBtns { height: 28px; margin: 6px 0 0; flex-wrap: nowrap; justify-content: flex-start; }
   #status div { height: 19px; line-height: 19px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   #status .big { font-weight: 700; font-size: 13.5px; }
   #gameBtns button { padding: 5px 10px; border-radius: 7px; border: 1px solid var(--line); background: transparent;

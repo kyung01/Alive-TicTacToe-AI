@@ -1,0 +1,25 @@
+# GitHub Pages publishes only the 3D brain page and the README images.
+# Everything else stays in the repo but out of the website: the full site was too large to deploy.
+exclude:
+  - ChatGPT
+  - presentation
+  - runs
+  - sounds
+  - docs
+  - tools
+  - DESIGN.md
+  - design_diagrams.html
+  - dashboard.html
+  - dashboard.py
+  - battle.py
+  - brain_ttt.py
+  - brain_ttt_gpu.py
+  - continuous.py
+  - evo_rule.py
+  - long_life.py
+  - perfect.py
+  - single.py
+  - requirements.txt
+  - best_evo_01278.npz
+  - best_evo_01303.npz
+  - train_evo.log
