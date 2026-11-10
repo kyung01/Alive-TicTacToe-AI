@@ -123,11 +123,14 @@ def stl(pos, live, out_lo, edges, k_edges):
     for j in range(len(live)):
         if not live[j]:
             continue
-        s = 0.16 if j < N_IN else (0.34 if j >= out_lo else 0.26)
+        s = 0.22 if j < N_IN else (0.5 if j >= out_lo else 0.4)
         octa(pos[j], s)
     for i, j, w in sorted(edges, key=lambda e: -abs(e[2]))[:k_edges]:
         if i != j:
             rod(pos[i], pos[j], 0.025 + 0.05 * min(abs(w), 2.0) / 2.0)
+    # GitHub's STL viewer stands models on Z; the layout's "up" is Y, so turn it upright: (x, y, z) -> (x, -z, y)
+    up = lambda v: np.array([v[0], -v[2], v[1]])
+    facets = [(up(a), up(b), up(c)) for a, b, c in facets]
     f = lambda v: " ".join(f"{x:.2f}".rstrip("0").rstrip(".") if "." in f"{x:.2f}" else f"{x:.2f}" for x in v)
     lines = ["solid brain"]
     for a, b, c in facets:
