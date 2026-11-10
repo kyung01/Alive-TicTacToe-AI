@@ -1,0 +1,46 @@
+Every big AI lab says it's building AGI, a machine that thinks the way we do. This video argues that today's models can't get there. That isn't because they're too small or trained on the wrong data. It's because they're built in the wrong shape.
+
+Problem one is structure. In a brain, signals loop forward, backward and sideways, and the activity never stops. Today's models are a one-way pipeline. Text goes in, passes through fixed layers once, and one word comes out the top.
+
+Problem two is the thought itself. A thought isn't text, yet "let me think step by step" is just more text fed back into the same calculation.
+
+So what would work? Stop trying to design a mind by hand and let it grow the way nature did: through evolution, with networks that loop and remember.
+
+This is AI Brain, Part 1. It's our first video like this, and we'd love your feedback. Tell us in the comments what worked, what didn't, and what you'd like to see next.
+
+CHAPTERS
+0:00 Every lab says it's building AGI
+0:15 Senses in, actions out, and the hidden middle
+0:42 The tangle: signals go everywhere
+1:08 Today's AI is a one-way pipeline
+1:35 Parable: the factory and the village
+2:02 A brain never stops
+2:27 How a transformer works (simplified)
+3:03 What a brain is supposed to look like
+3:35 Problem two: what is a thought?
+3:59 Parable: the taste of a strawberry
+4:26 "Let me think step by step" is not thinking
+4:48 Parable: the blind men and the elephant
+5:49 Breed what you cannot draw: evolution
+6:20 Networks that loop and remember
+6:50 Where this leads
+7:20 Credits
+
+IDEAS MENTIONED
+John H. Holland (1975), Adaptation in Natural and Artificial Systems
+John J. Hopfield (1982), "Neural networks and physical systems with emergent collective computational abilities"
+Jeffrey L. Elman (1990), "Finding Structure in Time"
+Randall D. Beer & John C. Gallagher (1992), "Evolving Dynamical Neural Networks for Adaptive Behavior"
+Karl Sims (1994), "Evolving Virtual Creatures"
+Sepp Hochreiter & Jürgen Schmidhuber (1997), "Long Short-Term Memory"
+Kenneth O. Stanley & Risto Miikkulainen (2002), "Evolving Neural Networks through Augmenting Topologies" (NEAT)
+
+The transformer section is simplified on purpose.
+
+CREDITS
+Narration: ElevenLabs voice "Adam"
+Music: "Forest Sketch", "Misty Thought Garden" and "Sunset on the Hill", made with ElevenLabs Music
+Illustrations: generated with ChatGPT
+Animation and sound effects: coded in HTML, SVG and Web Audio
+
+#AI #AGI #Neuroscience
