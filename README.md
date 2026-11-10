@@ -15,7 +15,7 @@
   <a href="https://kyung01.github.io/Alive-TicTacToe-AI/brain3d/"><img src="assets/brain3d-clip.gif" alt="The evolved champion brain thinking live in 3D while it beats a random player: signals light up from the eye through the hidden neurons to the outputs"></a>
   <br>
   <b><a href="https://kyung01.github.io/Alive-TicTacToe-AI/brain3d/">▶ Open the champion brain in 3D</a></b>: watch it think, rotate it, hover any neuron, or play against it.<br>
-  <sub>Above: the real evolved brain playing a real game. Every synapse lights up only while a signal runs through it.</sub>
+  <sub>Above: the real evolved brain winning a real game. Current runs along a synapse while it carries a signal, and the bars on the board show how much the brain wants each cell.</sub>
 </p>
 
 ---
@@ -79,15 +79,19 @@ training rules: watch it play a random player or itself, play against it yoursel
 
 - **The eye** is a wall of 29 receptors on the left (three 3x3 retinas: X, empty, O, plus the seat), facing the
   hidden neurons. **The outputs** are a wall of 9 on the right, one per cell, facing them from the other side.
-- **Synapses are nearly invisible** until a signal runs through them. Each one glows with the signal it carries
-  right now (sender's activity x weight; blue excites, red inhibits), so you see thoughts travel, not a hairball.
+- **Synapses are faint wires.** While a synapse carries a signal (sender's activity x weight), lit sections run
+  along it from sender to receiver like current, brighter and faster for stronger signals; blue excites, red
+  inhibits. You see thoughts travel, not a hairball.
+- **The board shows what the brain is trying to do.** Each cell has a bar for how strongly its output neuron
+  wants that cell; a full bar means it fires there. Gold on an empty cell, red on a taken one (a spike there is
+  ignored by the board).
 - **The hidden neurons are placed by a rubber-band simulation.** Every live connection is one identical spring,
   the same strength whatever its weight: it pulls when stretched and pushes when squeezed. Hidden neurons also
   push each other apart to keep their distance. The eye and the outputs are pinned; switched-off neurons and
   connections exert no force. Neurons that share many connections pull together, so the shape is the brain's
   real wiring. The cloud sits closer to the eye because the hidden neurons are wired far more to the 29 eye
   receptors than to the 9 outputs.
-- The 56 neurons evolution switched off float around it as faint stars.
+- The 56 neurons evolution switched off float around it as small grey dots.
 
 ### How it is wired
 
